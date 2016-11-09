@@ -1,3 +1,13 @@
 /.settings/
 /Debug/
-
+/PEx/Cpu.c
+/PEx/PE_LDD.c
+/PEx/Vectors_Config.h
+/PEx/PE_LDD.h
+/PEx/PE_Types.h
+/PEx/Cpu.h
+/PEx/CPU_Config.h
+/PEx/Init_Config.h
+/PEx/IO_Map.h
+/PEx/PE_Const.h
+/PEx/PE_Error.h

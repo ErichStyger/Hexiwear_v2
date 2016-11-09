@@ -30,7 +30,16 @@
 /* Including needed modules to compile this module/procedure */
 #include "Cpu.h"
 #include "Events.h"
-#include "Pins1.h"
+#include "LED1.h"
+#include "LEDpin4.h"
+#include "LED2.h"
+#include "LEDpin5.h"
+#include "LED3.h"
+#include "LEDpin6.h"
+#include "HF1.h"
+#include "KSDK1.h"
+#include "WAIT1.h"
+#include "UTIL1.h"
 /* Including shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
@@ -51,6 +60,12 @@ int main(void)
   /*** End of Processor Expert internal initialization.                    ***/
 
   /* Write your code here */
+  for(;;) {
+    LED1_Neg();
+    LED2_Neg();
+    LED3_Neg();
+    WAIT1_Waitms(500);
+  }
   /* For example: for(;;) { } */
 
   /*** Don't write any code pass this line, or it will be deleted during code generation. ***/
