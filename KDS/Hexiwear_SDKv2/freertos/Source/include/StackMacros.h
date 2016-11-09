@@ -1,5 +1,5 @@
 /*
-    FreeRTOS V8.2.3 - Copyright (C) 2015 Real Time Engineers Ltd.
+    FreeRTOS V9.0.0 - Copyright (C) 2016 Real Time Engineers Ltd.
     All rights reserved
 
     VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
@@ -75,13 +75,13 @@
  * out is currently overflowed, or looks like it might have overflowed in the
  * past.
  *
- * Setting configCHECK_FOR_STACK_OVERFLOW to 1 causes the macro to check
+ * Setting configCHECK_FOR_STACK_OVERFLOW to 1 will cause the macro to check
  * the current stack state only - comparing the current top of stack value to
  * the stack limit.  Setting configCHECK_FOR_STACK_OVERFLOW to greater than 1
- * also causes the last few stack bytes to be checked to ensure the value
+ * will also cause the last few stack bytes to be checked to ensure the value
  * to which the bytes were set when the task was created have not been
  * overwritten.  Note this second test does not guarantee that an overflowed
- * stack is always be recognized.
+ * stack will always be recognised.
  */
 
 /*-----------------------------------------------------------*/
@@ -94,7 +94,7 @@
 		/* Is the currently saved stack pointer within the stack limit? */								\
 		if( pxCurrentTCB->pxTopOfStack <= pxCurrentTCB->pxStack )										\
 		{																								\
-			vApplicationStackOverflowHook( ( TaskHandle_t ) pxCurrentTCB, pxCurrentTCB->pcTaskName );	\
+       configCHECK_FOR_STACK_OVERFLOW_NAME( ( TaskHandle_t ) pxCurrentTCB, pxCurrentTCB->pcTaskName ); /* << EST: use macro name */	\
 		}																								\
 	}
 
@@ -110,7 +110,7 @@
 		/* Is the currently saved stack pointer within the stack limit? */								\
 		if( pxCurrentTCB->pxTopOfStack >= pxCurrentTCB->pxEndOfStack )									\
 		{																								\
-			vApplicationStackOverflowHook( ( TaskHandle_t ) pxCurrentTCB, pxCurrentTCB->pcTaskName );	\
+      configCHECK_FOR_STACK_OVERFLOW_NAME( ( TaskHandle_t ) pxCurrentTCB, pxCurrentTCB->pcTaskName );	/* << EST: use macro name */ \
 		}																								\
 	}
 
@@ -129,7 +129,7 @@
 			( pulStack[ 2 ] != ulCheckValue ) ||												\
 			( pulStack[ 3 ] != ulCheckValue ) )												\
 		{																								\
-			vApplicationStackOverflowHook( ( TaskHandle_t ) pxCurrentTCB, pxCurrentTCB->pcTaskName );	\
+      configCHECK_FOR_STACK_OVERFLOW_NAME( ( TaskHandle_t ) pxCurrentTCB, pxCurrentTCB->pcTaskName );/* << EST: use macro name */	\
 		}																								\
 	}
 
@@ -153,7 +153,7 @@
 		/* Has the extremity of the task stack ever been written over? */																\
 		if( memcmp( ( void * ) pcEndOfStack, ( void * ) ucExpectedStackBytes, sizeof( ucExpectedStackBytes ) ) != 0 )					\
 		{																																\
-			vApplicationStackOverflowHook( ( TaskHandle_t ) pxCurrentTCB, pxCurrentTCB->pcTaskName );									\
+		  configCHECK_FOR_STACK_OVERFLOW_NAME( ( TaskHandle_t ) pxCurrentTCB, pxCurrentTCB->pcTaskName );		/* << EST: use macro name */							\
 		}																																\
 	}
 
@@ -168,4 +168,5 @@
 
 
 #endif /* STACK_MACROS_H */
+
 

@@ -41,6 +41,7 @@
 #include "LEDpin6.h"
 #include "HF1.h"
 #include "RTT1.h"
+#include "FRTOS1.h"
 #include "KSDK1.h"
 #include "WAIT1.h"
 #include "UTIL1.h"

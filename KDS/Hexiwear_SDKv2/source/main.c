@@ -52,6 +52,20 @@
 #include "queue.h"
 #include "timers.h"
 
+static void AppTask(void* param) {
+  (void)param; /* avoid compiler warning */
+  for(;;) {
+    LED1_Neg();
+    WAIT1_Waitms(500);
+    LED2_Neg();
+    WAIT1_Waitms(500);
+    LED3_Neg();
+    WAIT1_Waitms(500);
+    CLS1_SendStr((uint8_t*)"hello world!\r\n", CLS1_GetStdio()->stdOut);
+    vTaskDelay(pdMS_TO_TICKS(500));
+  }
+}
+
 /*!
  * @brief Application entry point.
  */
@@ -61,28 +75,20 @@ int main(void) {
   BOARD_BootClockRUN();
   BOARD_InitDebugConsole();
 
-  /* Add your code here */
   /* LEDs are on PTA1, PTA2 and PTD5 */
   CLOCK_EnableClock(kCLOCK_PortA);
-  //PORT_SetPinMux(PORTA, 12u, kPORT_MuxAsGpio);
-  //PORT_SetPinMux(PORTA, 13u, kPORT_MuxAsGpio);
-  //PORT_SetPinMux(PORTA, 14u, kPORT_MuxAsGpio);
+
   LED1_Init();
   LED2_Init();
   LED3_Init();
-  UTIL1_Init();
+  //UTIL1_Init();
   //WAIT1_Init();
   CLS1_Init();
   RTT1_Init();
-  for(;;) {
-    LED1_Neg();
-    WAIT1_Waitms(500);
-    LED2_Neg();
-    WAIT1_Waitms(500);
-    LED3_Neg();
-    WAIT1_Waitms(500);
-    CLS1_SendStr((uint8_t*)"hello world!\r\n", CLS1_GetStdio()->stdOut);
+  if (xTaskCreate(AppTask, "App", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
+    for(;;){} /* error case only, stay here! */
   }
+  vTaskStartScheduler(); /* start the RTOS, create the IDLE task and run my tasks (if any) */
 
   for(;;) { /* Infinite loop to avoid leaving the main function */
     __asm("NOP"); /* something to use as a breakpoint stop while looping */

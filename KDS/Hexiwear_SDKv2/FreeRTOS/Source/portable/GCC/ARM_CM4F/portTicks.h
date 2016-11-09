@@ -1,7 +1,3 @@
-/* << EST */
-#include "FreeRTOSConfig.h"
-#if !defined(configFRTOS_MEMORY_SCHEME) || (configFRTOS_MEMORY_SCHEME==3 && configSUPPORT_DYNAMIC_ALLOCATION==1)
-
 /*
     FreeRTOS V9.0.0 - Copyright (C) 2016 Real Time Engineers Ltd.
     All rights reserved
@@ -71,76 +67,65 @@
     1 tab == 4 spaces!
 */
 
+#ifndef PORTTICKS_H_
+#define PORTTICKS_H_
 
 /*
- * Implementation of pvPortMalloc() and vPortFree() that relies on the
- * compilers own malloc() and free() implementations.
- *
- * This file can only be used if the linker is configured to to generate
- * a heap memory area.
- *
- * See heap_1.c, heap_2.c and heap_4.c for alternative implementations, and the
- * memory management pages of http://www.FreeRTOS.org for more information.
+ *  Interface header file to the Processor Expert Tick counter.
+ *  This file is used to access the interface, especially for performance
+ *  counters (e.g. for Percepio Trace).
+ *  That way the a module can interface this wrapper header file instead
+ *  of one of the standard FreeRTOS header files.
  */
+#include "KSDK1.h" /* include interface to SDK */
 
-#include <stdlib.h>
+#include "FreeRTOSConfig.h"
+#include "portmacro.h"
 
-/* Defining MPU_WRAPPERS_INCLUDED_FROM_API_FILE prevents task.h from redefining
-all the API functions to use the MPU wrappers.  That should only be done when
-task.h is included from an application file. */
-#define MPU_WRAPPERS_INCLUDED_FROM_API_FILE
-
-#include "FreeRTOS.h"
-#include "task.h"
-
-#undef MPU_WRAPPERS_INCLUDED_FROM_API_FILE
-
-#if( configSUPPORT_DYNAMIC_ALLOCATION == 0 )
-	#error This file must not be used if configSUPPORT_DYNAMIC_ALLOCATION is 0
+#if configPEX_KINETIS_SDK
+extern uint32_t SystemCoreClock; /* in Kinetis SDK, this contains the system core clock speed */
 #endif
 
-/*-----------------------------------------------------------*/
+/*!
+ * \brief Return the tick raw counter value. It is assumed that the counter register has been reset at the last tick time
+ * \return Tick counter value. The value is reset at tick interrupt time.
+ * */
+portLONG uxGetTickCounterValue(void);
 
-void *pvPortMalloc( size_t xWantedSize )
-{
-void *pvReturn;
+#if configSYSTICK_USE_LOW_POWER_TIMER
+  #define FREERTOS_HWTC_DOWN_COUNTER     0 /* LPTM is counting up */
+  #define FREERTOS_HWTC_PERIOD           ((1000/configSYSTICK_LOW_POWER_TIMER_CLOCK_HZ)-1UL) /* counter is incrementing from zero to this value */
+#else
+  #define FREERTOS_HWTC_DOWN_COUNTER     1 /* SysTick is counting down */
+  #define FREERTOS_HWTC_PERIOD           ((configCPU_CLOCK_HZ/configTICK_RATE_HZ)-1UL) /* counter is decrementing from this value to zero */
+#endif
 
-	vTaskSuspendAll();
-	{
-		pvReturn = malloc( xWantedSize );
-		traceMALLOC( pvReturn, xWantedSize );
-	}
-	( void ) xTaskResumeAll();
+/* tick information for Percepio Trace */
 
-	#if( configUSE_MALLOC_FAILED_HOOK == 1 )
-	{
-		if( pvReturn == NULL )
-		{
-      /* EST: Using configuration macro name for hook */
-			extern void configUSE_MALLOC_FAILED_HOOK_NAME( void );
-			configUSE_MALLOC_FAILED_HOOK_NAME();
-		}
-	}
-	#endif
+/* undefine previous values, where dummy anyway: make sure this header file is included last! */
+#undef HWTC_COUNT_DIRECTION
+#undef HWTC_PERIOD
+#undef HWTC_DIVISOR
+#undef HWTC_COUNT
 
-	return pvReturn;
-}
-/*-----------------------------------------------------------*/
+#if FREERTOS_HWTC_DOWN_COUNTER
+  #define HWTC_COUNT_DIRECTION  DIRECTION_DECREMENTING
+  #define HWTC_PERIOD           FREERTOS_HWTC_PERIOD /* counter is decrementing from this value to zero */
+#else
+  #define HWTC_COUNT_DIRECTION  DIRECTION_INCREMENTING
+  #define HWTC_PERIOD           FREERTOS_HWTC_PERIOD /* counter is incrementing from zero to this value */
+#endif
+#if configSYSTICK_USE_LOW_POWER_TIMER
+  #define HWTC_DIVISOR 1 /* divisor for slow counter tick value */
+#else
+  #define HWTC_DIVISOR 2 /* divisor for fast counter tick value */
+#endif
 
-void vPortFree( void *pv )
-{
-	if( pv )
-	{
-		vTaskSuspendAll();
-		{
-			free( pv );
-			traceFREE( pv, 0 );
-		}
-		( void ) xTaskResumeAll();
-	}
-}
+#define HWTC_COUNT (uxGetTickCounterValue())
 
+#if configUSE_TICKLESS_IDLE == 1
+extern volatile uint8_t portTickCntr; /* used to find out if we woke up by the tick interrupt */
+#endif
 
-#endif /* configFRTOS_MEMORY_SCHEME==3 */ /* << EST */
-
+#endif /* PORTTICKS_H_ */
 

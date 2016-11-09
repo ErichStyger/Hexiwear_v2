@@ -1,5 +1,5 @@
 /*
-    FreeRTOS V8.2.3 - Copyright (C) 2015 Real Time Engineers Ltd.
+    FreeRTOS V9.0.0 - Copyright (C) 2016 Real Time Engineers Ltd.
     All rights reserved
 
     VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
@@ -154,7 +154,7 @@ typedef struct HeapRegion
 /*
  * Used to define multiple heap regions for use by heap_5.c.  This function
  * must be called before any calls to pvPortMalloc() - not creating a task,
- * queue, semaphore, mutex, software timer, event group, and so on, results in
+ * queue, semaphore, mutex, software timer, event group, etc. will result in
  * pvPortMalloc being called.
  *
  * pxHeapRegions passes in an array of HeapRegion_t structures - each of which
@@ -196,12 +196,20 @@ void vPortEndScheduler( void ) PRIVILEGED_FUNCTION;
  */
 #if( portUSING_MPU_WRAPPERS == 1 )
 	struct xMEMORY_REGION;
-	void vPortStoreTaskMPUSettings( xMPU_SETTINGS *xMPUSettings, const struct xMEMORY_REGION * const xRegions, StackType_t *pxBottomOfStack, uint16_t usStackDepth ) PRIVILEGED_FUNCTION;
+	void vPortStoreTaskMPUSettings( xMPU_SETTINGS *xMPUSettings, const struct xMEMORY_REGION * const xRegions, StackType_t *pxBottomOfStack, uint32_t ulStackDepth ) PRIVILEGED_FUNCTION;
 #endif
+
+/* << EST
+ * Tick Timer management routines:
+ */
+void vPortInitTickTimer(void);
+void vPortStartTickTimer(void);
+void vPortStopTickTimer(void);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* PORTABLE_H */
+
 
