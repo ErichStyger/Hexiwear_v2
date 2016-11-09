@@ -42,6 +42,8 @@
 #include "LED2.h"
 #include "LED3.h"
 #include "WAIT1.h"
+#include "CLS1.h"
+#include "RTT1.h"
 #include "fsl_port.h"
 
 /* FreeRTOS kernel includes. */
@@ -68,6 +70,10 @@ int main(void) {
   LED1_Init();
   LED2_Init();
   LED3_Init();
+  UTIL1_Init();
+  //WAIT1_Init();
+  CLS1_Init();
+  RTT1_Init();
   for(;;) {
     LED1_Neg();
     WAIT1_Waitms(500);
@@ -75,6 +81,7 @@ int main(void) {
     WAIT1_Waitms(500);
     LED3_Neg();
     WAIT1_Waitms(500);
+    CLS1_SendStr((uint8_t*)"hello world!\r\n", CLS1_GetStdio()->stdOut);
   }
 
   for(;;) { /* Infinite loop to avoid leaving the main function */

@@ -30,6 +30,9 @@
 /* Including needed modules to compile this module/procedure */
 #include "Cpu.h"
 #include "Events.h"
+#include "CS1.h"
+#include "CLS1.h"
+#include "XF1.h"
 #include "LED1.h"
 #include "LEDpin4.h"
 #include "LED2.h"
@@ -37,6 +40,7 @@
 #include "LED3.h"
 #include "LEDpin6.h"
 #include "HF1.h"
+#include "RTT1.h"
 #include "KSDK1.h"
 #include "WAIT1.h"
 #include "UTIL1.h"
