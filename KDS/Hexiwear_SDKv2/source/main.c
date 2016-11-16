@@ -41,6 +41,9 @@
 #include "LED1.h"
 #include "LED2.h"
 #include "LED3.h"
+#include "RGBR.h"
+#include "RGBG.h"
+#include "RGBB.h"
 #include "WAIT1.h"
 #include "CLS1.h"
 #include "RTT1.h"
@@ -75,12 +78,16 @@ int main(void) {
   BOARD_BootClockRUN();
   BOARD_InitDebugConsole();
 
-  /* LEDs are on PTA1, PTA2 and PTD5 */
-  CLOCK_EnableClock(kCLOCK_PortA);
+  CLOCK_EnableClock(kCLOCK_PortA); /* docking station LEDs are on PTA1, PTA2 and PTD5 */
+  CLOCK_EnableClock(kCLOCK_PortC); /* RGB_B, RGB_C */
+  CLOCK_EnableClock(kCLOCK_PortD); /* RGB_G */
 
   LED1_Init();
   LED2_Init();
   LED3_Init();
+  RGBR_Init();
+  RGBG_Init();
+  RGBB_Init();
   //UTIL1_Init();
   //WAIT1_Init();
   CLS1_Init();
@@ -88,6 +95,26 @@ int main(void) {
   if (xTaskCreate(AppTask, "App", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
     for(;;){} /* error case only, stay here! */
   }
+
+  for(;;) {
+    LED1_Neg();
+    LED2_Neg();
+    LED3_Neg();
+
+    RGBR_On();
+    WAIT1_Waitms(500);
+    RGBR_Off();
+
+    RGBG_On();
+    WAIT1_Waitms(500);
+    RGBG_Off();
+
+    RGBB_On();
+    WAIT1_Waitms(500);
+    RGBB_Off();
+    WAIT1_Waitms(500);
+  }
+
   vTaskStartScheduler(); /* start the RTOS, create the IDLE task and run my tasks (if any) */
 
   for(;;) { /* Infinite loop to avoid leaving the main function */

@@ -4,10 +4,10 @@
 **     Project     : Hexiwear_PEx_2_SDKv2
 **     Processor   : MK64FN1M0VDC12
 **     Component   : Utility
-**     Version     : Component 01.127, Driver 01.00, CPU db: 3.00.000
+**     Version     : Component 01.128, Driver 01.00, CPU db: 3.00.000
 **     Repository  : Legacy User Components
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-09, 08:54, # CodeGen: 2
+**     Date/Time   : 2016-11-09, 20:32, # CodeGen: 17
 **     Abstract    :
 **          Contains various utility functions.
 **     Settings    :
@@ -76,6 +76,8 @@
 **         SetValue16LE            - void UTIL1_SetValue16LE(uint16_t data, uint8_t *dataP);
 **         SetValue24LE            - void UTIL1_SetValue24LE(uint32_t data, uint8_t *dataP);
 **         SetValue32LE            - void UTIL1_SetValue32LE(uint32_t data, uint8_t *dataP);
+**         Deinit                  - void UTIL1_Deinit(void);
+**         Init                    - void UTIL1_Init(void);
 **
 **     * Copyright (c) 2014-2016, Erich Styger
 **      * Web:         https://mcuoneclipse.com
@@ -1213,6 +1215,28 @@ void UTIL1_SetValue32LE(uint32_t data, uint8_t *dataP);
 **         NAME            - DESCRIPTION
 **         data            - Value to store
 **       * dataP           - Pointer to memory
+**     Returns     : Nothing
+** ===================================================================
+*/
+
+void UTIL1_Deinit(void);
+/*
+** ===================================================================
+**     Method      :  UTIL1_Deinit (component Utility)
+**     Description :
+**         Driver De-Initialization
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+
+void UTIL1_Init(void);
+/*
+** ===================================================================
+**     Method      :  UTIL1_Init (component Utility)
+**     Description :
+**         Driver Initialization
+**     Parameters  : None
 **     Returns     : Nothing
 ** ===================================================================
 */

@@ -66,7 +66,7 @@ Purpose : Implementation of SEGGER real-time transfer (RTT) which
 **********************************************************************
 */
 /* << EST: Additional setting to check for FreeRTOS: need to use FreeRTOS with proper BASEPRI mask to create critical sections */
-#define SEGGER_RTT_FREERTOS_PRESENT   0 /* 1: FreeRTOS enabled in project, 0: bare metal */
+#define SEGGER_RTT_FREERTOS_PRESENT   1 /* 1: FreeRTOS enabled in project, 0: bare metal */
 #if SEGGER_RTT_FREERTOS_PRESENT
   #include "portmacro.h" /* include FreeRTOS port header file for critical section handling */
 #endif

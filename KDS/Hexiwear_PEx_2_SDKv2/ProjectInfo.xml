@@ -80,7 +80,13 @@
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\LEDpin4.c</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\LEDpin5.c</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\LEDpin6.c</PathName>
+      <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\LEDpin7.c</PathName>
+      <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\LEDpin8.c</PathName>
+      <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\LEDpin9.c</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\PE_LDD.c</PathName>
+      <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\RGBB.c</PathName>
+      <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\RGBG.c</PathName>
+      <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\RGBR.c</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\RTT1.c</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\RTT_Syscalls_GCC.c</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\SEGGER_RTT.c</PathName>
@@ -114,6 +120,7 @@
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\FreeRTOS\Source\include\semphr.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\FreeRTOS\Source\include\task.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\FreeRTOS\Source\include\timers.h</PathName>
+      <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\FreeRTOS\Source\portable\GCC\ARM_CM4F\freertos_tasks_c_additions.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\FreeRTOS\Source\portable\GCC\ARM_CM4F\portTicks.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\FreeRTOS\Source\portable\GCC\ARM_CM4F\portmacro.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\FreeRTOS\config\gcc\FreeRTOSConfig.h</PathName>
@@ -127,11 +134,17 @@
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\LEDpin4.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\LEDpin5.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\LEDpin6.h</PathName>
+      <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\LEDpin7.h</PathName>
+      <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\LEDpin8.h</PathName>
+      <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\LEDpin9.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\PE_Const.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\PE_Error.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\PE_KSDK_Types.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\PE_LDD.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\PE_Types.h</PathName>
+      <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\RGBB.h</PathName>
+      <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\RGBG.h</PathName>
+      <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\RGBR.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\RTT1.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\SEGGER_RTT.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\SEGGER_RTT_Conf.h</PathName>
