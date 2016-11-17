@@ -78,20 +78,16 @@ int main(void) {
   BOARD_BootClockRUN();
   BOARD_InitDebugConsole();
 
-  CLOCK_EnableClock(kCLOCK_PortA); /* docking station LEDs are on PTA1, PTA2 and PTD5 */
-  CLOCK_EnableClock(kCLOCK_PortC); /* RGB_B, RGB_C */
-  CLOCK_EnableClock(kCLOCK_PortD); /* RGB_G */
-
+  /* initialize components */
   LED1_Init();
   LED2_Init();
   LED3_Init();
   RGBR_Init();
   RGBG_Init();
   RGBB_Init();
-  //UTIL1_Init();
-  //WAIT1_Init();
   CLS1_Init();
   RTT1_Init();
+  /* create RTOS task(s) */
   if (xTaskCreate(AppTask, "App", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
     for(;;){} /* error case only, stay here! */
   }

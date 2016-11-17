@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 - 2016, Freescale Semiconductor, Inc.
+ * Copyright (c) 2016, Freescale Semiconductor, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -26,14 +26,29 @@
  * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
  */
-
-/* This is a template file for pins configuration created by New Kinetis SDK 2.x Project Wizard. Enjoy! */
 
 #ifndef _PIN_MUX_H_
 #define _PIN_MUX_H_
 
-#include <stdbool.h>
+
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
+
+/*! @brief Direction type  */
+typedef enum _pin_mux_direction
+{
+  kPIN_MUX_DirectionInput = 0U,         /* Input direction */
+  kPIN_MUX_DirectionOutput = 1U,        /* Output direction */
+  kPIN_MUX_DirectionInputOrOutput = 2U  /* Input or output direction */
+} pin_mux_direction_t;
+
+/*!
+ * @addtogroup pin_mux
+ * @{
+ */
 
 /*******************************************************************************
  * API
@@ -41,15 +56,74 @@
 
 #if defined(__cplusplus)
 extern "C" {
-#endif /* __cplusplus*/
-       /*!
-        * @brief configure all pins for this demo/example
-        *
-        */
+#endif
+
+/* PORTC8 (coord A7), RGB_R */
+#define BOARD_INITPINS_RGBR_GPIO                                           GPIOC   /*!< GPIO device name: GPIOC */
+#define BOARD_INITPINS_RGBR_PORT                                           PORTC   /*!< PORT device name: PORTC */
+#define BOARD_INITPINS_RGBR_GPIO_PIN                                          8U   /*!< PORTC pin index: 8 */
+#define BOARD_INITPINS_RGBR_PIN_NAME                                        PTC8   /*!< Pin name */
+#define BOARD_INITPINS_RGBR_LABEL                                        "RGB_R"   /*!< Label */
+#define BOARD_INITPINS_RGBR_NAME                                          "RGBR"   /*!< Identifier name */
+#define BOARD_INITPINS_RGBR_DIRECTION                   kPIN_MUX_DirectionOutput   /*!< Direction */
+
+/* PORTC9 (coord D6), RGB_B */
+#define BOARD_INITPINS_RGBB_GPIO                                           GPIOC   /*!< GPIO device name: GPIOC */
+#define BOARD_INITPINS_RGBB_PORT                                           PORTC   /*!< PORT device name: PORTC */
+#define BOARD_INITPINS_RGBB_GPIO_PIN                                          9U   /*!< PORTC pin index: 9 */
+#define BOARD_INITPINS_RGBB_PIN_NAME                                        PTC9   /*!< Pin name */
+#define BOARD_INITPINS_RGBB_LABEL                                        "RGB_B"   /*!< Label */
+#define BOARD_INITPINS_RGBB_NAME                                          "RGBB"   /*!< Identifier name */
+#define BOARD_INITPINS_RGBB_DIRECTION                   kPIN_MUX_DirectionOutput   /*!< Direction */
+
+/* PORTD0 (coord D4), RGB_G */
+#define BOARD_INITPINS_RGBG_GPIO                                           GPIOD   /*!< GPIO device name: GPIOD */
+#define BOARD_INITPINS_RGBG_PORT                                           PORTD   /*!< PORT device name: PORTD */
+#define BOARD_INITPINS_RGBG_GPIO_PIN                                          0U   /*!< PORTD pin index: 0 */
+#define BOARD_INITPINS_RGBG_PIN_NAME                                        PTD0   /*!< Pin name */
+#define BOARD_INITPINS_RGBG_LABEL                                        "RGB_G"   /*!< Label */
+#define BOARD_INITPINS_RGBG_NAME                                          "RGBG"   /*!< Identifier name */
+#define BOARD_INITPINS_RGBG_DIRECTION                   kPIN_MUX_DirectionOutput   /*!< Direction */
+
+/* PORTA12 (coord K8), DOCK_LED1 */
+#define BOARD_INITPINS_LED1_GPIO                                           GPIOA   /*!< GPIO device name: GPIOA */
+#define BOARD_INITPINS_LED1_PORT                                           PORTA   /*!< PORT device name: PORTA */
+#define BOARD_INITPINS_LED1_GPIO_PIN                                         12U   /*!< PORTA pin index: 12 */
+#define BOARD_INITPINS_LED1_PIN_NAME                                       PTA12   /*!< Pin name */
+#define BOARD_INITPINS_LED1_LABEL                                    "DOCK_LED1"   /*!< Label */
+#define BOARD_INITPINS_LED1_NAME                                          "LED1"   /*!< Identifier name */
+
+/* PORTA13 (coord L8), DOCK_LED2 */
+#define BOARD_INITPINS_LED2_GPIO                                           GPIOA   /*!< GPIO device name: GPIOA */
+#define BOARD_INITPINS_LED2_PORT                                           PORTA   /*!< PORT device name: PORTA */
+#define BOARD_INITPINS_LED2_GPIO_PIN                                         13U   /*!< PORTA pin index: 13 */
+#define BOARD_INITPINS_LED2_PIN_NAME                                       PTA13   /*!< Pin name */
+#define BOARD_INITPINS_LED2_LABEL                                    "DOCK_LED2"   /*!< Label */
+#define BOARD_INITPINS_LED2_NAME                                          "LED2"   /*!< Identifier name */
+
+/* PORTA14 (coord K9), DOCK_LED3 */
+#define BOARD_INITPINS_LED3_GPIO                                           GPIOA   /*!< GPIO device name: GPIOA */
+#define BOARD_INITPINS_LED3_PORT                                           PORTA   /*!< PORT device name: PORTA */
+#define BOARD_INITPINS_LED3_GPIO_PIN                                         14U   /*!< PORTA pin index: 14 */
+#define BOARD_INITPINS_LED3_PIN_NAME                                       PTA14   /*!< Pin name */
+#define BOARD_INITPINS_LED3_LABEL                                    "DOCK_LED3"   /*!< Label */
+#define BOARD_INITPINS_LED3_NAME                                          "LED3"   /*!< Identifier name */
+
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
 void BOARD_InitPins(void);
 
 #if defined(__cplusplus)
 }
-#endif /* __cplusplus*/
+#endif
 
-#endif /* _PIN_MUX_H_  */
+/*!
+ * @}
+ */
+#endif /* _PIN_MUX_H_ */
+
+/*******************************************************************************
+ * EOF
+ ******************************************************************************/

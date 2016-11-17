@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 - 2016, Freescale Semiconductor, Inc.
+ * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -28,32 +28,51 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/* This is a template for clock configuration created by New Kinetis SDK 2.x Project Wizard. Enjoy! */
-
 #ifndef _CLOCK_CONFIG_H_
 #define _CLOCK_CONFIG_H_
 
-/*******************************************************************************
- * DEFINITION
- ******************************************************************************/
+#include "fsl_common.h"
 
 /*******************************************************************************
- * API
+ * Definitions
  ******************************************************************************/
+#define BOARD_XTAL0_CLK_HZ                         12000000U  /*!< Board xtal0 frequency in Hz */
+#define BOARD_XTAL32K_CLK_HZ                          32768U  /*!< Board RTC xtal frequency in Hz */
 
+/*******************************************************************************
+ ********************** Configuration BOARD_BootClockRUN ***********************
+ ******************************************************************************/
+/*******************************************************************************
+ * Definitions for BOARD_BootClockRUN configuration
+ ******************************************************************************/
+#define BOARD_BOOTCLOCKRUN_CORE_CLOCK             120000000U  /*!< Core clock frequency: 120000000Hz */
+
+/*! @brief MCG set for BOARD_BootClockRUN configuration.
+ */
+extern const mcg_config_t mcgConfig_BOARD_BootClockRUN;
+/*! @brief SIM module set for BOARD_BootClockRUN configuration.
+ */
+extern const sim_clock_config_t simConfig_BOARD_BootClockRUN;
+/*! @brief OSC set for BOARD_BootClockRUN configuration.
+ */
+extern const osc_config_t oscConfig_BOARD_BootClockRUN;
+
+/*******************************************************************************
+ * API for BOARD_BootClockRUN configuration
+ ******************************************************************************/
 #if defined(__cplusplus)
 extern "C" {
-#endif /* __cplusplus */
-
+#endif /* __cplusplus*/
 
 /*!
- * @brief configure clock after reset for this demo/example
+ * @brief This function executes configuration of clocks.
+ *
  */
 void BOARD_BootClockRUN(void);
 
-
 #if defined(__cplusplus)
 }
-#endif /* __cplusplus */
+#endif /* __cplusplus*/
 
 #endif /* _CLOCK_CONFIG_H_ */
+
