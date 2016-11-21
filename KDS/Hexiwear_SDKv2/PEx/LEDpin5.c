@@ -4,10 +4,10 @@
 **     Project     : Hexiwear_PEx_2_SDKv2
 **     Processor   : MK64FN1M0VDC12
 **     Component   : SDK_BitIO
-**     Version     : Component 01.015, Driver 01.00, CPU db: 3.00.000
+**     Version     : Component 01.017, Driver 01.00, CPU db: 3.00.000
 **     Repository  : Legacy User Components
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-09, 14:14, # CodeGen: 12
+**     Date/Time   : 2016-11-18, 19:44, # CodeGen: 22
 **     Abstract    :
 **
 **     Settings    :
@@ -17,6 +17,7 @@
 **          PORT Name                                      : PORTA
 **          Pin Number                                     : 13
 **          Pin Symbol                                     : LED_RED2
+**          Do Pin Muxing                                  : no
 **     Contents    :
 **         GetDir    - bool LEDpin5_GetDir(void);
 **         SetDir    - void LEDpin5_SetDir(bool Dir);
@@ -309,7 +310,9 @@ void LEDpin5_PutVal(bool Val)
 void LEDpin5_Init(void)
 {
 #if KSDK1_SDK_VERSION_USED == KSDK1_SDK_VERSION_2_0
+  #if LEDpin5_DO_PIN_MUXING
   PORT_SetPinMux(LEDpin5_PORTName, LEDpin5_PinNumber, kPORT_MuxAsGpio); /* mux as GPIO */
+  #endif
   LEDpin5_SetOutput();
 #elif KSDK1_SDK_VERSION_USED == KSDK1_SDK_VERSION_1_3
   /*! \todo Pin Muxing not implemented */
