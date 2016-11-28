@@ -7,7 +7,7 @@
 **     Version     : Component 01.009, Driver 01.00, CPU db: 3.00.000
 **     Repository  : Legacy User Components
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-09, 18:06, # CodeGen: 14
+**     Date/Time   : 2016-11-25, 18:26, # CodeGen: 24
 **     Abstract    :
 **
 **     Settings    :
@@ -44,18 +44,24 @@
 #define __CS1_H
 
 /* MODULE CS1. */
-
-/* Include inherited beans */
-#include "KSDK1.h"
+#include "KSDK1.h" /* include SDK */
 
 #if KSDK1_SDK_VERSION_USED == KSDK1_SDK_VERSION_NONE
-/* Include shared modules, which are used for whole project */
+  /* Include shared modules, which are used for whole project */
   #include "PE_Types.h"
   #include "PE_Error.h"
   #include "PE_Const.h"
   #include "IO_Map.h"
-  #include "Cpu.h"
 #endif
+
+/* Include inherited components */
+#include "KSDK1.h"
+
+/* other includes needed */
+#if KSDK1_SDK_VERSION_USED == KSDK1_SDK_VERSION_NONE
+  #include "Cpu.h" /* needed derivative header */
+#endif
+
 
 /* workaround macros for wrong EnterCritical()/ExitCritical() in the low level drivers. */
 #define CS1_CriticalVariableDrv() \

@@ -7,7 +7,7 @@
 **     Version     : Component 01.015, Driver 01.00, CPU db: 3.00.000
 **     Repository  : Legacy User Components
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-09, 18:06, # CodeGen: 14
+**     Date/Time   : 2016-11-25, 18:26, # CodeGen: 24
 **     Abstract    :
 **
 **     Settings    :
@@ -40,7 +40,24 @@
 */         
 
 /* MODULE XF1. */
-
+/**
+ * @file        xformatc.c
+ *
+ * @brief       Printf C implementation.
+ *
+ * @author      Mario Viara
+ *
+ * @version     1.04
+ *
+ * @copyright   Copyright Mario Viara 2014  - License Open Source (LGPL)
+ * This is a free software and is opened for education, research and commercial
+ * developments under license policy of following terms:
+ * - This is a free software and there is NO WARRANTY.
+ * - No restriction on use. You can use, modify and redistribute it for personal,
+ *   non-profit or commercial product UNDER YOUR RESPONSIBILITY.
+ * - Redistributions of source code must retain the above copyright notice.
+ *
+ */
 #include "XF1.h"
 
 /**

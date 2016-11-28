@@ -7,7 +7,7 @@
 **     Version     : Component 01.005, Driver 01.00, CPU db: 3.00.000
 **     Repository  : Legacy User Components
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-18, 19:44, # CodeGen: 22
+**     Date/Time   : 2016-11-25, 18:26, # CodeGen: 24
 **     Abstract    :
 **
 **     Settings    :
@@ -47,25 +47,25 @@
 
 /* SDK version used */
 #define KSDK1_SDK_VERSION_USED  KSDK1_SDK_VERSION_2_0
+
 #if KSDK1_SDK_VERSION_USED != KSDK1_SDK_VERSION_NONE
+  #include "PE_KSDK_Types.h"
   #ifndef __HIWARE__ /* Hiware compiler (S08, S12) only supports C89 */
     #include <stdint.h> /* uint8_t, int16_t, ... */
     #include <stdbool.h> /* bool, true, false, ... */
   #endif
-  #include "PE_KSDK_Types.h"
-#endif
-#if KSDK1_SDK_VERSION_USED == KSDK1_SDK_VERSION_NONE
-/* Include shared modules, which are used for whole project */
-#include "PE_Types.h"
-#include "PE_Error.h"
-#include "PE_Const.h"
-#include "IO_Map.h"
-/* Include inherited beans */
 #endif
 
 #if KSDK1_SDK_VERSION_USED == KSDK1_SDK_VERSION_NONE
+/* Include shared modules, which are used for whole project */
+  #include "PE_Types.h"
+  #include "PE_Error.h"
+  #include "PE_Const.h"
+  #include "IO_Map.h"
+/* Include inherited components */
   #include "Cpu.h"
 #endif
+
 
 /* END KSDK1. */
 

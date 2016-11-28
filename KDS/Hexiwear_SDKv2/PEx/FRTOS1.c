@@ -7,7 +7,7 @@
 **     Version     : Component 01.510, Driver 01.00, CPU db: 3.00.000
 **     Repository  : Legacy User Components
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-09, 19:49, # CodeGen: 16
+**     Date/Time   : 2016-11-25, 18:26, # CodeGen: 24
 **     Abstract    :
 **          This component implements the FreeRTOS Realtime Operating System
 **     Settings    :
@@ -233,8 +233,10 @@
 
 /* MODULE FRTOS1. */
 #include "FRTOS1.h"
+#if 0 /* not including it: not necessary and conflicting with bool types */
 #if KSDK1_SDK_VERSION_USED == KSDK1_SDK_VERSION_NONE
   #include "Events.h"
+#endif
 #endif
 #include "portTicks.h"                 /* interface to tick counter */
 

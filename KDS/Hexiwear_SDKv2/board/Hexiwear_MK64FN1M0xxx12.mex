@@ -25,7 +25,7 @@
          </pins_profile>
          <functions_list>
             <function name="BOARD_InitPins">
-               <description>Configures pin routing and optionally pin electrical features.&amp;lt;br/&amp;gt;</description>
+               <description>Configures pin routing and optionally pin electrical features. ddd&amp;lt;br/&amp;gt;</description>
                <options>
                   <coreID>singlecore</coreID>
                   <enableClock>true</enableClock>

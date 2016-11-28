@@ -7,7 +7,7 @@
 **     Version     : Component 01.086, Driver 01.00, CPU db: 3.00.000
 **     Repository  : Legacy User Components
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-09, 18:06, # CodeGen: 14
+**     Date/Time   : 2016-11-25, 18:26, # CodeGen: 24
 **     Abstract    :
 **
 **     Settings    :
@@ -110,15 +110,15 @@
 #define __CLS1_H
 
 /* MODULE CLS1. */
-#ifndef __HIWARE__
-  #include <stdint.h>
-  #include <stdbool.h>
-#endif
+#include "KSDK1.h" /* include SDK */
 
-#ifndef bool
+#if KSDK1_SDK_VERSION_USED == KSDK1_SDK_VERSION_NONE
+  /* Include shared modules, which are used for whole project */
   #include "PE_Types.h"
+  #include "PE_Error.h"
+  #include "PE_Const.h"
+  #include "IO_Map.h"
 #endif
-
 
 #ifndef __BWUserType_CLS1_StdIO_OutErr_FctType
 #define __BWUserType_CLS1_StdIO_OutErr_FctType
@@ -158,7 +158,6 @@
   typedef const CLS1_ParseCommandCallback CLS1_ConstParseCommandCallback; /* Callback for parsing a shell command */
 #endif
 
-
 #define CLS1_DEFAULT_SHELL_BUFFER_SIZE  48  /* default buffer size for shell command parsing */
 
 /* Include inherited components */
@@ -169,14 +168,7 @@
 #include "CS1.h"
 #include "KSDK1.h"
 
-#if KSDK1_SDK_VERSION_USED == KSDK1_SDK_VERSION_NONE
-/* Include shared modules, which are used for whole project */
-  #include "PE_Types.h"
-  #include "PE_Error.h"
-  #include "PE_Const.h"
-  #include "IO_Map.h"
-  #include "Cpu.h"
-#endif
+/* other includes needed */
 #include <stddef.h> /* for size_t */
 
 /* settings for command line history */

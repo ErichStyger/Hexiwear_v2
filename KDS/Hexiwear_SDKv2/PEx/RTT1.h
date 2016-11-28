@@ -4,10 +4,10 @@
 **     Project     : Hexiwear_PEx_2_SDKv2
 **     Processor   : MK64FN1M0VDC12
 **     Component   : SeggerRTT
-**     Version     : Component 01.076, Driver 01.00, CPU db: 3.00.000
+**     Version     : Component 01.080, Driver 01.00, CPU db: 3.00.000
 **     Repository  : Legacy User Components
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-09, 18:06, # CodeGen: 14
+**     Date/Time   : 2016-11-25, 18:26, # CodeGen: 24
 **     Abstract    :
 **
 **     Settings    :
@@ -47,6 +47,7 @@
 **         StdIOKeyPressed  - bool RTT1_StdIOKeyPressed(void);
 **         StdIOReadChar    - void RTT1_StdIOReadChar(uint8_t *c);
 **         StdIOSendChar    - void RTT1_StdIOSendChar(uint8_t ch);
+**         GetStdio         - %@Shell@'ModuleName'%.ConstStdIOTypePtr RTT1_GetStdio(void);
 **         Deinit           - void RTT1_Deinit(void);
 **         Init             - void RTT1_Init(void);
 **
@@ -401,6 +402,18 @@ void RTT1_Deinit(void);
 **         Driver deinitialization
 **     Parameters  : None
 **     Returns     : Nothing
+** ===================================================================
+*/
+
+CLS1_ConstStdIOTypePtr RTT1_GetStdio(void);
+/*
+** ===================================================================
+**     Method      :  RTT1_GetStdio (component SeggerRTT)
+**     Description :
+**         Returns a pointer to the standard I/O
+**     Parameters  : None
+**     Returns     :
+**         ---             - Error code
 ** ===================================================================
 */
 

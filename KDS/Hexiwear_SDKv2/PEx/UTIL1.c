@@ -7,7 +7,7 @@
 **     Version     : Component 01.128, Driver 01.00, CPU db: 3.00.000
 **     Repository  : Legacy User Components
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-09, 20:32, # CodeGen: 17
+**     Date/Time   : 2016-11-25, 18:26, # CodeGen: 24
 **     Abstract    :
 **          Contains various utility functions.
 **     Settings    :
@@ -2346,7 +2346,7 @@ void UTIL1_NumFloatToStr(uint8_t *dst, size_t dstSize, float val, uint8_t nofFra
   if (isNeg) {
     val = -val; /* make it positive */
   }
-  integral = (int32_t)val;
+  integral = (uint32_t)(int32_t)val;
   val = val-(float)integral; /* get rid of integral part */
   shift = 1;
   for(i=0;i<nofFracDigits;i++) {
