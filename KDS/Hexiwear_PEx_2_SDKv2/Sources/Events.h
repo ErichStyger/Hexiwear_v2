@@ -51,6 +51,7 @@
 #include "LEDpin8.h"
 #include "RGBB.h"
 #include "LEDpin9.h"
+#include "MCUC1.h"
 #include "KSDK1.h"
 #include "WAIT1.h"
 #include "UTIL1.h"

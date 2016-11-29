@@ -1,10 +1,10 @@
 /* ###################################################################
 **     Filename    : main.c
-**     Project     : Hexiwear_PEx_2_SDKv2
-**     Processor   : MK64FN1M0VDC12
+**     Project     : Hexiwear_PEx_Dockingstation
+**     Processor   : MK64FN1M0VLQ12
 **     Version     : Driver 01.01
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-09, 08:35, # CodeGen: 0
+**     Date/Time   : 2016-11-29, 10:52, # CodeGen: 0
 **     Abstract    :
 **         Main module.
 **         This module contains user's application code.
@@ -30,28 +30,18 @@
 /* Including needed modules to compile this module/procedure */
 #include "Cpu.h"
 #include "Events.h"
-#include "CS1.h"
-#include "CLS1.h"
-#include "XF1.h"
-#include "LED1.h"
-#include "LEDpin4.h"
-#include "LED2.h"
-#include "LEDpin5.h"
-#include "LED3.h"
-#include "LEDpin6.h"
-#include "HF1.h"
-#include "RTT1.h"
-#include "FRTOS1.h"
-#include "RGBR.h"
-#include "LEDpin7.h"
-#include "RGBG.h"
-#include "LEDpin8.h"
-#include "RGBB.h"
-#include "LEDpin9.h"
-#include "MCUC1.h"
-#include "KSDK1.h"
+#include "Pins1.h"
 #include "WAIT1.h"
-#include "UTIL1.h"
+#include "KSDK1.h"
+#include "RGBR.h"
+#include "LEDpin1.h"
+#include "BitIoLdd1.h"
+#include "RGBG.h"
+#include "LEDpin2.h"
+#include "BitIoLdd2.h"
+#include "RGBB.h"
+#include "LEDpin3.h"
+#include "BitIoLdd3.h"
 /* Including shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
@@ -73,11 +63,21 @@ int main(void)
 
   /* Write your code here */
   for(;;) {
-    LED1_Neg();
-    LED2_Neg();
-    LED3_Neg();
-    WAIT1_Waitms(500);
-  }
+    WAIT1_Waitms(100);
+    RGBR_On();
+    WAIT1_Waitms(100);
+    RGBR_Off();
+
+    WAIT1_Waitms(100);
+    RGBG_On();
+    WAIT1_Waitms(100);
+    RGBG_Off();
+
+    WAIT1_Waitms(100);
+    RGBB_On();
+    WAIT1_Waitms(100);
+    RGBB_Off();
+}
   /* For example: for(;;) { } */
 
   /*** Don't write any code pass this line, or it will be deleted during code generation. ***/
