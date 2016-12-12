@@ -4,15 +4,15 @@
 **     Project     : Hexiwear_PEx_2_SDKv2
 **     Processor   : MK64FN1M0VDC12
 **     Component   : Utility
-**     Version     : Component 01.128, Driver 01.00, CPU db: 3.00.000
+**     Version     : Component 01.130, Driver 01.00, CPU db: 3.00.000
 **     Repository  : Legacy User Components
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-25, 18:26, # CodeGen: 24
+**     Date/Time   : 2016-11-29, 10:51, # CodeGen: 26
 **     Abstract    :
 **          Contains various utility functions.
 **     Settings    :
 **          Component name                                 : UTIL1
-**          SDK                                            : KSDK1
+**          SDK                                            : MCUC1
 **     Contents    :
 **         strcpy                  - void UTIL1_strcpy(uint8_t *dst, size_t dstSize, const unsigned char *src);
 **         strcat                  - void UTIL1_strcat(uint8_t *dst, size_t dstSize, const unsigned char *src);

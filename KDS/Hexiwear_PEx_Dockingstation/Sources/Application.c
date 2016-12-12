@@ -5,6 +5,7 @@
  *      Author: Erich Styger Local
  */
 
+#include "Platform.h"
 #include "Application.h"
 #include "FRTOS1.h"
 #include "Shell.h"
@@ -12,7 +13,9 @@
 
 void APP_Run(void) {
   SHELL_Init();
+#if PL_CONFIG_HAS_RADIO
   RNETA_Init();
+#endif
   vTaskStartScheduler();
 }
 

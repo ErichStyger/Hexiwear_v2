@@ -108,6 +108,7 @@
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\CS1.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\Cpu.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\FRTOS1.h</PathName>
+      <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\FRTOS1config.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\FreeRTOS\Source\include\FreeRTOS.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\FreeRTOS\Source\include\StackMacros.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\FreeRTOS\Source\include\croutine.h</PathName>
@@ -156,6 +157,7 @@
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\Vectors_Config.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\WAIT1.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\XF1.h</PathName>
+      <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Generated_Code\XF1config.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Sources\Events.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Static_Code\IO_Map\MK64F12.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_2_SDKv2\Static_Code\PDD\ADC_PDD.h</PathName>

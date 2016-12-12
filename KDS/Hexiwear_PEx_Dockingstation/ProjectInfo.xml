@@ -137,6 +137,7 @@
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Generated_Code\Cpu.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Generated_Code\ExtIntLdd1.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Generated_Code\FRTOS1.h</PathName>
+      <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Generated_Code\FRTOS1config.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Generated_Code\FreeRTOS.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Generated_Code\FreeRTOSConfig.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Generated_Code\HF1.h</PathName>
@@ -181,6 +182,7 @@
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Generated_Code\Vectors_Config.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Generated_Code\WAIT1.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Generated_Code\XF1.h</PathName>
+      <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Generated_Code\XF1config.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Generated_Code\croutine.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Generated_Code\deprecated_definitions.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Generated_Code\event_groups.h</PathName>
@@ -197,6 +199,7 @@
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Generated_Code\timers.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Sources\Application.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Sources\Events.h</PathName>
+      <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Sources\Platform.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Sources\RNet_App.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Sources\RNet_AppConfig.h</PathName>
       <PathName>C:\Users\Erich Styger\Data\GitRepos\Hexiwear_v2\KDS\Hexiwear_PEx_Dockingstation\Sources\Shell.h</PathName>

@@ -6,6 +6,7 @@
  * This module implements the front to the console/shell functionality.
  */
 
+#include "Platform.h"
 #include "Shell.h"
 #include "CLS1.h"
 #include "Application.h"
@@ -18,8 +19,10 @@ static const CLS1_ParseCommandCallback CmdParserTable[] =
 {
   CLS1_ParseCommand, /* Processor Expert Shell component, is first in list */
   KIN1_ParseCommand,
+#if PL_CONFIG_HAS_RADIO
   RNET1_ParseCommand,
   RNETA_ParseCommand,
+#endif
   FRTOS1_ParseCommand,
   NULL /* Sentinel */
 };

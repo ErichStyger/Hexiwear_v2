@@ -4,10 +4,10 @@
 **     Project     : Hexiwear_PEx_2_SDKv2
 **     Processor   : MK64FN1M0VDC12
 **     Component   : KinetisSDK
-**     Version     : Component 01.005, Driver 01.00, CPU db: 3.00.000
+**     Version     : Component 01.006, Driver 01.00, CPU db: 3.00.000
 **     Repository  : Legacy User Components
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-09, 11:20, # CodeGen: 5
+**     Date/Time   : 2016-11-29, 10:51, # CodeGen: 26
 **     Abstract    :
 **
 **     Settings    :
