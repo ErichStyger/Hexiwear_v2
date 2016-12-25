@@ -114,7 +114,7 @@ static void Init(void) {
   }
 }
 
-static void RadioTask(void *pvParameters) {
+static void RNetATask(void *pvParameters) {
   (void)pvParameters; /* not used */
   Init(); /* initialize address */
   appState = RNETA_NONE; /* set state machine state */
@@ -135,8 +135,8 @@ void RNETA_Init(void) {
     //APP_DebugPrint((unsigned char*)"ERR: failed setting message handler!\r\n");
   }
   if (FRTOS1_xTaskCreate(
-        RadioTask,  /* pointer to the task */
-        "Radio", /* task name for kernel awareness debugging */
+        RNetATask,  /* pointer to the task */
+        "RNetA", /* task name for kernel awareness debugging */
         configMINIMAL_STACK_SIZE+50, /* task stack size */
         (void*)NULL, /* optional task startup argument */
         tskIDLE_PRIORITY+3,  /* initial priority */
@@ -167,13 +167,10 @@ static uint8_t PrintStatus(const CLS1_StdIOType *io) {
 
 static void PrintHelp(const CLS1_StdIOType *io) {
   CLS1_SendHelpStr((unsigned char*)"app", (unsigned char*)"Group of application commands\r\n", io->stdOut);
-  CLS1_SendHelpStr((unsigned char*)"  help", (unsigned char*)"Shows radio help or status\r\n", io->stdOut);
+  CLS1_SendHelpStr((unsigned char*)"  help|status", (unsigned char*)"Shows radio help or status\r\n", io->stdOut);
   CLS1_SendHelpStr((unsigned char*)"  saddr 0x<addr>", (unsigned char*)"Set source node address\r\n", io->stdOut);
   CLS1_SendHelpStr((unsigned char*)"  daddr 0x<addr>", (unsigned char*)"Set destination node address\r\n", io->stdOut);
   CLS1_SendHelpStr((unsigned char*)"  send val <val>", (unsigned char*)"Set a value to the destination node\r\n", io->stdOut);
-#if RNET_CONFIG_REMOTE_STDIO
-  CLS1_SendHelpStr((unsigned char*)"  send (in/out/err)", (unsigned char*)"Send a string to stdio using the wireless transceiver\r\n", io->stdOut);
-#endif
 }
 
 uint8_t RNETA_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io) {
@@ -215,31 +212,6 @@ uint8_t RNETA_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_S
       CLS1_SendStr((unsigned char*)"ERR: wrong address\r\n", io->stdErr);
       return ERR_FAILED;
     }
-#if RNET_CONFIG_REMOTE_STDIO
-  } else if (UTIL1_strncmp((char*)cmd, (char*)"app send", sizeof("app send")-1)==0) {
-    unsigned char buf[32];
-    RSTDIO_QueueType queue;
-
-    if (UTIL1_strncmp((char*)cmd, (char*)"app send in", sizeof("app send in")-1)==0) {
-      queue = RSTDIO_QUEUE_TX_IN;
-      cmd += sizeof("app send in");
-    } else if (UTIL1_strncmp((char*)cmd, (char*)"app send out", sizeof("app send out")-1)==0) {
-      queue = RSTDIO_QUEUE_TX_OUT;
-      cmd += sizeof("app send out");
-    } else if (UTIL1_strncmp((char*)cmd, (char*)"app send err", sizeof("app send err")-1)==0) {
-      queue = RSTDIO_QUEUE_TX_ERR;
-      cmd += sizeof("app send err");
-    } else {
-      return ERR_OK; /* not handled */
-    }
-    UTIL1_strcpy(buf, sizeof(buf), cmd);
-    UTIL1_chcat(buf, sizeof(buf), '\n');
-    buf[sizeof(buf)-2] = '\n'; /* have a '\n' in any case */
-    if (RSTDIO_SendToTxStdio(queue, buf, UTIL1_strlen((char*)buf))!=ERR_OK) {
-      CLS1_SendStr((unsigned char*)"failed!\r\n", io->stdErr);
-    }
-    *handled = TRUE;
-#endif
   }
   return res;
 }

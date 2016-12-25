@@ -3,7 +3,7 @@
   <Header>
     <Name>Hexiwear_PEx_Dockingstation</Name>
     <SavedBy>Erich Styger Local</SavedBy>
-    <ModificationStamp>29</ModificationStamp>
+    <ModificationStamp>32</ModificationStamp>
     <Date>2016-11-29</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.12.2.RT7_b1550-0615</PEversion>
@@ -25503,7 +25503,7 @@
     <UserFolderName />
     <Comment lines_count="0" />
     <Template />
-    <BeanVersion>01.088</BeanVersion>
+    <BeanVersion>01.089</BeanVersion>
     <LightErrorsIgnored>false</LightErrorsIgnored>
     <Properties>
       <ItemState>
@@ -28526,7 +28526,7 @@
     <UserFolderName />
     <Comment lines_count="0" />
     <Template />
-    <BeanVersion>01.092</BeanVersion>
+    <BeanVersion>01.094</BeanVersion>
     <LightErrorsIgnored>false</LightErrorsIgnored>
     <Properties>
       <ItemState>
@@ -28750,6 +28750,14 @@
         <Expanded>true</Expanded>
       </ItemState>
       <ItemState>
+        <ItemSymbol>RStdioDefaultDestinationAddress</ItemSymbol>
+        <ReadOnly>false</ReadOnly>
+        <UserReadOnly>false</UserReadOnly>
+        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
+        <Value>255</Value>
+        <Base>DEC</Base>
+      </ItemState>
+      <ItemState>
         <ItemSymbol>RStdioQueueLength</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
@@ -28876,7 +28884,7 @@
     <UserFolderName />
     <Comment lines_count="0" />
     <Template />
-    <BeanVersion>01.088</BeanVersion>
+    <BeanVersion>01.090</BeanVersion>
     <LightErrorsIgnored>false</LightErrorsIgnored>
     <Properties>
       <ItemState>
@@ -30720,6 +30728,22 @@
             </ItemState>
           </Events>
         </InheritedComponentState>
+      </ItemState>
+      <ItemState>
+        <ItemSymbol>UseMutex</ItemSymbol>
+        <ReadOnly>false</ReadOnly>
+        <UserReadOnly>false</UserReadOnly>
+        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
+        <Index>0</Index>
+        <Value>true</Value>
+      </ItemState>
+      <ItemState>
+        <ItemSymbol>Mutex</ItemSymbol>
+        <ReadOnly>false</ReadOnly>
+        <UserReadOnly>false</UserReadOnly>
+        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
+        <Index>0</Index>
+        <Value>true</Value>
       </ItemState>
     </Properties>
     <Methods>
