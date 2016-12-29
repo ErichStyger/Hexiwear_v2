@@ -32,7 +32,23 @@
 
 static int i = 0;
 
-int main(void)
+void __aeabi_memclr4(void) {
+  for(;;);
+}
+
+void __aeabi_memclr(void) {
+  for(;;);
+}
+
+void __aeabi_memset4(void) {
+  for(;;);
+}
+
+void __aeabi_memcpy(void) {
+  for(;;);
+}
+
+int main2(void)
 {
 
     /* Write your code here */
