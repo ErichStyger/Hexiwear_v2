@@ -26,6 +26,9 @@
   #include "HLED5.h"
   #include "HLED6.h"
 #endif
+#include "RGBR.h"
+#include "RGBG.h"
+#include "RGBB.h"
 
 static const CLS1_ParseCommandCallback CmdParserTable[] =
 {
@@ -50,6 +53,15 @@ static const CLS1_ParseCommandCallback CmdParserTable[] =
   #if HLED6_PARSE_COMMAND_ENABLED
   HLED6_ParseCommand,
   #endif
+#endif
+#if RGBR_PARSE_COMMAND_ENABLED
+  RGBR_ParseCommand,
+#endif
+#if RGBG_PARSE_COMMAND_ENABLED
+  RGBG_ParseCommand,
+#endif
+#if RGBB_PARSE_COMMAND_ENABLED
+  RGBB_ParseCommand,
 #endif
 #if PL_CONFIG_HAS_RADIO
   RNET1_ParseCommand,

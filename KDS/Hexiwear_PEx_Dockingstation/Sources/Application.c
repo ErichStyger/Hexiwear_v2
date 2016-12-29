@@ -53,8 +53,10 @@ static void AppTask(void *param) {
   HLED6_Off();
 #endif
   for(;;) {
-    RGBG_Neg();
-    FRTOS1_vTaskDelay(pdMS_TO_TICKS(100));
+    RGBG_On();
+    FRTOS1_vTaskDelay(pdMS_TO_TICKS(10));
+    RGBG_Off();
+    FRTOS1_vTaskDelay(pdMS_TO_TICKS(5000));
   }
 }
 
