@@ -21,4 +21,7 @@ Section: .bootloader
 Align: 4
 
 
-NOTE: The project is still experimental and *not* functional yet. Still fixing issues and debugging it.
+NOTE: The project is still experimental.
+
+Links:
+- https://mcuoneclipse.com/2016/12/30/building-the-nxp-ble-stack-with-open-source-gnu-and-eclipse-tools/
