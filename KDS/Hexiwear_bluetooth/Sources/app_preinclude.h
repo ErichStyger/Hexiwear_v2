@@ -143,6 +143,7 @@
  ********************************************************************************** */
 #define CONFIG_HAS_OTAP_SERVICE     0 /* over-the-air-application-programming service */
 #define CONFIG_HAS_HEALTH_SERVICE   0 /* health service */
+#define CONFIG_HAS_TSI              0 /* touch sensing interface */
 
 /* Defines Controller task stack size */
 #define gControllerTaskStackSize_c 700

@@ -192,6 +192,7 @@ static void HostInterface_RxPacketHandler(hostInterface_packet_t * pHostInterfac
             break;   
         }
         
+#if CONFIG_HAS_TSI
         /////////////////////////////////////////////////////////////////////////////
         // Send info about active slider.
         case packetType_tsiGroupGetActive:
@@ -207,7 +208,9 @@ static void HostInterface_RxPacketHandler(hostInterface_packet_t * pHostInterfac
             }
             break;   
         }
+#endif
         
+#if CONFIG_HAS_TSI
         /////////////////////////////////////////////////////////////////////////////
         // Toggle Active slider.
         case packetType_tsiGroupToggleActive:
@@ -238,7 +241,7 @@ static void HostInterface_RxPacketHandler(hostInterface_packet_t * pHostInterfac
             }
             break;   
         }
-        
+#endif
         /////////////////////////////////////////////////////////////////////////////
         // Send info about advertising mode.
         case packetType_advModeGet:

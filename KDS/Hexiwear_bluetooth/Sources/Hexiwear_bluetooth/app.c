@@ -225,6 +225,7 @@ static tmrTimerID_t goToSleepTimerId;
 
 static bool_t sleepFalg = false;
 
+#if CONFIG_HAS_OTAP_SERVICE
 /*! OTAP Client data structure.
  *  Contains current image information and state informations
  *  regarding the image download procedure. */
@@ -257,7 +258,7 @@ static otapClientAppData_t     otapClientData =
 static const uint8_t imageIdAll[gOtap_ImageIdFieldSize_c]  = {0x00, 0x00};
 static const uint8_t imageIdKW40[gOtap_ImageIdFieldSize_c] = {0x01, 0x00};
 static const uint8_t imageIdMK64[gOtap_ImageIdFieldSize_c] = {0x02, 0x00};
-
+#endif
 uint8_t currentImageVerMK64[gOtap_ImageVersionFieldSize_c] = 
 {
     0x01, 0x00, 0x00,    // Build Version
@@ -426,6 +427,7 @@ static bool BleApp_VerifyFlashRead(uint8_t * data, uint16_t size)
  *    Fill the properties of the firmware images (for both MK64 and KW40 MCUs).
  */
 
+#if CONFIG_HAS_OTAP_SERVICE
 static void BleApp_ReadFwImagProps(void)
 {
     uint8_t *imgId;
@@ -463,6 +465,7 @@ static void BleApp_ReadFwImagProps(void)
         FLib_MemCpy((uint8_t *) otapClientData.currentImgVer, (uint8_t *) imgVer, gOtap_ImageVersionFieldSize_c);
     }
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
@@ -536,14 +539,17 @@ void BleApp_Init(void)
         NV_WriteHWParameters(&gHardwareParameters);
     }
     
+#if CONFIG_HAS_TSI
     // TSI should be active only in "deviceState_watch" state.
     if(deviceState == deviceState_watch)
     {
         TouchSense_Init();
     }
+#endif
     
+#if CONFIG_HAS_OTAP_SERVICE
     BleApp_ReadFwImagProps();
-    
+#endif
     // Check if there is valid advertise mode written into FLASH.
     if(BleApp_VerifyFlashRead((uint8_t *)&gHardwareParameters.advMode, 1) == true)
     {
