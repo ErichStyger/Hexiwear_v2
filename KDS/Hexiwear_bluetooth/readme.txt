@@ -2,6 +2,20 @@ readme.txt
 ----------
 This is a port of the IAR Hexiwear KW40Z BLE project to Kinetis Design Studio.
 
-Security library: C:\nxp\KW40Z_Connectivity_Software_1.0.1\ConnSw\framework\SecLib
-C:\nxp\KW40Z_Connectivity_Software_1.0.1\ConnSw\bluetooth\controller\lib
-C:\nxp\KW40Z_Connectivity_Software_1.0.1\ConnSw\bluetooth\host\lib
+
+The following symbols are defined in the IAR linker settings:
+
+gUseNVMLink_d=1
+__heap_size__=0
+__stack_size__=384
+gUseBootloaderLink_d=1
+gUseInternalStorageLink_d=0
+__ram_vector_table__=1
+gNVMSectorCountLink_d=1
+
+
+Raw image:
+C:\nxp\KW40Z_Connectivity_Software_1.0.1\ConnSw\framework\Bootloader\Bootloader_OTAP_Serial\BootloaderOTAP_KW40Z4\Exe\BootloaderOTAP_KW40Z4.bin
+Symbol: bootloader
+Section: .bootloader
+Align: 4

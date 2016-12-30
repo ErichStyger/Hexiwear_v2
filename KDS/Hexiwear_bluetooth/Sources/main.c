@@ -29,24 +29,20 @@
  */
 
 #include "fsl_device_registers.h"
+#include <string.h>
 
 static int i = 0;
 
-void __aeabi_memclr4(void) {
-  for(;;);
-}
+/* wrappers needed as used in the IAR libraries */
+void __aeabi_memset(void *dest, size_t n, int c) { memset(dest, c, n); }
+void __aeabi_memset4(void *dest, size_t n, int c) { memset(dest, c, n); }
+void __aeabi_memclr(void *dest, size_t n) { memset(dest, n, 0); }
+void __aeabi_memclr4(void *dest, size_t n) { memset(dest, n, 0); }
+void __aeabi_memcpy(void *to, void *from, size_t size) { memcpy(to, from, size); }
 
-void __aeabi_memclr(void) {
-  for(;;);
-}
-
-void __aeabi_memset4(void) {
-  for(;;);
-}
-
-void __aeabi_memcpy(void) {
-  for(;;);
-}
+/* NV_STORAGE_END_ADDRESS from linker file is used as NV Start Address */
+uint32_t NV_STORAGE_END_ADDRESS;
+uint32_t FREESCALE_PROD_DATA_BASE_ADDR;
 
 int main2(void)
 {

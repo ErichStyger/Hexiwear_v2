@@ -209,9 +209,11 @@ static gpio_input_pin_user_config_t bleApp_intPin =
 /* Service Data*/
 static basConfig_t      basServiceConfig    = {service_battery, 100};
 static disConfig_t      disServiceConfig    = {service_device_info};
+#if CONFIG_HAS_OTAP_SERVICE
 static otapClientConfig_t otapServiceConfig = {service_otap};
 
 static uint16_t otapWriteNotifHandles[]     = {value_otap_control_point, value_otap_data};
+#endif
 static uint16_t writeNotifHandles[]         = {value_alertIn};
 
 /* Application specific data*/
@@ -294,6 +296,7 @@ static void BleApp_AddToWhiteList(void);
 static void BleApp_Advertise(void);
 static void Ble_StartServices(void);
 
+#if CONFIG_HAS_OTAP_SERVICE
 /* OTAP Client functions */
 /* Commands received from the OTAP Server */
 static void OtapClient_HandleDataChunk (deviceId_t deviceId, uint16_t length, uint8_t* pData);
@@ -319,6 +322,7 @@ static void OtapClient_Complete(void);
 static void OtapClient_Fail(void);
 
 static void BleApp_SendConnUpdateReq(deviceId_t peerDeviceId);
+#endif
 
 /* Timer Callbacks */
 static void BleApp_GoToSleepTimerCallback (void *);
@@ -688,12 +692,16 @@ static void Ble_StartServices(void)
         Dis_Start(&disServiceConfig);
         Mos_Start();
         Wes_Start();
+#if CONFIG_HAS_HEALTH_SERVICE
         Hes_Start();
+#endif
         Als_Start();
     }
     else
     {
+#if CONFIG_HAS_OTAP_SERVICE
         OtapCS_Start(&otapServiceConfig);
+#endif
     }
 }
 
@@ -713,12 +721,16 @@ static void Ble_Subscribe(deviceId_t deviceId)
         Bas_Subscribe(deviceId);
         Mos_Subscribe(deviceId);
         Wes_Subscribe(deviceId);
+#if CONFIG_HAS_HEALTH_SERVICE
         Hes_Subscribe(deviceId);
+#endif
         Als_Subscribe(deviceId);
     }
     else
     {
+#if CONFIG_HAS_OTAP_SERVICE
         OtapCS_Subscribe(deviceId);
+#endif
     }
 }
 
@@ -736,12 +748,16 @@ static void Ble_Unsubscribe(void)
         Bas_Unsubscribe();
         Mos_Unsubscribe();
         Wes_Unsubscribe();
+#if CONFIG_HAS_HEALTH_SERVICE
         Hes_Unsubscribe();
+#endif
         Als_Unsubscribe();
     }
     else
     {
+#if CONFIG_HAS_OTAP_SERVICE
         OtapCS_Unsubscribe();
+#endif
     }
 }
 
@@ -808,8 +824,10 @@ static void BleApp_Config()
     }
     else
     {
+#if CONFIG_HAS_OTAP_SERVICE
         GattServer_RegisterHandlesForWriteNotifications (sizeof(otapWriteNotifHandles)/sizeof(otapWriteNotifHandles[0]),
                                                          otapWriteNotifHandles);
+#endif
     }
         
     /* Register security requirements */
@@ -869,8 +887,10 @@ static void BleApp_Config()
     GattDb_WriteAttribute(value_fw_rev, 11, fwRevision);       // Set firmware revision characteristic.
     GattDb_WriteAttribute(value_serial_num, 10, uniqueID);     // Set serial number characteristic.
     
+#if CONFIG_HAS_OTAP_SERVICE
     // Write current state to corresponding characteristic.
     GattDb_WriteAttribute(value_otap_state, 1, (uint8_t *)&deviceState);
+#endif
 
     goToSleepTimerId = TMR_AllocateTimer();
     
@@ -1053,7 +1073,9 @@ static void BleApp_ConnectionCallback (deviceId_t peerDeviceId, gapConnectionEve
                         // If device state is some of "OTAP states", and remote device is not bonded, just stop OTAP and reset device.
                         else
                         {
+#if CONFIG_HAS_OTAP_SERVICE
                             OtapClient_Fail();
+#endif
                             ResetMCU();
                         }
                     }
@@ -1070,7 +1092,9 @@ static void BleApp_ConnectionCallback (deviceId_t peerDeviceId, gapConnectionEve
                 #if (cPWR_UsePowerDownMode)    
                     PWR_DisallowDeviceToSleep();
                 #endif
+#if CONFIG_HAS_OTAP_SERVICE
                     OtapClient_HandleConnectionEvent (peerDeviceId);
+#endif
                 }
                 else
                 {
@@ -1114,7 +1138,9 @@ static void BleApp_ConnectionCallback (deviceId_t peerDeviceId, gapConnectionEve
             // If disconnect event is detected during OTAP, then declare OTAP process as unsuccessful, and reset device.
             if(deviceState != deviceState_watch)
             {
+#if CONFIG_HAS_OTAP_SERVICE
                 OtapClient_Fail();
+#endif
                 ResetMCU();
             }
             // Send link state to host MCU.
@@ -1249,7 +1275,9 @@ static void BleApp_ConnectionCallback (deviceId_t peerDeviceId, gapConnectionEve
             // Device must be paired and bonded before start OTAP process.
             else
             {
+#if CONFIG_HAS_OTAP_SERVICE
                 OtapClient_Fail();
+#endif
                 ResetMCU();
             }
         }    
@@ -1395,6 +1423,7 @@ static void BleApp_CccdWritten (deviceId_t deviceId, uint16_t handle, gattCccdFl
     otapCommand_t otapCommand;
     bleResult_t   bleResult;
     
+#if CONFIG_HAS_OTAP_SERVICE
     /*! Check if the OTAP control point CCCD was written. */
     if (
          (handle == cccd_otap_control_point) &&
@@ -1426,6 +1455,7 @@ static void BleApp_CccdWritten (deviceId_t deviceId, uint16_t handle, gattCccdFl
             ResetMCU();
         }
     }
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -1479,6 +1509,7 @@ static void BleApp_AttributeWritten(deviceId_t deviceId, uint16_t handle, uint16
             GattServer_SendAttributeWrittenStatus(deviceId, handle, attWriteStatus);
         }
     }
+#if CONFIG_HAS_OTAP_SERVICE
     else if(
              (handle == value_otap_control_point) &&
              (deviceState != deviceState_watch)
@@ -1564,12 +1595,15 @@ static void BleApp_AttributeWritten(deviceId_t deviceId, uint16_t handle, uint16
             break;
         };
     }
-    else
+#endif
+   else
     {
         // A GATT Server is trying to GATT Write an unknown attribute value.
         //  This should not happen. Disconnect the link.
         Gap_Disconnect (deviceId);
+#if CONFIG_HAS_OTAP_SERVICE
         OtapClient_Fail();
+#endif
         ResetMCU();
     }
 }
@@ -1595,6 +1629,7 @@ static void BleApp_AttributeWrittenWithoutResponse (deviceId_t deviceId,
     otapStatus_t otapStatus = gOtapStatusSuccess_c;
     bleResult_t bleResult;
     
+#if CONFIG_HAS_OTAP_SERVICE
     // Only the OTAP Data attribute is expected to be written using the
     // ATT Write Without Response Command. 
     if (
@@ -1652,6 +1687,7 @@ static void BleApp_AttributeWrittenWithoutResponse (deviceId_t deviceId,
             }
         }
     }
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -1668,6 +1704,7 @@ static void BleApp_HandleValueConfirmation (deviceId_t deviceId)
     otapCommand_t otapCommand;
     bleResult_t   bleResult;
     
+#if CONFIG_HAS_OTAP_SERVICE
     // Check for which command sent to the OTAP Server the confirmation has been received.
     if(deviceState != deviceState_watch)
     {
@@ -1716,12 +1753,14 @@ static void BleApp_HandleValueConfirmation (deviceId_t deviceId)
                 break;
         };
     }
+#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 
+#if CONFIG_HAS_OTAP_SERVICE
 static void OtapClient_HandleDataChunk (deviceId_t deviceId, uint16_t length, uint8_t* pData)
 {
     otapCommand_t otapCommand;
@@ -2095,11 +2134,12 @@ static void OtapClient_HandleDataChunk (deviceId_t deviceId, uint16_t length, ui
         }
     }
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 
+#if CONFIG_HAS_OTAP_SERVICE
 static void OtapClient_HandleNewImageNotification (deviceId_t deviceId, uint16_t length, uint8_t* pValue)
 {
     otapCommand_t otapCommand;
@@ -2217,11 +2257,12 @@ static void OtapClient_HandleNewImageNotification (deviceId_t deviceId, uint16_t
         }
     }
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 
+#if CONFIG_HAS_OTAP_SERVICE
 static void OtapClient_HandleNewImageInfoResponse (deviceId_t deviceId, uint16_t length, uint8_t* pValue)
 {
     otapCommand_t otapCommand;
@@ -2328,11 +2369,12 @@ static void OtapClient_HandleNewImageInfoResponse (deviceId_t deviceId, uint16_t
         }
     }
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 
+#if CONFIG_HAS_OTAP_SERVICE
 static void OtapClient_HandleErrorNotification (deviceId_t deviceId, uint16_t length, uint8_t* pValue)
 {
     otapCommand_t otapCommand;
@@ -2383,11 +2425,11 @@ static void OtapClient_HandleErrorNotification (deviceId_t deviceId, uint16_t le
         }
     }
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
-
+#if CONFIG_HAS_OTAP_SERVICE
 static void OtapClient_HandleNewImageInfoRequestConfirmation (deviceId_t deviceId)
 {
     /* Clear the last command sent to the OTAP Server for which a Confirmation is expected. */
@@ -2396,11 +2438,11 @@ static void OtapClient_HandleNewImageInfoRequestConfirmation (deviceId_t deviceI
     /* Nothing more to do here. If the New Image Info Request Command has reached
      * the OTAP Server then the OTAP Client expects a New Image Info Response */
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
-
+#if CONFIG_HAS_OTAP_SERVICE
 static void OtapClient_HandleImageBlockRequestConfirmation (deviceId_t deviceId)
 {
     /* Clear the last command sent to the OTAP Server for which a Confirmation is expected. */
@@ -2410,11 +2452,11 @@ static void OtapClient_HandleImageBlockRequestConfirmation (deviceId_t deviceId)
      * the OTAP Server then the OTAP Client expects the requested image chunks
      * or an Error Notification. */
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
-
+#if CONFIG_HAS_OTAP_SERVICE
 static void OtapClient_HandleImageTransferCompleteConfirmation (deviceId_t deviceId)
 {
     otapCommand_t otapCommand;
@@ -2460,11 +2502,12 @@ static void OtapClient_HandleImageTransferCompleteConfirmation (deviceId_t devic
         ResetMCU ();
     }
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 
+#if CONFIG_HAS_OTAP_SERVICE
 static void OtapClient_HandleErrorNotificationConfirmation (deviceId_t deviceId)
 {
     /* Clear the last command sent to the OTAP Server for which a Confirmation is expected. */
@@ -2479,11 +2522,12 @@ static void OtapClient_HandleErrorNotificationConfirmation (deviceId_t deviceId)
     /* If an error has occured try to continue the image download from a "safe" point. */
     OtapClient_ContinueImageDownload (deviceId);
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 
+#if CONFIG_HAS_OTAP_SERVICE
 static void OtapClient_HandleStopImageTransferConfirmation (deviceId_t deviceId)
 {
     /* Clear the last command sent to the OTAP Server for which a Confirmation is expected. */
@@ -2498,11 +2542,12 @@ static void OtapClient_HandleStopImageTransferConfirmation (deviceId_t deviceId)
     /* If an error has occured try to continue the image download from a "safe" point. */
     OtapClient_ContinueImageDownload (deviceId);
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 
+#if CONFIG_HAS_OTAP_SERVICE
 static void OtapClient_HandleConnectionEvent (deviceId_t deviceId)
 {
     switch (otapClientData.state)
@@ -2568,11 +2613,11 @@ static void OtapClient_HandleConnectionEvent (deviceId_t deviceId)
         break;
     };
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
-
+#if CONFIG_HAS_OTAP_SERVICE
 static void OtapClient_HandleDisconnectionEvent(deviceId_t deviceId)
 {
     /* Check if the peer OTAP server was disconnected and if so reset block download
@@ -2585,11 +2630,11 @@ static void OtapClient_HandleDisconnectionEvent(deviceId_t deviceId)
         otapClientData.totalBlockSize = 0;
     }
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
-
+#if CONFIG_HAS_OTAP_SERVICE
 static void OtapClient_ContinueImageDownload (deviceId_t deviceId)
 {
     otapCommand_t   otapCommand;
@@ -2745,11 +2790,11 @@ static void OtapClient_ContinueImageDownload (deviceId_t deviceId)
         break;
     };
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
-
+#if CONFIG_HAS_OTAP_SERVICE
 static bool_t OtapClient_CheckRemoteID(uint8_t* pRemoteImgId)
 {
     /* Check the Image Id. */
@@ -2759,11 +2804,12 @@ static bool_t OtapClient_CheckRemoteID(uint8_t* pRemoteImgId)
     }
     return TRUE;
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 
+#if CONFIG_HAS_OTAP_SERVICE
 static bool_t OtapClient_IsRemoteImageNewer (uint8_t* pRemoteImgId, uint8_t* pRemoteImgVer)
 {
     uint32_t    remoteBuildVer;
@@ -2797,11 +2843,12 @@ static bool_t OtapClient_IsRemoteImageNewer (uint8_t* pRemoteImgId, uint8_t* pRe
     
     return TRUE;
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 
+#if CONFIG_HAS_OTAP_SERVICE
 static otapStatus_t OtapClient_IsImageFileHeaderValid (bleOtaImageFileHeader_t* imgFileHeader)
 {
     if (imgFileHeader->fileIdentifier != gBleOtaFileHeaderIdentifier_c)
@@ -2846,7 +2893,7 @@ static otapStatus_t OtapClient_IsImageFileHeaderValid (bleOtaImageFileHeader_t* 
     
     return gOtapStatusSuccess_c;
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
@@ -2854,6 +2901,7 @@ static otapStatus_t OtapClient_IsImageFileHeaderValid (bleOtaImageFileHeader_t* 
  *    Set corresponding params when image successfully loaded.
  */
 
+#if CONFIG_HAS_OTAP_SERVICE
 static void OtapClient_Complete(void)
 {
     uint8_t *imgVer;
@@ -2880,7 +2928,7 @@ static void OtapClient_Complete(void)
     NV_WriteHWParameters(&gHardwareParameters);
     OSA_TimeDelay(100u);
 }
-        
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
@@ -2888,11 +2936,12 @@ static void OtapClient_Complete(void)
  *    Set corresponding params when image loading fail.
  */
 
+#if CONFIG_HAS_OTAP_SERVICE
 static void OtapClient_Fail(void)
 {
     ;
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////

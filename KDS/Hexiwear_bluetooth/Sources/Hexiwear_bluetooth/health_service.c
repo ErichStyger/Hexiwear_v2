@@ -7,6 +7,7 @@
 * Include
 *************************************************************************************
 ************************************************************************************/
+#if CONFIG_HAS_HEALTH_SERVICE
 
 #include "ble_general.h"
 #include "gatt_db_app_interface.h"
@@ -146,6 +147,7 @@ bleResult_t Hes_RecordMeasurement(hostInterface_packetType_t type, uint8_t * dat
     
     return result;
 }
+#endif //CONFIG_HAS_HEALTH_SERVICE
 
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////

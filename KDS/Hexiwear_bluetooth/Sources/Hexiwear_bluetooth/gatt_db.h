@@ -16,6 +16,7 @@ PRIMARY_SERVICE(service_gap, gBleSig_GenericAccessProfile_d)
     CHARACTERISTIC(char_ppcp, gBleSig_GapPpcp_d, (gGattCharPropRead_c) )
             VALUE(value_ppcp, gBleSig_GapPpcp_d, (gPermissionFlagReadable_c), 8, 0x30, 0x00, 0x40, 0x00, 0x00, 0x00, 0x80, 0x0C)
 
+#if CONFIG_HAS_OTAP_SERVICE
 PRIMARY_SERVICE_UUID128(service_otap, uuid_service_otap)
     CHARACTERISTIC_UUID128(char_otap_control_point, uuid_char_otap_control_point, (gGattCharPropWrite_c | gGattCharPropIndicate_c))
         VALUE_UUID128_VARLEN(value_otap_control_point, uuid_char_otap_control_point, (gPermissionFlagWritable_c), 16, 16, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
@@ -24,6 +25,7 @@ PRIMARY_SERVICE_UUID128(service_otap, uuid_service_otap)
         VALUE_UUID128_VARLEN(value_otap_data, uuid_char_otap_data, (gPermissionFlagWritable_c), 20, 20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)                
     CHARACTERISTIC_UUID128(char_otap_state, uuid_char_otap_state, (gGattCharPropRead_c))
         VALUE_UUID128(value_otap_state, uuid_char_otap_state, (gPermissionFlagReadable_c), 1, 0x00)                        
+#endif
         
 PRIMARY_SERVICE(service_device_info, gBleSig_DeviceInformationService_d)
     CHARACTERISTIC(char_manuf_name, gBleSig_ManufacturerNameString_d, (gGattCharPropRead_c) )
@@ -77,6 +79,7 @@ PRIMARY_SERVICE(service_weather, gBleCustom_WeatherService_d)
             
             
             
+#if CONFIG_HAS_HEALTH_SERVICE
 PRIMARY_SERVICE(service_health, gBleCustom_HealthService_d)
     CHARACTERISTIC(char_heartRate, gBleCustom_HeartRateUUID_d, gGattCharPropRead_c)
         VALUE(value_heartRate, gBleCustom_HeartRateUUID_d, (gPermissionFlagReadable_c | gPermissionFlagReadWithAuthentication_c), gBleCustom_HeartRateLength_d, 0x00)
@@ -89,7 +92,7 @@ PRIMARY_SERVICE(service_health, gBleCustom_HealthService_d)
     CHARACTERISTIC(char_calorie, gBleCustom_CalorieUUID_d, gGattCharPropRead_c)
         VALUE(value_calorie, gBleCustom_CalorieUUID_d, (gPermissionFlagReadable_c | gPermissionFlagReadWithAuthentication_c), gBleCustom_CalorieLength_d, 0x00, 0x00)
 //        DESCRIPTOR(desc_activityTime, gBleSig_CharUserDescriptor_d, (gPermissionFlagReadable_c), 12, "ActivityTime")
-
+#endif
             
                        
 PRIMARY_SERVICE(service_alert, gBleCustom_AlertService_d)

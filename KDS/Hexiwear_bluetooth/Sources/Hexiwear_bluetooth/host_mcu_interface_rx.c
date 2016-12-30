@@ -141,6 +141,7 @@ static void HostInterface_RxPacketHandler(hostInterface_packet_t * pHostInterfac
             break;   
         }
         
+#if CONFIG_HAS_HEALTH_SERVICE
         /////////////////////////////////////////////////////////////////////////////
         // Health Service
         case packetType_heartRate:
@@ -150,7 +151,7 @@ static void HostInterface_RxPacketHandler(hostInterface_packet_t * pHostInterfac
             Hes_RecordMeasurement(pHostInterface_packet->type, pHostInterface_packet->data);
             break;   
         }
-        
+#endif
         /////////////////////////////////////////////////////////////////////////////
         // Alert Service
         case packetType_alertOut:
