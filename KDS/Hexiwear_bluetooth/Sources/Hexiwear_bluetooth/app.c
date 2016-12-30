@@ -2970,12 +2970,107 @@ void DefaultISR(void)
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
-
-void HardFault_Handler(void)
+#if 1 /* << EST */
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+void HF1_HandlerC(uint32_t *hardfault_args)
 {
-    ResetMCU();
+  /*lint -save  -e550 Symbol not accessed. */
+  static volatile unsigned long stacked_r0;
+  static volatile unsigned long stacked_r1;
+  static volatile unsigned long stacked_r2;
+  static volatile unsigned long stacked_r3;
+  static volatile unsigned long stacked_r12;
+  static volatile unsigned long stacked_lr;
+  static volatile unsigned long stacked_pc;
+  static volatile unsigned long stacked_psr;
+  static volatile unsigned long _CFSR;
+  static volatile unsigned long _HFSR;
+  static volatile unsigned long _DFSR;
+  static volatile unsigned long _AFSR;
+  static volatile unsigned long _BFAR;
+  static volatile unsigned long _MMAR;
+  stacked_r0 = ((unsigned long)hardfault_args[0]);
+  stacked_r1 = ((unsigned long)hardfault_args[1]);
+  stacked_r2 = ((unsigned long)hardfault_args[2]);
+  stacked_r3 = ((unsigned long)hardfault_args[3]);
+  stacked_r12 = ((unsigned long)hardfault_args[4]);
+  stacked_lr = ((unsigned long)hardfault_args[5]);
+  stacked_pc = ((unsigned long)hardfault_args[6]);
+  stacked_psr = ((unsigned long)hardfault_args[7]);
+
+  /* Configurable Fault Status Register */
+  /* Consists of MMSR, BFSR and UFSR */
+  _CFSR = (*((volatile unsigned long *)(0xE000ED28)));
+
+  /* Hard Fault Status Register */
+  _HFSR = (*((volatile unsigned long *)(0xE000ED2C)));
+
+  /* Debug Fault Status Register */
+  _DFSR = (*((volatile unsigned long *)(0xE000ED30)));
+
+  /* Auxiliary Fault Status Register */
+  _AFSR = (*((volatile unsigned long *)(0xE000ED3C)));
+
+  /* Read the Fault Address Registers. These may not contain valid values.
+   * Check BFARVALID/MMARVALID to see if they are valid values
+   * MemManage Fault Address Register
+   */
+  _MMAR = (*((volatile unsigned long *)(0xE000ED34)));
+  /* Bus Fault Address Register */
+  _BFAR = (*((volatile unsigned long *)(0xE000ED38)));
+
+#if 0 /* experimental, seems not to work properly with GDB in KDS V3.2.0 */
+#ifdef __GNUC__ /* might improve stack, see https://www.element14.com/community/message/199113/l/gdb-assisted-debugging-of-hard-faults#199113 */
+  __asm volatile (
+      "tst lr,#4     \n" /* check which stack pointer we are using */
+      "ite eq        \n"
+      "mrseq r0, msp \n" /* use MSP */
+      "mrsne r0, psp \n" /* use PSP */
+      "mov sp, r0    \n" /* set stack pointer so GDB shows proper stack frame */
+  );
+#endif
+#endif
+  __asm("BKPT #0\n") ; /* cause the debugger to stop */
+  /*lint -restore */
 }
 
+/*
+** ===================================================================
+**     Method      :  HF1_HardFaultHandler (component HardFault)
+**     Description :
+**         Hard Fault Handler
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+__attribute__((naked))
+void HardFault_Handler(void)
+{
+  __asm volatile (
+    " movs r0,#4      \n"  /* load bit mask into R0 */
+    " mov r1, lr      \n"  /* load link register into R1 */
+    " tst r0, r1      \n"  /* compare with bitmask */
+    " beq _MSP        \n"  /* if bitmask is set: stack pointer is in PSP. Otherwise in MSP */
+    " mrs r0, psp     \n"  /* otherwise: stack pointer is in PSP */
+    " b _GetPC        \n"  /* go to part which loads the PC */
+  "_MSP:              \n"  /* stack pointer is in MSP register */
+    " mrs r0, msp     \n"  /* load stack pointer into R0 */
+  "_GetPC:            \n"  /* find out where the hard fault happened */
+    " ldr r1,[r0,#20] \n"  /* load program counter into R1. R1 contains address of the next instruction where the hard fault happened */
+    " b HF1_HandlerC   \n"  /* decode more information. R0 contains pointer to stack frame */
+  );
+}
+#else
+void HardFault_Handler(void)
+{
+#if 1 /* << EST */
+  portDISABLE_INTERRUPTS();
+  for(;;) {}
+#endif
+    ResetMCU();
+}
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////

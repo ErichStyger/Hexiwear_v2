@@ -381,7 +381,7 @@ void main_task(uint32_t param)
     }
     
     /* Call application task */
-    App_Thread( param );
+   App_Thread( param );
 }
 
 /*! *********************************************************************************
@@ -399,13 +399,14 @@ void App_Thread (uint32_t param)
     while(1)
     { 
         OSA_EventWait(&mAppEvent, 0x00FFFFFF, FALSE, OSA_WAIT_FOREVER, &event);
-        
         /* Dequeue the host to app message */
         if (event & gAppEvtMsgFromHostStack_c)
         {
             /* Pointer for storing the messages from host. */
             appMsgFromHost_t *pMsgIn = NULL;  
             
+           // vTaskDelay(50); /* << EST */
+#if 1
             /* Check for existing messages in queue */
             while(MSG_Pending(&mHostAppInputQueue))
             {
@@ -421,8 +422,8 @@ void App_Thread (uint32_t param)
                     pMsgIn = NULL;
                 }
             }
+#endif
         }
-
         /* For BareMetal break the while(1) after 1 run */
         if( gUseRtos_c == 0 )
         {
