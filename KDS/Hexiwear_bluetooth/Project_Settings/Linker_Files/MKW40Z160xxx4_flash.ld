@@ -48,7 +48,8 @@ ENTRY(Reset_Handler)
 
 HEAP_SIZE  = DEFINED(__heap_size__)  ? __heap_size__  : 0x0000;
 STACK_SIZE = DEFINED(__stack_size__) ? __stack_size__ : 0x0100;
-M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? 0x0100 : 0x0;
+/* M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? 0x0100 : 0x0; */
+M_VECTOR_RAM_SIZE = 0x0100;
 
 /* Specify the memory areas */
 MEMORY
@@ -166,6 +167,17 @@ SECTIONS
     KEEP (*(.fini_array*))
     PROVIDE_HIDDEN (__fini_array_end = .);
   } > m_text
+  
+  .nvm :
+  {
+     . = ALIGN(8);
+    FREESCALE_PROD_DATA_BASE_ADDR = .;
+    . += 1024;
+    NV_STORAGE_START_ADDRESS = .;
+    . += 1024;
+     . = ALIGN(8);
+    NV_STORAGE_END_ADDRESS = .;
+  } > m_text
 
   __etext = .;    /* define a global symbol at end of code */
   __DATA_ROM = .; /* Symbol is used by startup for data initialization */
@@ -191,8 +203,10 @@ SECTIONS
     __interrupts_ram_end__ = .; /* Define a global symbol at data end */
   } > m_data
 
-  __VECTOR_RAM = DEFINED(__ram_vector_table__) ? __VECTOR_RAM__ : ORIGIN(m_interrupts);
-  __RAM_VECTOR_TABLE_SIZE_BYTES = DEFINED(__ram_vector_table__) ? (__interrupts_ram_end__ - __interrupts_ram_start__) : 0x0;
+/*  __VECTOR_RAM = DEFINED(__ram_vector_table__) ? __VECTOR_RAM__ : ORIGIN(m_interrupts); */
+/*  __RAM_VECTOR_TABLE_SIZE_BYTES = DEFINED(__ram_vector_table__) ? (__interrupts_ram_end__ - __interrupts_ram_start__) : 0x0; */
+__VECTOR_RAM = __VECTOR_RAM__;
+__RAM_VECTOR_TABLE_SIZE_BYTES = (__interrupts_ram_end__ - __interrupts_ram_start__);
 
   .data : AT(__DATA_ROM)
   {

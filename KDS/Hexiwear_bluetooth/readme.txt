@@ -19,3 +19,6 @@ C:\nxp\KW40Z_Connectivity_Software_1.0.1\ConnSw\framework\Bootloader\Bootloader_
 Symbol: bootloader
 Section: .bootloader
 Align: 4
+
+
+NOTE: The project is still experimental and *not* functional yet. Still fixing issues and debugging it.

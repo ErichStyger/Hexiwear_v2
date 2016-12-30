@@ -41,8 +41,8 @@ void __aeabi_memclr4(void *dest, size_t n) { memset(dest, n, 0); }
 void __aeabi_memcpy(void *to, void *from, size_t size) { memcpy(to, from, size); }
 
 /* NV_STORAGE_END_ADDRESS from linker file is used as NV Start Address */
-uint32_t NV_STORAGE_END_ADDRESS;
-uint32_t FREESCALE_PROD_DATA_BASE_ADDR;
+//uint32_t NV_STORAGE_END_ADDRESS;
+//uint32_t FREESCALE_PROD_DATA_BASE_ADDR;
 
 int main2(void)
 {
