@@ -72,18 +72,18 @@ static const CLS1_ParseCommandCallback CmdParserTable[] =
 };
 
 static void ShellTask(void *pvParameters) {
-#if RNET_CONFIG_REMOTE_STDIO
+#if PL_CONFIG_HAS_RADIO && RNET_CONFIG_REMOTE_STDIO
   CLS1_ConstStdIOType *ioRemote = RSTDIO_GetStdio();
 #endif
   (void)pvParameters; /* not used */
   CLS1_DefaultShellBuffer[0] = '\0';
-#if RNET_CONFIG_REMOTE_STDIO
+#if PL_CONFIG_HAS_RADIO && RNET_CONFIG_REMOTE_STDIO
   RSTDIO_DefaultShellBuffer[0] = '\0';
 #endif
   CLS1_SendStr("hello world!\r\n", CLS1_GetStdio()->stdOut);
   for(;;) {
     (void)CLS1_ReadAndParseWithCommandTable(CLS1_DefaultShellBuffer, sizeof(CLS1_DefaultShellBuffer), CLS1_GetStdio(), CmdParserTable);
-#if RNET_CONFIG_REMOTE_STDIO
+#if PL_CONFIG_HAS_RADIO && RNET_CONFIG_REMOTE_STDIO
     RSTDIO_Print(CLS1_GetStdio()); /* dispatch incoming messages */
     (void)CLS1_ReadAndParseWithCommandTable(RSTDIO_DefaultShellBuffer, sizeof(RSTDIO_DefaultShellBuffer), ioRemote, CmdParserTable);
 #endif

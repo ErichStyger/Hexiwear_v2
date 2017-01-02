@@ -54,9 +54,9 @@ static void AppTask(void *param) {
 #endif
   for(;;) {
     RGBG_On();
-    FRTOS1_vTaskDelay(pdMS_TO_TICKS(10));
+    FRTOS1_vTaskDelay(pdMS_TO_TICKS(50));
     RGBG_Off();
-    FRTOS1_vTaskDelay(pdMS_TO_TICKS(5000));
+    FRTOS1_vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }
 
