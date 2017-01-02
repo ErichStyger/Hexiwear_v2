@@ -57,7 +57,7 @@ static void _ft_keydetector_safa_enable(struct ft_electrode_data *electrode, uin
 
 const struct ft_keydetector_safa ft_keydetector_safa_default = 
 {
-    .signal_filter = 2,
+    .signal_filter = {2},
     .base_avrg = {.n2_order = 9},
     .non_activity_avrg =  {.n2_order = FT_FILTER_MOVING_AVERAGE_MAX_ORDER},
     .entry_event_cnt = 4,
