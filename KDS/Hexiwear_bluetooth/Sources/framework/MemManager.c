@@ -83,7 +83,11 @@ const uint32_t heapSize = heapSize_c;
 #define poolCount (PoolsDetails_c 0)
 
 // Memory pool info and anchors.
-pools_t memPools[poolCount];
+pools_t memPools[poolCount]
+#if defined(__GNUC__) /* << EST */
+  __attribute__((aligned(4)))
+#endif
+;
 
 #undef _block_size_
 #undef _number_of_blocks_
