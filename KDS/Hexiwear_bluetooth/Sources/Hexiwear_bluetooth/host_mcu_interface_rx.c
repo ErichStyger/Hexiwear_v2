@@ -141,17 +141,17 @@ static void HostInterface_RxPacketHandler(hostInterface_packet_t * pHostInterfac
             break;   
         }
         
-#if CONFIG_HAS_HEALTH_SERVICE
         /////////////////////////////////////////////////////////////////////////////
         // Health Service
         case packetType_heartRate:
         case packetType_steps:
         case packetType_calorie:
         {
+#if CONFIG_HAS_HEALTH_SERVICE
             Hes_RecordMeasurement(pHostInterface_packet->type, pHostInterface_packet->data);
+#endif
             break;   
         }
-#endif
         /////////////////////////////////////////////////////////////////////////////
         // Alert Service
         case packetType_alertOut:
@@ -192,14 +192,17 @@ static void HostInterface_RxPacketHandler(hostInterface_packet_t * pHostInterfac
             break;   
         }
         
-#if CONFIG_HAS_TSI
         /////////////////////////////////////////////////////////////////////////////
         // Send info about active slider.
         case packetType_tsiGroupGetActive:
         {
             hostInterface_txPacket.type    = packetType_tsiGroupSendActive;
             hostInterface_txPacket.length  = 1;
+#if CONFIG_HAS_TSI
             hostInterface_txPacket.data[0] = TouchSense_GetActiveGroup();
+#else
+            hostInterface_txPacket.data[0] = tsiGroup_select_left; /* dummy value */
+#endif
             hostInterface_txPacket.data[1] = gHostInterface_trailerByte;
             
             while(HostInterface_TxQueueMsgPut((hostInterface_packet_t *)&hostInterface_txPacket, true) != osaStatus_Success)
@@ -208,15 +211,14 @@ static void HostInterface_RxPacketHandler(hostInterface_packet_t * pHostInterfac
             }
             break;   
         }
-#endif
         
-#if CONFIG_HAS_TSI
         /////////////////////////////////////////////////////////////////////////////
         // Toggle Active slider.
         case packetType_tsiGroupToggleActive:
         {
             tsiGroup_select_t tsiGroup; 
             
+#if CONFIG_HAS_TSI
             // Read current active group of electrodes, and toggle it.
             tsiGroup = TouchSense_GetActiveGroup();
             tsiGroup = (tsiGroup == tsiGroup_select_left) ? tsiGroup_select_right : tsiGroup_select_left;
@@ -229,7 +231,9 @@ static void HostInterface_RxPacketHandler(hostInterface_packet_t * pHostInterfac
             
             // Set corresponding group to be active.
             TouchSense_SetActiveGroup(tsiGroup);
-            
+#else
+            tsiGroup = tsiGroup_select_left; /* dummy value */
+#endif
             // Send packet to host.
             hostInterface_txPacket.type    = packetType_tsiGroupSendActive;
             hostInterface_txPacket.length  = 1;
@@ -241,7 +245,6 @@ static void HostInterface_RxPacketHandler(hostInterface_packet_t * pHostInterfac
             }
             break;   
         }
-#endif
         /////////////////////////////////////////////////////////////////////////////
         // Send info about advertising mode.
         case packetType_advModeGet:
