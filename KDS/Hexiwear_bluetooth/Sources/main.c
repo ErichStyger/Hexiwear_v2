@@ -30,6 +30,8 @@
 
 #include "fsl_device_registers.h"
 #include <string.h>
+#include "FreeRTOS.h"
+#include <stdio.h>
 
 static int i = 0;
 
@@ -43,6 +45,31 @@ void __aeabi_memcpy(void *to, void *from, size_t size) { memcpy(to, from, size);
 /* NV_STORAGE_END_ADDRESS from linker file is used as NV Start Address */
 //uint32_t NV_STORAGE_END_ADDRESS;
 //uint32_t FREESCALE_PROD_DATA_BASE_ADDR;
+void vApplicationMallocFailedHook(void)
+{
+  /* Called if a call to pvPortMalloc() fails because there is insufficient
+     free memory available in the FreeRTOS heap.  pvPortMalloc() is called
+     internally by FreeRTOS API functions that create tasks, queues, software
+     timers, and semaphores.  The size of the FreeRTOS heap is set by the
+     configTOTAL_HEAP_SIZE configuration constant in FreeRTOSConfig.h. */
+  taskDISABLE_INTERRUPTS();
+  /* Write your code here ... */
+  for(;;) {}
+}
+
+void vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
+{
+  /* This will get called if a stack overflow is detected during the context
+     switch.  Set configCHECK_FOR_STACK_OVERFLOWS to 2 to also check for stack
+     problems within nested interrupts, but only do this for debug purposes as
+     it will increase the context switch time. */
+  (void)pxTask;
+  (void)pcTaskName;
+  taskDISABLE_INTERRUPTS();
+  /* Write your code here ... */
+//  printf("hello%s", "abd");
+  for(;;) {}
+}
 
 int main2(void)
 {

@@ -217,7 +217,7 @@ static uint16_t otapWriteNotifHandles[]     = {value_otap_control_point, value_o
 static uint16_t writeNotifHandles[]         = {value_alertIn};
 
 /* Application specific data*/
-static bool_t mContactStatus = TRUE;
+//static bool_t mContactStatus = TRUE;
 
 extern uint8_t gAppSerMgrIf;
 
@@ -291,7 +291,7 @@ static void BleApp_CccdWritten (deviceId_t deviceId, uint16_t handle, gattCccdFl
 static void BleApp_AttributeWritten(deviceId_t deviceId, uint16_t handle, uint16_t length, uint8_t *pValue);
 static void BleApp_AttributeWrittenWithoutResponse (deviceId_t deviceId, uint16_t handle, uint16_t length, uint8_t* pValue);
 static void BleApp_HandleValueConfirmation (deviceId_t deviceId);
-static void BatteryMeasurementTimerCallback (void *);
+//static void BatteryMeasurementTimerCallback (void *);
 static void BleApp_AddToWhiteList(void);
 
 static void BleApp_Advertise(void);
@@ -803,7 +803,7 @@ static void BleApp_Config()
 {  
     uint8_t uniqueID[10];
     uint8_t fwRevision[12] = "1.0.0/1.0.0";  // NOTE: Each field into firmware revision must be single digits!
-    uint16_t gpioPin;
+//    uint16_t gpioPin;
     
     // Read unique ID
     FLib_MemCpy(uniqueID, (uint8_t *)&SIM_BASE_PTR->UIDL, 4);
@@ -1036,7 +1036,7 @@ static void BleApp_AdvertisingCallback (gapAdvertisingEvent_t* pAdvertisingEvent
 
 static void BleApp_ConnectionCallback (deviceId_t peerDeviceId, gapConnectionEvent_t* pConnectionEvent)
 {
-    bleResult_t result;    
+//    bleResult_t result;
     switch (pConnectionEvent->eventType)
     {
         case gConnEvtConnected_c:
@@ -1365,8 +1365,8 @@ static void BleApp_ConnectionCallback (deviceId_t peerDeviceId, gapConnectionEve
 
 static void BleApp_GattServerCallback (deviceId_t deviceId, gattServerEvent_t* pServerEvent)
 {
-    uint16_t handle;
-    uint8_t status;
+//    uint16_t handle;
+//    uint8_t status;
     
     switch (pServerEvent->eventType)
     {
@@ -1426,10 +1426,10 @@ static void BleApp_GattServerCallback (deviceId_t deviceId, gattServerEvent_t* p
 
 static void BleApp_CccdWritten (deviceId_t deviceId, uint16_t handle, gattCccdFlags_t cccd)
 {
+#if CONFIG_HAS_OTAP_SERVICE
     otapCommand_t otapCommand;
     bleResult_t   bleResult;
     
-#if CONFIG_HAS_OTAP_SERVICE
     /*! Check if the OTAP control point CCCD was written. */
     if (
          (handle == cccd_otap_control_point) &&
@@ -1478,9 +1478,11 @@ static void BleApp_CccdWritten (deviceId_t deviceId, uint16_t handle, gattCccdFl
 
 static void BleApp_AttributeWritten(deviceId_t deviceId, uint16_t handle, uint16_t length, uint8_t* pValue)
 {
+#if CONFIG_HAS_OTAP_SERVICE
     bleResult_t bleResult;
     otapCommand_t otapCommand;
-     
+#endif
+
    if(
       (handle == value_alertIn) &&
       (deviceState == deviceState_watch)
@@ -1490,7 +1492,7 @@ static void BleApp_AttributeWritten(deviceId_t deviceId, uint16_t handle, uint16
         {
             osaStatus_t eventWaitStatus;
             uint8_t     attWriteStatus;
-            event_flags_t setFlags;
+//            event_flags_t setFlags;
             
             // Send corresponding data to host MCU.
             Als_HandleInAlert(pValue);
@@ -1631,11 +1633,11 @@ static void BleApp_AttributeWrittenWithoutResponse (deviceId_t deviceId,
                                                     uint16_t length,
                                                     uint8_t* pValue)
 {
+#if CONFIG_HAS_OTAP_SERVICE
     otapCommand_t otapCommand;
     otapStatus_t otapStatus = gOtapStatusSuccess_c;
     bleResult_t bleResult;
     
-#if CONFIG_HAS_OTAP_SERVICE
     // Only the OTAP Data attribute is expected to be written using the
     // ATT Write Without Response Command. 
     if (
@@ -1707,10 +1709,10 @@ static void BleApp_AttributeWrittenWithoutResponse (deviceId_t deviceId,
 
 static void BleApp_HandleValueConfirmation (deviceId_t deviceId)
 {
+#if CONFIG_HAS_OTAP_SERVICE
     otapCommand_t otapCommand;
     bleResult_t   bleResult;
     
-#if CONFIG_HAS_OTAP_SERVICE
     // Check for which command sent to the OTAP Server the confirmation has been received.
     if(deviceState != deviceState_watch)
     {

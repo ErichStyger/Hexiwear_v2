@@ -46,7 +46,7 @@
 #include "FsciCommands.h"
 #endif
 
-
+#if CONFIG_HAS_OTAP_SERVICE
 /******************************************************************************
 *******************************************************************************
 * Private Macros
@@ -753,3 +753,5 @@ static bool_t OtaSupportCalback( clientPacket_t* pData )
     return TRUE;
 }
 #endif
+
+#endif /* CONFIG_HAS_OTAP_SERVICE */

@@ -172,9 +172,9 @@ SECTIONS
   {
      . = ALIGN(8);
     FREESCALE_PROD_DATA_BASE_ADDR = .;
-    . += 1024;
+    . += 256;
     NV_STORAGE_START_ADDRESS = .;
-    . += 1024;
+    . += 256;
      . = ALIGN(8);
     NV_STORAGE_END_ADDRESS = .;
   } > m_text

@@ -94,7 +94,7 @@
 #define configUSE_IDLE_HOOK                       0 /* 1: use Idle hook; 0: no Idle hook */
 #endif
 #define configUSE_TICK_HOOK                       0 /* 1: use Tick hook; 0: no Tick hook */
-#define configUSE_MALLOC_FAILED_HOOK              0 /* 1: use MallocFailed hook; 0: no MallocFailed hook */
+#define configUSE_MALLOC_FAILED_HOOK              1 /* 1: use MallocFailed hook; 0: no MallocFailed hook */
 #define configTICK_RATE_HZ                        ((TickType_t)200) /* frequency of tick interrupt */
 #define configSYSTICK_USE_LOW_POWER_TIMER         0 /* If using Kinetis Low Power Timer (LPTMR) instead of SysTick timer */
 #define configSYSTICK_LOW_POWER_TIMER_CLOCK_HZ    1 /* 1 kHz LPO timer. Set to 1 if not used */
@@ -130,7 +130,7 @@
 #define configIDLE_SHOULD_YIELD                   1
 #define configUSE_CO_ROUTINES                     0
 #define configUSE_MUTEXES                         1
-#define configCHECK_FOR_STACK_OVERFLOW            0 /* 0 is disabling stack overflow. Set it to 1 for Method1 or 2 for Method2 */  
+#define configCHECK_FOR_STACK_OVERFLOW            1 /* 0 is disabling stack overflow. Set it to 1 for Method1 or 2 for Method2 */
 #define configUSE_RECURSIVE_MUTEXES               1
 #define configQUEUE_REGISTRY_SIZE                 10
 #define configUSE_QUEUE_SETS                      0
