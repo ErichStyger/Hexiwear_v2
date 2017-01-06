@@ -71,6 +71,10 @@ void vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
   for(;;) {}
 }
 
+void exit(int i) { /* custom exit function to save flash memory */
+  for(;;);
+}
+
 int main2(void)
 {
 
