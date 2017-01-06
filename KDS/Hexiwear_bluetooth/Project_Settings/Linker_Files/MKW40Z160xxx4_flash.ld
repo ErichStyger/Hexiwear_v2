@@ -55,6 +55,7 @@ M_VECTOR_RAM_SIZE = 0x0100;
 MEMORY
 {
   m_interrupts          (RX)  : ORIGIN = 0x00000000, LENGTH = 0x00000100
+  m_inbetween           (RX)  : ORIGIN = 0x00000100, LENGTH = 0x00000300
   m_flash_config        (RX)  : ORIGIN = 0x00000400, LENGTH = 0x00000010
   m_text                (RX)  : ORIGIN = 0x00000410, LENGTH = 0x00027BF0
   m_data                (RW)  : ORIGIN = 0x1FFFF000, LENGTH = 0x00005000
@@ -94,21 +95,21 @@ SECTIONS
     KEEP (*(.fini))
     . = ALIGN(4);
     
-    *(.BootloaderFlags)
+  /*  *(.BootloaderFlags) */
     
   } > m_text
 
   .ARM.extab :
   {
     *(.ARM.extab* .gnu.linkonce.armextab.*)
-  } > m_text
+  } > m_inbetween /* m_text */
 
   .ARM :
   {
     __exidx_start = .;
     *(.ARM.exidx*)
     __exidx_end = .;
-  } > m_text
+  } > m_inbetween /* m_text */
 
  .ctors :
   {
@@ -132,7 +133,7 @@ SECTIONS
     KEEP (*(SORT(.ctors.*)))
     KEEP (*(.ctors))
     __CTOR_END__ = .;
-  } > m_text
+  } > m_inbetween /* m_text */
 
   .dtors :
   {
@@ -143,14 +144,14 @@ SECTIONS
     KEEP (*(SORT(.dtors.*)))
     KEEP (*(.dtors))
     __DTOR_END__ = .;
-  } > m_text
+  } > m_inbetween /* m_text */
 
   .preinit_array :
   {
     PROVIDE_HIDDEN (__preinit_array_start = .);
     KEEP (*(.preinit_array*))
     PROVIDE_HIDDEN (__preinit_array_end = .);
-  } > m_text
+  } > m_inbetween /* m_text */
 
   .init_array :
   {
@@ -158,7 +159,7 @@ SECTIONS
     KEEP (*(SORT(.init_array.*)))
     KEEP (*(.init_array*))
     PROVIDE_HIDDEN (__init_array_end = .);
-  } > m_text
+  } > m_inbetween /* m_text */
 
   .fini_array :
   {
@@ -166,17 +167,19 @@ SECTIONS
     KEEP (*(SORT(.fini_array.*)))
     KEEP (*(.fini_array*))
     PROVIDE_HIDDEN (__fini_array_end = .);
-  } > m_text
+  } > m_inbetween /* m_text */
   
   .nvm :
   {
      . = ALIGN(8);
     FREESCALE_PROD_DATA_BASE_ADDR = .;
-    . += 256;
+    . += 1024;
+
     NV_STORAGE_START_ADDRESS = .;
-    . += 256;
+    . += 1024;
      . = ALIGN(8);
     NV_STORAGE_END_ADDRESS = .;
+
   } > m_text
 
   __etext = .;    /* define a global symbol at end of code */
