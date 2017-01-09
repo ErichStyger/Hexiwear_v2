@@ -1,0 +1,47 @@
+Release Name: MKW40Z     	Version: 1.1.4
+Bluetooth Low Energy
+Software
+
+
+Freescale Connectivity		Description: Freescale Connectivity Framework
+Framework			Middleware for Connectivity stacks
+				Version 5.2.4
+				Author: Freescale
+				License: Open Source - BSD-3-Clause
+				Format: source code
+				Location: ConnSw/framework
+								
+Bluetooth Low Energy		Description: Bluetooth Low Energy Stack (HCI, L2CAP, ATT, GATT, GAP and SM)
+Host Software 			Version: 1.1.4
+				Author: Freescale
+				License: Proprietary,   See Freescale EULA
+				LA_OPT_FSL_OPEN_3RD_PARTY_IP, Appendix A,
+				MQX RTOS Code. 
+				Format: Object code
+				Location: ConnSw/bluetooth/host/lib
+
+Bluetooth Low Energy		Description: Bluetooth Low Energy Controller Firmware.
+Controller Firmware 		Host Command Interface ( HCI).  
+				Version: 4.1.0
+				Author: Mindtree
+				License: Proprietary 
+				Format: Object code
+				Location: ConnSw/bluetooth/controller/lib
+
+Bluetooth Low Energy		Description: Bluetooth Low Energy GATT Profiles
+Profiles 			Version: 1.1.4
+				Author: Freescale
+				License: Open Source - BSD-3-Clause. 
+				Format: Source code
+				Location: ConnSw/bluetooth/profiles
+
+				
+Freescale Connectivity		Description: Freescale connectivity
+SecLib                       	security library for Kinetis
+				Version 5.2.4
+				Author: Freescale
+				License: Proprietary.  See Freescale EULA
+				LA_OPT_FSL_OPEN_3RD_PARTY_IP, Appendix A,
+				MQX RTOS Code.
+				Format: object code
+				Location: ConnSw/framework/SecLib			

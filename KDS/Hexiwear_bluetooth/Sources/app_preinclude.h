@@ -90,7 +90,7 @@
 #define gTMR_EnableLowPowerTimers       0
              
 /* Enable/Disable PowerDown functionality in PwrLib */
-#define cPWR_UsePowerDownMode           1
+#define cPWR_UsePowerDownMode           0
 
 /* Enable/Disable BLE Link Layer DSM */
 #define cPWR_BLE_LL_Enable              1
@@ -146,18 +146,18 @@
  * 	BLE Stack Configuration
  ********************************************************************************** */
 #define CONFIG_HAS_OTAP_SERVICE     0 /* over-the-air-application-programming service */
-#define CONFIG_HAS_HEALTH_SERVICE   1 /* health service */
-#define CONFIG_HAS_TSI              0 /* touch sensing interface */
+#define CONFIG_HAS_HEALTH_SERVICE   0 /* health service */
+#define CONFIG_HAS_TSI              1 /* touch sensing interface */
 
 /* Defines Controller task stack size */
-#define gControllerTaskStackSize_c 700
+#define gControllerTaskStackSize_c 800 /*700*/
 
 /* Defines Host task stack size */
 #define gHost_TaskStackSize_c 1000
 //#define gHost_TaskPriority_c 5
 
 /* Defines L2cap task stack size */
-#define gL2ca_TaskStackSize_c 400
+#define gL2ca_TaskStackSize_c 500 /*400*/
 //#define gL2ca_TaskPriority_c 4
            
 #define BD_ADDR             0x01,0x00,0x00,0x9F,0x04,0x00
