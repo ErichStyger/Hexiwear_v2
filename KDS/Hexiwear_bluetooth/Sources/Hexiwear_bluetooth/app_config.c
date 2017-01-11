@@ -77,7 +77,7 @@ const gapAdStructure_t advScanStruct_otap[3] =
     {
         .length = 9,
         .adType = gAdShortenedLocalName_c,
-        .aData = "HEXIOTAP"
+        .aData = (uint8_t*)"HEXIOTAP"
     }  
 };
 
@@ -91,7 +91,7 @@ const gapAdStructure_t advScanStruct_watch[2] =
     {
         .length = 9,
         .adType = gAdShortenedLocalName_c,
-        .aData = "HEXIWEAR"
+        .aData = (uint8_t*)"HEXIWEAR"
     }  
 };
 

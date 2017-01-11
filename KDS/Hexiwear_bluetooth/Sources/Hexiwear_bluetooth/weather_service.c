@@ -112,8 +112,8 @@ bleResult_t Wes_RecordMeasurement(hostInterface_packetType_t type, uint8_t * dat
 {
     bleResult_t result;
     
-    uint16_t charUuid16;
-    uint8_t  length;
+    uint16_t charUuid16=0;
+    uint8_t  length=0;
     
     switch(type)
     {

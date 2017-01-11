@@ -110,7 +110,7 @@ bleResult_t Mos_Unsubscribe(void)
 bleResult_t Mos_RecordMeasurement(hostInterface_packetType_t type, uint8_t * data)
 {
     bleResult_t result;
-    uint16_t charUuid16;
+    uint16_t charUuid16=0;
     uint8_t  length;
     
     switch(type)

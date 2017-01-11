@@ -213,7 +213,7 @@ void ClientAncs_GattNotificationCallback
 
 static void ClientAncs_StartServiceDiscovery(deviceId_t peerDeviceId)
 {
-    bleResult_t discResult;
+    //bleResult_t discResult;
     
     /* Allocate memory for Service Discovery */
     mpServiceDiscoveryBuffer = MEM_BufferAlloc(sizeof(gattService_t) * 1);
@@ -227,7 +227,7 @@ static void ClientAncs_StartServiceDiscovery(deviceId_t peerDeviceId)
     clientAncsPeerInfo.appState = mAppPrimaryServiceDisc_c;
 
     /* Start Service Discovery*/
-    discResult = GattClient_DiscoverPrimaryServicesByUuid(peerDeviceId,
+    (void)GattClient_DiscoverPrimaryServicesByUuid(peerDeviceId,
                                              gBleUuidType128_c,
                                              (bleUuid_t*) &uuid_service_ancs,
                                              mpServiceDiscoveryBuffer,

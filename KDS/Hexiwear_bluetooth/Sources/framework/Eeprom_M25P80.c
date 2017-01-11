@@ -152,7 +152,7 @@ static uint8_t mEepromEraseBitmap[64];
 *****************************************************************************/
 ee_err_t EEPROM_Init(void)
 {
-    ee_err_t retval;
+    //ee_err_t retval; /* << EST */
     spiBusConfig_t spiConfig = {
         .bitsPerSec = 2000000,
         .master = TRUE,

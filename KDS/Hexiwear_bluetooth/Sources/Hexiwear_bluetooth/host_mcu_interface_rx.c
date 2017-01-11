@@ -408,8 +408,8 @@ osaStatus_t HostInterface_RxInit(void)
 
 static void HostInterface_RxCallback(uint32_t instance, void *lpuartState)
 {
-    lpuart_status_t status;
-    uint32_t        bytesRemaining;
+    //lpuart_status_t status;
+    //uint32_t        bytesRemaining;
     lpuart_state_t *tmpLpuartState = (lpuart_state_t*)lpuartState;
     static uint8_t  dataBytesCnt;
     

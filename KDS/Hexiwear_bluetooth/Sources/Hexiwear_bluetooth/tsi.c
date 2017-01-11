@@ -144,11 +144,11 @@ void TouchSense_SetActiveGroup(tsiGroup_select_t tsiGroup)
 void TouchSense_Init(void)
 {   
     int32_t result;
-    uint32_t     cnt;
+    //uint32_t     cnt;
     tsiGroup_select_t tsiGroup;
-    osa_status_t status;
+    //osa_status_t status;
 
-    status = OSA_MutexCreate(&tsiMutex);
+    (void)OSA_MutexCreate(&tsiMutex);
     
     tsiQueueHnd = OSA_MsgQCreate(tsiQueue, 1, 1);
     if(tsiQueueHnd == 0)

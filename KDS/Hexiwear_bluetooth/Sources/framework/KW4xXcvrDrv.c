@@ -484,8 +484,8 @@ void XcvrInit_ModeChg_Common ( radio_mode_t radioMode, MODE_CHG_SEL_T mode_chang
 {
     static radio_mode_t last_mode = INVALID_MODE;
     
-    uint8_t osr;
-    uint8_t norm_en;
+    uint8_t osr=0;
+    uint8_t norm_en=0;
     uint8_t chf_bypass;
     IFR_SW_TRIM_TBL_ENTRY_T sw_trim_tbl[] =
     {
@@ -508,7 +508,7 @@ void XcvrInit_ModeChg_Common ( radio_mode_t radioMode, MODE_CHG_SEL_T mode_chang
     }
     
     /* Check that this is the proper chip version */
-    if ((RSIM_ANA_TEST >> 24) & 0xF != 0x2)
+    if (((RSIM_ANA_TEST >> 24) & 0xF) != 0x2)
     {
         XcvrPanic(WRONG_RADIO_ID_DETECTED,(uint32_t)&XcvrInit_ModeChg_Common);
     }
@@ -1886,7 +1886,7 @@ xcvrStatus_t XcvrOverrideFrequency ( uint32_t freq , uint32_t refOsc)
     num = (int32_t) (fract_check * denom);
     
     if (num < 0)
-        num = (((1 << 28) - 1) & ((1 << 28) - 1) - ABS(num)) + 1;
+        num = ((((1 << 28) - 1) & ((1 << 28) - 1)) - ABS(num)) + 1;
     
     XCVR_BWR_PLL_LP_SDM_CTRL1_LPM_INTG(XCVR, intg);
     XCVR_BWR_PLL_LP_SDM_CTRL2_LPM_NUM(XCVR, num);
