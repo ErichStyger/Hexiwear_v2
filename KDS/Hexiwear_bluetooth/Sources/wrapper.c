@@ -31,6 +31,7 @@
 #include "fsl_device_registers.h"
 #include <string.h>
 #include "FreeRTOS.h"
+#include "task.h"
 #include <stdio.h>
 
 /* wrappers needed as used in the IAR libraries */
@@ -62,7 +63,6 @@ void vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
   (void)pcTaskName;
   taskDISABLE_INTERRUPTS();
   /* Write your code here ... */
-//  printf("hello%s", "abd");
   for(;;) {}
 }
 

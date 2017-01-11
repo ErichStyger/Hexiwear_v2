@@ -55,9 +55,12 @@
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.std.751598574" name="Language standard" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.std" useByScannerDiscovery="true" value="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.std.c99" valueType="enumerated"/>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths.1317186262" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;../Sources&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../Sources/McuLib&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../Sources/Hexiwear_bluetooth&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../Sources/bluetooth&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../Sources/FreeRTOS&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../Sources/FreeRTOS/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;../Sources/FreeRTOS/portable/GCC/ARM_CM4F&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../Sources/KSDK&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../Sources/framework&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;../Project_Settings/Startup_Code&quot;"/>
@@ -132,7 +135,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Sources/Hexiwear_bluetooth/ft_module_gpio.c|Sources/Hexiwear_bluetooth/ft_module_gpioint.c|Sources/Hexiwear_bluetooth/ft_keydetector_afid.c|Sources/Hexiwear_bluetooth/ft_control_slider.c|Sources/Hexiwear_bluetooth/ft_control_matrix.c|Sources/Hexiwear_bluetooth/ft_control_aslider.c|Sources/Hexiwear_bluetooth/ft_control_arotary.c|Sources/Hexiwear_bluetooth/ft_control_rotary.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="Sources/_FreeRTOS|Sources/Hexiwear_bluetooth/ft_control_slider.c|Sources/Hexiwear_bluetooth/ft_module_gpioint.c|Sources/Hexiwear_bluetooth/ft_control_matrix.c|Sources/Hexiwear_bluetooth/ft_keydetector_afid.c|Sources/Hexiwear_bluetooth/ft_control_arotary.c|Sources/Hexiwear_bluetooth/ft_module_gpio.c|Sources/Hexiwear_bluetooth/ft_control_rotary.c|Sources/Hexiwear_bluetooth/ft_control_aslider.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
