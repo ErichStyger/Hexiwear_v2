@@ -205,11 +205,13 @@ SECTIONS
     . = ALIGN(4);
     __interrupts_ram_end__ = .; /* Define a global symbol at data end */
   } > m_data
-
-/*  __VECTOR_RAM = DEFINED(__ram_vector_table__) ? __VECTOR_RAM__ : ORIGIN(m_interrupts); */
-/*  __RAM_VECTOR_TABLE_SIZE_BYTES = DEFINED(__ram_vector_table__) ? (__interrupts_ram_end__ - __interrupts_ram_start__) : 0x0; */
+/*
+__VECTOR_RAM = DEFINED(__ram_vector_table__) ? __VECTOR_RAM__ : ORIGIN(m_interrupts);
+__RAM_VECTOR_TABLE_SIZE_BYTES = DEFINED(__ram_vector_table__) ? (__interrupts_ram_end__ - __interrupts_ram_start__) : 0x0;
+*/
 __VECTOR_RAM = __VECTOR_RAM__;
 __RAM_VECTOR_TABLE_SIZE_BYTES = (__interrupts_ram_end__ - __interrupts_ram_start__);
+
 
   .data : AT(__DATA_ROM)
   {
