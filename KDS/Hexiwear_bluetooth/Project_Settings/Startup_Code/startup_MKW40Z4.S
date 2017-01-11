@@ -120,7 +120,7 @@ Reset_Handler:
     bl SystemInit
 #endif
     bl init_data_bss
-    cpsie   i               /* Unmask interrupts */
+//    cpsie   i               /* Unmask interrupts */
 #ifndef __START
 #define __START _start
 #endif
