@@ -133,14 +133,10 @@
 #define osNumberOfEvents        8
 
 /* Defines main task stack size */
-#if 0
-#define gMainThreadStackSize_c  700
-#else /* << EST */
-#define gMainThreadStackSize_c  1024
-#endif
+#define gMainThreadStackSize_c  600
 
 /* Defines total heap size used by the OS */
-#define gTotalHeapSize_c        9700
+#define gTotalHeapSize_c       9700
            
 /*! *********************************************************************************
  * 	BLE Stack Configuration
@@ -150,7 +146,7 @@
 #define CONFIG_HAS_TSI              1 /* touch sensing interface */
 
 /* Defines Controller task stack size */
-#define gControllerTaskStackSize_c 800 /*700*/
+#define gControllerTaskStackSize_c 800
 
 /* Defines Host task stack size */
 #define gHost_TaskStackSize_c 1000

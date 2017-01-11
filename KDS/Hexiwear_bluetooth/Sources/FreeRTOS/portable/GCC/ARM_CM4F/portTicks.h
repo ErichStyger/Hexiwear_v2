@@ -1,5 +1,5 @@
 /*
-    FreeRTOS V8.2.0 - Copyright (C) 2015 Real Time Engineers Ltd.
+    FreeRTOS V9.0.0 - Copyright (C) 2016 Real Time Engineers Ltd.
     All rights reserved
 
     VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
@@ -8,14 +8,14 @@
 
     FreeRTOS is free software; you can redistribute it and/or modify it under
     the terms of the GNU General Public License (version 2) as published by the
-    Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
+    Free Software Foundation >>>> AND MODIFIED BY <<<< the FreeRTOS exception.
 
-	***************************************************************************
+    ***************************************************************************
     >>!   NOTE: The modification to the GPL is included to allow you to     !<<
     >>!   distribute a combined work that includes FreeRTOS without being   !<<
     >>!   obliged to provide the source code for proprietary components     !<<
     >>!   outside of the FreeRTOS kernel.                                   !<<
-	***************************************************************************
+    ***************************************************************************
 
     FreeRTOS is distributed in the hope that it will be useful, but WITHOUT ANY
     WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -37,17 +37,17 @@
     ***************************************************************************
 
     http://www.FreeRTOS.org/FAQHelp.html - Having a problem?  Start by reading
-	the FAQ page "My application does not run, what could be wrong?".  Have you
-	defined configASSERT()?
+    the FAQ page "My application does not run, what could be wrong?".  Have you
+    defined configASSERT()?
 
-	http://www.FreeRTOS.org/support - In return for receiving this top quality
-	embedded software for free we request you assist our global community by
-	participating in the support forum.
+    http://www.FreeRTOS.org/support - In return for receiving this top quality
+    embedded software for free we request you assist our global community by
+    participating in the support forum.
 
-	http://www.FreeRTOS.org/training - Investing in training allows your team to
-	be as productive as possible as early as possible.  Now you can receive
-	FreeRTOS training directly from Richard Barry, CEO of Real Time Engineers
-	Ltd, and the world's leading authority on the world's leading RTOS.
+    http://www.FreeRTOS.org/training - Investing in training allows your team to
+    be as productive as possible as early as possible.  Now you can receive
+    FreeRTOS training directly from Richard Barry, CEO of Real Time Engineers
+    Ltd, and the world's leading authority on the world's leading RTOS.
 
     http://www.FreeRTOS.org/plus - A selection of FreeRTOS ecosystem products,
     including FreeRTOS+Trace - an indispensable productivity tool, a DOS
@@ -77,12 +77,13 @@
  *  That way the a module can interface this wrapper header file instead
  *  of one of the standard FreeRTOS header files.
  */
+#include "McuLib.h" /* include SDK and API used */
 
 #include "FreeRTOSConfig.h"
 #include "portmacro.h"
 
-#if configPEX_KINETIS_SDK
-extern uint32_t SystemCoreClock; /* in Kinetis SDK, this contains the system core clock speed */
+#if McuLib_CONFIG_NXP_SDK_USED
+  extern uint32_t SystemCoreClock; /* in Kinetis SDK, this contains the system core clock speed */
 #endif
 
 /*!
@@ -99,31 +100,41 @@ portLONG uxGetTickCounterValue(void);
   #define FREERTOS_HWTC_PERIOD           ((configCPU_CLOCK_HZ/configTICK_RATE_HZ)-1UL) /* counter is decrementing from this value to zero */
 #endif
 
+#define FREERTOS_HWTC_FREQ_HZ            configTICK_RATE_HZ
+
 /* tick information for Percepio Trace */
 
 /* undefine previous values, where dummy anyway: make sure this header file is included last! */
-#undef HWTC_COUNT_DIRECTION
-#undef HWTC_PERIOD
-#undef HWTC_DIVISOR
-#undef HWTC_COUNT
+#undef TRC_HWTC_COUNT_DIRECTION
+#undef TRC_HWTC_PERIOD
+#undef TRC_HWTC_DIVISOR
+#undef TRC_HWTC_COUNT
 
 #if FREERTOS_HWTC_DOWN_COUNTER
-  #define HWTC_COUNT_DIRECTION  DIRECTION_DECREMENTING
-  #define HWTC_PERIOD           FREERTOS_HWTC_PERIOD /* counter is decrementing from this value to zero */
+  #define TRC_HWTC_COUNT_DIRECTION  DIRECTION_DECREMENTING
+  #define TRC_HWTC_PERIOD           FREERTOS_HWTC_PERIOD /* counter is decrementing from this value to zero */
 #else
-  #define HWTC_COUNT_DIRECTION  DIRECTION_INCREMENTING
-  #define HWTC_PERIOD           FREERTOS_HWTC_PERIOD /* counter is incrementing from zero to this value */
+  #define TRC_HWTC_COUNT_DIRECTION  DIRECTION_INCREMENTING
+  #define TRC_HWTC_PERIOD           FREERTOS_HWTC_PERIOD /* counter is incrementing from zero to this value */
 #endif
 #if configSYSTICK_USE_LOW_POWER_TIMER
-  #define HWTC_DIVISOR 1 /* divisor for slow counter tick value */
+  #define TRC_HWTC_DIVISOR 1 /* divisor for slow counter tick value */
 #else
-  #define HWTC_DIVISOR 2 /* divisor for fast counter tick value */
+  #define TRC_HWTC_DIVISOR 2 /* divisor for fast counter tick value */
 #endif
 
-#define HWTC_COUNT (uxGetTickCounterValue())
+#if (TRC_CFG_HARDWARE_PORT == TRC_HARDWARE_PORT_PROCESSOR_EXPERT)
+  #define TRC_HWTC_COUNT (uxGetTickCounterValue())
+  #define TRC_HWTC_TYPE TRC_FREE_RUNNING_32BIT_INCR
+#endif
+
+#if !configCPU_FAMILY_IS_ARM(configCPU_FAMILY) /* the defines below are already defined in trcHardwarePort.h for Cortex-M */
+  #define TRC_IRQ_PRIORITY_ORDER 1
+  #define TRC_HWTC_FREQ_HZ  FREERTOS_HWTC_FREQ_HZ
+#endif
 
 #if configUSE_TICKLESS_IDLE == 1
-extern volatile uint8_t portTickCntr; /* used to find out if we woke up by the tick interrupt */
+  extern volatile uint8_t portTickCntr; /* used to find out if we woke up by the tick interrupt */
 #endif
 
 #endif /* PORTTICKS_H_ */
