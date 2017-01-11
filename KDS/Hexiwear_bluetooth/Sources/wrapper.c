@@ -33,8 +33,6 @@
 #include "FreeRTOS.h"
 #include <stdio.h>
 
-static int i = 0;
-
 /* wrappers needed as used in the IAR libraries */
 void __aeabi_memset(void *dest, size_t n, int c) { memset(dest, c, n); }
 void __aeabi_memset4(void *dest, size_t n, int c) { memset(dest, c, n); }
@@ -42,9 +40,6 @@ void __aeabi_memclr(void *dest, size_t n) { memset(dest, n, 0); }
 void __aeabi_memclr4(void *dest, size_t n) { memset(dest, n, 0); }
 void __aeabi_memcpy(void *to, void *from, size_t size) { memcpy(to, from, size); }
 
-/* NV_STORAGE_END_ADDRESS from linker file is used as NV Start Address */
-//uint32_t NV_STORAGE_END_ADDRESS;
-//uint32_t FREESCALE_PROD_DATA_BASE_ADDR;
 void vApplicationMallocFailedHook(void)
 {
   /* Called if a call to pvPortMalloc() fails because there is insufficient
@@ -75,18 +70,6 @@ void exit(int i) { /* custom exit function to save flash memory */
   for(;;);
 }
 
-int main2(void)
-{
-
-    /* Write your code here */
-
-    /* This for loop should be replaced. By default this loop allows a single stepping. */
-    for (;;) {
-        i++;
-    }
-    /* Never leave main */
-    return 0;
-}
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////
