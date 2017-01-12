@@ -187,6 +187,7 @@ typedef enum
 }
 bleApp_pins;
 
+#if (cPWR_UsePowerDownMode)
 /** Wakeup pin configuration. */
 static gpio_input_pin_t bleApp_wakeUpPin = 
 {
@@ -195,6 +196,7 @@ static gpio_input_pin_t bleApp_wakeUpPin =
     .isPassiveFilterEnabled = false,
     .interrupt = kPortIntEitherEdge,
 };
+#endif
 
 /** Interrupt pin configuration. */
 static gpio_input_pin_user_config_t bleApp_intPin =
@@ -325,8 +327,10 @@ static void OtapClient_Fail(void);
 static void BleApp_SendConnUpdateReq(deviceId_t peerDeviceId);
 #endif
 
+#if (cPWR_UsePowerDownMode)
 /* Timer Callbacks */
 static void BleApp_GoToSleepTimerCallback (void *);
+#endif
 
 /************************************************************************************
 *************************************************************************************
@@ -3084,15 +3088,15 @@ void HardFault_Handler(void)
  *    @param   pParam   Param.
  */
 
+#if (cPWR_UsePowerDownMode)
 static void BleApp_GoToSleepTimerCallback (void *pParam)
 {
-#if (cPWR_UsePowerDownMode)
     if(deviceState == deviceState_watch)
     {
         PWR_AllowDeviceToSleep();
     }
-#endif
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////

@@ -303,7 +303,7 @@ extern uint8_t gBDAddress_c[6];
 
 void main_task(uint32_t param)
 {  
-    uint8_t uniqueID[10];            
+    //uint8_t uniqueID[10];
     
     // Read unique ID
     FLib_MemCpy(gBDAddress_c, (uint8_t *)&SIM_BASE_PTR->UIDMH, 2);

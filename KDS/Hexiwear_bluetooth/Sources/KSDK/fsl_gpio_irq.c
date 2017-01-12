@@ -138,8 +138,8 @@ void PORTB_IRQHandler(void)
 void PORTBC_IRQHandler(void)
 {
     /* Clear interrupt flag.*/
-    if(PORT_HAL_GetPortIntFlag(PORTB_BASE))  PORT_HAL_ClearPortIntFlag(PORTB_BASE);
-    if(PORT_HAL_GetPortIntFlag(PORTC_BASE))  PORT_HAL_ClearPortIntFlag(PORTC_BASE);
+    if(PORT_HAL_GetPortIntFlag(PORTB_BASE_PTR))  PORT_HAL_ClearPortIntFlag(PORTB_BASE_PTR);
+    if(PORT_HAL_GetPortIntFlag(PORTC_BASE_PTR))  PORT_HAL_ClearPortIntFlag(PORTC_BASE_PTR);
 }
 #endif
 /*******************************************************************************
