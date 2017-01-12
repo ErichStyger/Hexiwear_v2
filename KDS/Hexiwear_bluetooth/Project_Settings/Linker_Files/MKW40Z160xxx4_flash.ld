@@ -47,7 +47,7 @@
 ENTRY(Reset_Handler)
 
 HEAP_SIZE  = DEFINED(__heap_size__)  ? __heap_size__  : 0x0000;
-STACK_SIZE = DEFINED(__stack_size__) ? __stack_size__ : 0x0100;
+STACK_SIZE = DEFINED(__stack_size__) ? __stack_size__ : 0x0400;
 /* M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? 0x0100 : 0x0; */
 M_VECTOR_RAM_SIZE = 0x0100;
 
@@ -171,7 +171,7 @@ SECTIONS
   
   .nvm :
   {
-     . = ALIGN(8);
+     . = ALIGN(1024); /* flash blocks must be 1k aligned! */
     FREESCALE_PROD_DATA_BASE_ADDR = .;
     . += 1024;
 
