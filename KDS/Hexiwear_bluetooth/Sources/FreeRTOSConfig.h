@@ -123,11 +123,11 @@
 #define configSYSTICK_USE_CORE_CLOCK              1 /* System Tick is using core clock  */
 #define configSYSTICK_CLOCK_DIVIDER               1 /* no divider */
 #define configSYSTICK_CLOCK_HZ                    ((configCPU_CLOCK_HZ)/configSYSTICK_CLOCK_DIVIDER) /* frequency of system tick counter */
-#define configMINIMAL_STACK_SIZE                  (100) /* stack size in addressable stack units */
+#define configMINIMAL_STACK_SIZE                  (75) /* stack size in addressable stack units */
 /*----------------------------------------------------------*/
 /* Heap Memory */
 #define configFRTOS_MEMORY_SCHEME                 1 /* either 1 (only alloc), 2 (alloc/free), 3 (malloc), 4 (coalesc blocks), 5 (multiple blocks) */
-#define configTOTAL_HEAP_SIZE                     ((size_t)(10350)) /* size of heap in bytes */
+#define configTOTAL_HEAP_SIZE                     ((size_t)(9300)) /* size of heap in bytes */
 #define configUSE_HEAP_SECTION_NAME               0 /* set to 1 if a custom section name (configHEAP_SECTION_NAME_STRING) shall be used, 0 otherwise */
 #if configUSE_HEAP_SECTION_NAME
 #define configHEAP_SECTION_NAME_STRING            ".m_data_20000000" /* heap section name (use e.g. ".m_data_20000000" for gcc and "m_data_20000000" for IAR). Check your linker file for the name used. */
@@ -171,7 +171,7 @@
 #define configUSE_TIMERS                          1 /* set to 1 to enable software timers */
 #define configTIMER_TASK_PRIORITY                 (configMAX_PRIORITIES-1U)
 #define configTIMER_QUEUE_LENGTH                  10U
-#define configTIMER_TASK_STACK_DEPTH              (100)
+#define configTIMER_TASK_STACK_DEPTH              (75)
 #define INCLUDE_xEventGroupSetBitFromISR          0
 #define INCLUDE_xTimerPendFunctionCall            1
 #define configUSE_DAEMON_TASK_STARTUP_HOOK        0 /* 1: use application specific vApplicationDaemonTaskStartupHook(), 0: do not use hook */
