@@ -113,7 +113,7 @@
 #define  gPWRLib_LLWU_WakeupPin_PTC6_c     LLWU_EXT_PIN14
 #define  gPWRLib_LLWU_WakeupPin_PTC7_c     LLWU_EXT_PIN15 
 
-#define  gPWRLib_LLWU_KeyboardFlagMask_c (gPWRLib_LLWU_WakeupPin_PTA18_c | gPWRLib_LLWU_WakeupPin_PTA19_c )
+#define  gPWRLib_LLWU_KeyboardFlagMask_c (gPWRLib_LLWU_WakeupPin_PTB0_c)
 
 #define    gPWRLib_LLWU_WakeupModuleFlag_LPTMR_c      LLWU_INT_MODULE0
 #define    gPWRLib_LLWU_WakeupModuleFlag_CMP0_c       LLWU_INT_MODULE1
