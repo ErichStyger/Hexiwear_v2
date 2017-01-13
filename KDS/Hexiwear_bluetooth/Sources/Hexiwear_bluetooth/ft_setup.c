@@ -52,7 +52,7 @@
 /* SAFA keydetector settings */
 const struct ft_keydetector_safa keydec_safa = 
 {
-    .signal_filter = 4,
+    .signal_filter = {4},
     .base_avrg = {.n2_order = 12},
     .non_activity_avrg =  {.n2_order = 14},
     .entry_event_cnt = 2,
