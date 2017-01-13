@@ -74,7 +74,7 @@ appEvent_t;
 typedef enum appState_tag
 {
     mAppIdle_c,
-    mAppExchangeMtu_c,
+   // mAppExchangeMtu_c, /* not used */
     mAppPrimaryServiceDisc_c,
     mAppCharServiceDisc_c,
     mAppDescriptorSetup_c,
