@@ -123,11 +123,11 @@
 #define configSYSTICK_USE_CORE_CLOCK              1 /* System Tick is using core clock  */
 #define configSYSTICK_CLOCK_DIVIDER               1 /* no divider */
 #define configSYSTICK_CLOCK_HZ                    ((configCPU_CLOCK_HZ)/configSYSTICK_CLOCK_DIVIDER) /* frequency of system tick counter */
-#define configMINIMAL_STACK_SIZE                  (75) /* stack size in addressable stack units */
+#define configMINIMAL_STACK_SIZE                  (50) /* stack size in addressable stack units */
 /*----------------------------------------------------------*/
 /* Heap Memory */
 #define configFRTOS_MEMORY_SCHEME                 1 /* either 1 (only alloc), 2 (alloc/free), 3 (malloc), 4 (coalesc blocks), 5 (multiple blocks) */
-#define configTOTAL_HEAP_SIZE                     ((size_t)(9300)) /* size of heap in bytes */
+#define configTOTAL_HEAP_SIZE                     ((size_t)(9200)) /* size of heap in bytes */
 #define configUSE_HEAP_SECTION_NAME               0 /* set to 1 if a custom section name (configHEAP_SECTION_NAME_STRING) shall be used, 0 otherwise */
 #if configUSE_HEAP_SECTION_NAME
 #define configHEAP_SECTION_NAME_STRING            ".m_data_20000000" /* heap section name (use e.g. ".m_data_20000000" for gcc and "m_data_20000000" for IAR). Check your linker file for the name used. */
@@ -139,7 +139,7 @@
 #define configMAX_TASK_NAME_LEN                   12 /* task name length in bytes */
 #define configUSE_TRACE_FACILITY                  1 /* 1: include additional structure members and functions to assist with execution visualization and tracing, 0: no runtime stats/trace */
 #define configUSE_TRACE_HOOKS                     0 /* 1: Percepio Trace hooks, 0: not using Percepio Trace hooks */
-#define configUSE_SEGGER_SYSTEM_VIEWER_HOOKS      0 /* 1: Segger System Viewer hooks, 0: not using Segger System Viewer hooks */
+#define configUSE_SEGGER_SYSTEM_VIEWER_HOOKS      1 /* 1: Segger System Viewer hooks, 0: not using Segger System Viewer hooks */
 #define configUSE_STATS_FORMATTING_FUNCTIONS      (configUSE_TRACE_FACILITY || configGENERATE_RUN_TIME_STATS)
 #define configUSE_16_BIT_TICKS                    0 /* 1: use 16bit tick counter type, 0: use 32bit tick counter type */
 #define configIDLE_SHOULD_YIELD                   1 /* 1: the IDEL task will yield as soon as possible. 0: The IDLE task waits until preemption. */

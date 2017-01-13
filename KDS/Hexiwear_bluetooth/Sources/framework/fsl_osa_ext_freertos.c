@@ -42,7 +42,14 @@
 #include "fsl_interrupt_manager.h"
 #include <string.h>
 #include "GenericList.h"
-
+#if configUSE_TRACE_HOOKS
+  #include "McuPercepio.h"
+#elif configUSE_SEGGER_SYSTEM_VIEWER_HOOKS
+  #include "SEGGER_SYSVIEW.h"
+#endif
+#if CONFIG_HAS_SEGGER_RTT
+  #include "SEGGER_RTT.h"
+#endif
 
 /*! *********************************************************************************
 *************************************************************************************
@@ -990,9 +997,16 @@ int main (void)
     task_handler_t handler;
     
     OSA_Init();
-
+#if CONFIG_HAS_SEGGER_RTT
+    SEGGER_RTT_Init();
+#endif
+#if configUSE_TRACE_HOOKS
+    McuPercepio_Startup();
+#elif configUSE_SEGGER_SYSTEM_VIEWER_HOOKS
+    SEGGER_SYSVIEW_Conf();
+#endif
     OSA_TaskCreate((task_t)startup_task, 
-                   "main",
+                   (uint8_t*)"main",
                    gMainThreadStackSize_c,
                    NULL,
                    gMainThreadPriority_c,
