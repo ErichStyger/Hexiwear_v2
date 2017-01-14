@@ -34,12 +34,14 @@
 #include "task.h"
 #include <stdio.h>
 
-/* wrappers needed as used in the IAR libraries */
-void __aeabi_memset(void *dest, size_t n, int c) { memset(dest, c, n); }
-void __aeabi_memset4(void *dest, size_t n, int c) { memset(dest, c, n); }
-void __aeabi_memclr(void *dest, size_t n) { memset(dest, n, 0); }
-void __aeabi_memclr4(void *dest, size_t n) { memset(dest, n, 0); }
-void __aeabi_memcpy(void *to, void *from, size_t size) { memcpy(to, from, size); }
+#if !CONFIG_HAS_NEW_HOST_LIB
+  /* wrappers needed as used in the IAR libraries */
+  void __aeabi_memset(void *dest, size_t n, int c) { memset(dest, c, n); }
+  void __aeabi_memset4(void *dest, size_t n, int c) { memset(dest, c, n); }
+  void __aeabi_memclr(void *dest, size_t n) { memset(dest, n, 0); }
+  void __aeabi_memclr4(void *dest, size_t n) { memset(dest, n, 0); }
+  void __aeabi_memcpy(void *to, void *from, size_t size) { memcpy(to, from, size); }
+#endif
 
 void vApplicationMallocFailedHook(void)
 {
@@ -66,9 +68,11 @@ void vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
   for(;;) {}
 }
 
+#if 0 /* conflicts with -Lto */
 void exit(int i) { /* custom exit function to save flash memory */
   for(;;);
 }
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
