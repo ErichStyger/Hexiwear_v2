@@ -339,7 +339,7 @@ static osaStatus_t TouchSense_TaskInit(void)
 {       
     osa_status_t status;
     
-    status = OSA_TaskCreate(TouchSense_Task, "Touch_Task", gTouchSenseTaskStackSize_c, 0,
+    status = OSA_TaskCreate(TouchSense_Task, (uint8_t*)"Touch_Task", gTouchSenseTaskStackSize_c, 0,
                             gTouchSensePriority_c, (task_param_t)NULL, FALSE, &tsiTaskId); 
     if( kStatus_OSA_Success != status )
     {

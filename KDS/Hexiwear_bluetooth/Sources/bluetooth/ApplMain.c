@@ -648,15 +648,15 @@ void App_NvmRead
 * Interface assumptions: None
 * Return value: None
 *****************************************************************************/
+#if gKBD_KeysCount_c > 0
 static void App_KeyboardCallBack
   (
   uint8_t events  /*IN: Events from keyboard module  */
   )
 {
-#if gKBD_KeysCount_c > 0 
     BleApp_HandleKeys(events);
-#endif
 }
+#endif
 
 /*****************************************************************************
 * Handles all messages received from the host task.

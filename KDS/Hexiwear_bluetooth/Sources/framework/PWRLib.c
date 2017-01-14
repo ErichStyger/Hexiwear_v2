@@ -526,7 +526,7 @@ void
 #endif  
   (void)(SMC_PMCTRL == 0U);        /* Dummy read of SMC_PMCTRL to ensure the register is written before enterring low power mode */
    /* WFI instruction will start entry into deep sleep mode */
-  asm("WFI");
+  __asm("WFI");
 }
 
 /*---------------------------------------------------------------------------

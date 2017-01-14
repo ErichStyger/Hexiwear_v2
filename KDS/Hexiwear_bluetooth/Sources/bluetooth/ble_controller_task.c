@@ -134,7 +134,7 @@ osaStatus_t Controller_TaskInit(void)
     }        
     
     /* Task creation */
-    status = OSA_TaskCreate(ControllerTask, "CTRLR_Task", gControllerTaskStackSize_c, CTRLR_stack,
+    status = OSA_TaskCreate(ControllerTask, (uint8_t*)"CTRLR_Task", gControllerTaskStackSize_c, CTRLR_stack,
                             gControllerTaskPriority_c, (task_param_t)NULL, FALSE, &gControllerTaskId);
     if( kStatus_OSA_Success != status )
     {
