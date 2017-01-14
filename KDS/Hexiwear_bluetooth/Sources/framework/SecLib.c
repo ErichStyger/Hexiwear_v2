@@ -1450,7 +1450,7 @@ void SHA1_HashFinish(sha1Context_t* ctx, uint8_t* pData, uint32_t numBytes)
     FLib_MemCpyReverseOrder(&ctx->buffer[60], &ctx->totalBytes, sizeof(uint32_t));
     SHA1_hash_n(ctx->buffer, 1, ctx->hash);
     /* Convert to Big Endian */
-    for(i=0; i<SHA256_HASH_SIZE/sizeof(uint32_t); i++)
+    for(i=0; i<SHA1_HASH_SIZE/sizeof(uint32_t); i++)
     {
         temp = ctx->hash[i];
         FLib_MemCpyReverseOrder(&ctx->hash[i], &temp, sizeof(uint32_t));
