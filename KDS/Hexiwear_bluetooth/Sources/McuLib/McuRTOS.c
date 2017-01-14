@@ -495,7 +495,7 @@ static uint8_t PrintTaskList(const McuShell_StdIOType *io) {
       McuUtility_strcatPad(buf, sizeof(buf), tmpBuf, ' ', PAD_STAT_TASK_STACK_MARK);
       McuShell_SendStr(buf, io->stdOut);
 #endif
-#if configGENERATE_RUN_TIME_STATS
+#if configGENERATE_RUN_TIME_STATS && configUSE_TRACE_FACILITY
       /* runtime */
       McuUtility_strcpy(tmpBuf, sizeof(tmpBuf), (unsigned char*)"0x");
       McuUtility_strcatNum32Hex(tmpBuf, sizeof(tmpBuf), taskStatus.ulRunTimeCounter);

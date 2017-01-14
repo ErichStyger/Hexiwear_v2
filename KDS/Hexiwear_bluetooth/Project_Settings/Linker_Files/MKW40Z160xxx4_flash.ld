@@ -47,15 +47,15 @@
 ENTRY(Reset_Handler)
 
 HEAP_SIZE  = DEFINED(__heap_size__)  ? __heap_size__  : 0x0000;
-STACK_SIZE = DEFINED(__stack_size__) ? __stack_size__ : 0x0200;
+STACK_SIZE = DEFINED(__stack_size__) ? __stack_size__ : 0x0180;
 /* M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? 0x0100 : 0x0; */
 M_VECTOR_RAM_SIZE = 0x0100;
 
 /* Specify the memory areas */
 MEMORY
 {
-  m_interrupts          (RX)  : ORIGIN = 0x00000000, LENGTH = 0x00000100
-  m_inbetween           (RX)  : ORIGIN = 0x00000100, LENGTH = 0x00000300
+  m_interrupts          (RX)  : ORIGIN = 0x00000000, LENGTH = 0x000000C0
+  m_inbetween           (RX)  : ORIGIN = 0x000000C0, LENGTH = 0x00000330
   m_flash_config        (RX)  : ORIGIN = 0x00000400, LENGTH = 0x00000010
   m_text                (RX)  : ORIGIN = 0x00000410, LENGTH = 0x00027BF0
   m_data                (RW)  : ORIGIN = 0x1FFFF000, LENGTH = 0x00005000
@@ -73,13 +73,30 @@ SECTIONS
     . = ALIGN(4);
   } > m_interrupts
 
+ .inbetween : 
+  { 
+    . = ALIGN(4);
+    *wrapper.o (.text .text* .rodata*) 
+    *startup.o (.text .text* .rodata*) 
+    *startup_MKW40Z4.o (.text .text* .rodata*) 
+    *system_MKW40Z4.o (.text .text* .rodata*) 
+    *app_config.o (.text .text* .rodata*)
+    *appMode_service.o (.text .text* .rodata*)
+    *alert_service.o (.text .text* .rodata*)
+    *common_service.o (.text .text* .rodata*)
+    *health_service.o (.text .text* .rodata*) 
+    *motion_service.o (.text .text* .rodata*) 
+    /**app.o (.rodata*) */
+    . = ALIGN(4); 
+  }  > m_inbetween /* fill the 'inbetween' memory */   
+
   .flash_config :
   {
     . = ALIGN(4);
     KEEP(*(.FlashConfig))    /* Flash Configuration Field (FCF) */
     . = ALIGN(4);
   } > m_flash_config
-
+  
   /* The program code and other data goes into internal flash */
   .text :
   {
@@ -102,14 +119,14 @@ SECTIONS
   .ARM.extab :
   {
     *(.ARM.extab* .gnu.linkonce.armextab.*)
-  } > m_inbetween /* m_text */
+  } >  m_text
 
   .ARM :
   {
     __exidx_start = .;
     *(.ARM.exidx*)
     __exidx_end = .;
-  } > m_inbetween /* m_text */
+  } >m_text
 
  .ctors :
   {
@@ -133,7 +150,7 @@ SECTIONS
     KEEP (*(SORT(.ctors.*)))
     KEEP (*(.ctors))
     __CTOR_END__ = .;
-  } > m_inbetween /* m_text */
+  } >  m_text
 
   .dtors :
   {
@@ -144,14 +161,14 @@ SECTIONS
     KEEP (*(SORT(.dtors.*)))
     KEEP (*(.dtors))
     __DTOR_END__ = .;
-  } > m_inbetween /* m_text */
+  } >  m_text
 
   .preinit_array :
   {
     PROVIDE_HIDDEN (__preinit_array_start = .);
     KEEP (*(.preinit_array*))
     PROVIDE_HIDDEN (__preinit_array_end = .);
-  } > m_inbetween /* m_text */
+  } > m_text 
 
   .init_array :
   {
@@ -159,7 +176,7 @@ SECTIONS
     KEEP (*(SORT(.init_array.*)))
     KEEP (*(.init_array*))
     PROVIDE_HIDDEN (__init_array_end = .);
-  } > m_inbetween /* m_text */
+  } > m_text
 
   .fini_array :
   {
@@ -167,7 +184,7 @@ SECTIONS
     KEEP (*(SORT(.fini_array.*)))
     KEEP (*(.fini_array*))
     PROVIDE_HIDDEN (__fini_array_end = .);
-  } > m_inbetween /* m_text */
+  } >  m_text
   
   .nvm :
   {

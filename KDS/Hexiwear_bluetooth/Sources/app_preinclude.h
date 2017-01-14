@@ -45,6 +45,7 @@
 #define osNumberOfSemaphores    1
 
 #define gKeyBoardSupported_d    0
+#define gKBD_KeysCount_c        0
 
 /* Specifies the number of physical LEDs on the target board */
 #define gLEDsOnTargetBoardCnt_c 0
@@ -90,7 +91,7 @@
 #define gTMR_EnableLowPowerTimers       0
              
 /* Enable/Disable PowerDown functionality in PwrLib */
-#define cPWR_UsePowerDownMode           0  /* 1 */
+#define cPWR_UsePowerDownMode           1  /* 1 */
 
 /* Enable/Disable BLE Link Layer DSM */
 #define cPWR_BLE_LL_Enable              1
@@ -144,8 +145,8 @@
 #define CONFIG_HAS_OTAP_SERVICE     0 /* over-the-air-application-programming service */
 #define CONFIG_HAS_HEALTH_SERVICE   1 /* health service */
 #define CONFIG_HAS_TSI              1 /* touch sensing interface */
-#define CONFIG_HAS_SEGGER_RTT       1 /* using SEGGER RTT. Turn on Segger Systemview in FreeRTOSConfig.h */
-#define CONFIG_HAS_NEW_HOST_LIB     1 /* new BLE host library */
+#define CONFIG_HAS_SEGGER_RTT       0 /* using SEGGER RTT. Turn on Segger Systemview in FreeRTOSConfig.h */
+#define CONFIG_HAS_NEW_HOST_LIB     0 /* 1: new BLE host library built with gcc; 0: using libraries built with IAR */
 
 /* Defines Controller task stack size */
 #define gControllerTaskStackSize_c 1150
