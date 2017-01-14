@@ -46,6 +46,11 @@
 #include "fsl_os_abstraction.h"
 #include "panic.h"
 
+#if 1 && CONFIG_HAS_NEW_HOST_LIB /* << EST */
+  msgQueue_t   gApp2Host_TaskQueue;
+  msgQueue_t   gHci2Host_TaskQueue;
+#endif
+
 /************************************************************************************
 *************************************************************************************
 * Public memory declarations
@@ -65,7 +70,9 @@ msgQueue_t   gL2ca_TaskQueue;
 *************************************************************************************
 ************************************************************************************/
 static void Host_Task(task_param_t argument);
+#if !CONFIG_HAS_NEW_HOST_LIB
 static void L2ca_Task(task_param_t argument);
+#endif
 /************************************************************************************
 *************************************************************************************
 * Private memory declarations
@@ -104,22 +111,22 @@ osaStatus_t Ble_HostTaskInit(void)
 
     /* Task creation */
      
-    status = OSA_TaskCreate(Host_Task, "HOST_Task", gHost_TaskStackSize_c, HOST_stack,
+    status = OSA_TaskCreate(Host_Task, (uint8_t*)"HOST_Task", gHost_TaskStackSize_c, HOST_stack,
                             gHost_TaskPriority_c, (task_param_t)NULL, FALSE, &gHost_TaskId);
     if( kStatus_OSA_Success != status )
     {
         panic(0,0,0,0);
         return osaStatus_Error;
     }
-    
-    status = OSA_TaskCreate(L2ca_Task, "L2CA_Task", gL2ca_TaskStackSize_c, L2CA_stack,
+#if !CONFIG_HAS_NEW_HOST_LIB
+    status = OSA_TaskCreate(L2ca_Task, (uint8_t*)"L2CA_Task", gL2ca_TaskStackSize_c, L2CA_stack,
                             gL2ca_TaskPriority_c, (task_param_t)NULL, FALSE, &gL2ca_TaskId);
     if( kStatus_OSA_Success != status )
     {
         panic(0,0,0,0);
         return osaStatus_Error;
     }
-    
+#endif
     return osaStatus_Success;
 }
 
@@ -134,10 +141,12 @@ static void Host_Task(task_param_t argument)
     Host_TaskHandler((void *) NULL);    
 }
 
+#if !CONFIG_HAS_NEW_HOST_LIB
 static void L2ca_Task(task_param_t argument)
 {
     L2ca_TaskHandler((void *) NULL);    
 }
+#endif
 
 /*! *********************************************************************************
 * @}

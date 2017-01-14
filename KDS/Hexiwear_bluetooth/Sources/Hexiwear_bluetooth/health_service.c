@@ -112,8 +112,8 @@ bleResult_t Hes_Unsubscribe(void)
 bleResult_t Hes_RecordMeasurement(hostInterface_packetType_t type, uint8_t * data)
 {
     bleResult_t result;
-    uint16_t charUuid16;
-    uint8_t  length;
+    uint16_t charUuid16=0;
+    uint8_t  length=0;
     
     switch(type)
     {

@@ -271,7 +271,11 @@ uint8_t currentImageVerMK64[gOtap_ImageVersionFieldSize_c] =
 
 uint8_t currentImageVerKW40[gOtap_ImageVersionFieldSize_c] = 
 {
+#if 0
     0x01, 0x00, 0x00,    // Build Version
+#else
+    0x01, 0x00, 0x01,    // Build Version // << EST new build version
+#endif
     0x41,                // Stack Version
     0x11, 0x11, 0x11,    // Hardware Id
     0x01                 // Manufacturer Id
@@ -958,6 +962,7 @@ static void BleApp_Advertise(void)
 
 static void BleApp_SendConnUpdateReq(deviceId_t peerDeviceId)
 {
+#if !CONFIG_HAS_NEW_HOST_LIB
     if(deviceState == deviceState_watch)
     {
         L2ca_UpdateConnectionParameters(peerDeviceId, gWatchConnMinInterval_c, gWatchConnMaxInterval_c,
@@ -968,6 +973,7 @@ static void BleApp_SendConnUpdateReq(deviceId_t peerDeviceId)
         L2ca_UpdateConnectionParameters(peerDeviceId, gOtapConnMinInterval_c, gOtapConnMaxInterval_c,
                                                         gConnSlaveLatency_c, gConnTimeoutMultiplier_c, 0, 0);
     }
+#endif
 }
         
 /////////////////////////////////////////////////////////////////////////////////////

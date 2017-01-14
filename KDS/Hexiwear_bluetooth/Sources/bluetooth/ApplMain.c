@@ -320,8 +320,10 @@ void main_task(uint32_t param)
         
         /* Framework init */ 
         MEM_Init();
-        TMR_Init();       
-        LED_Init();
+        TMR_Init();
+        if (gLEDsOnTargetBoardCnt_c>0) {
+          LED_Init();
+        }
         SecLib_Init();
         
         RNG_Init();   
@@ -343,16 +345,18 @@ void main_task(uint32_t param)
 #endif
         
         pfBLE_SignalFromISR = BLE_SignalFromISRCallback;        
-        
+
 #if (cPWR_UsePowerDownMode)
         AppIdle_TaskInit();
         PWR_Init();
         PWR_DisallowDeviceToSleep();
-#else    
-        Led1Flashing();
-        Led2Flashing();
-        Led3Flashing();
-        Led4Flashing();           
+#else
+        if (gLEDsOnTargetBoardCnt_c>0) {
+          Led1Flashing();
+          Led2Flashing();
+          Led3Flashing();
+          Led4Flashing();
+        }
 #endif    
        
         /* Initialize peripheral drivers specific to the application */

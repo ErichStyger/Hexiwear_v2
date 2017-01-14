@@ -126,6 +126,7 @@ Reset_Handler:
 #endif
 #ifndef __ATOLLIC__
     bl    __START
+    //bl main
 #else
     bl    __libc_init_array
     bl    main

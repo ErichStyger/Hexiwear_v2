@@ -97,7 +97,7 @@ void FwkInit(void)
         return;
     }
 
-    status = OSA_TaskCreate(FwkTask, "FWK_Task", gFwkCommonStackSize_c, FWK_stack,
+    status = OSA_TaskCreate(FwkTask, (uint8_t*)"FWK_Task", gFwkCommonStackSize_c, FWK_stack,
                             gSerialTaskPriority_c, (task_param_t)NULL, FALSE, &gFwkCommonTaskId);
     if( kStatus_OSA_Success != status )
     {

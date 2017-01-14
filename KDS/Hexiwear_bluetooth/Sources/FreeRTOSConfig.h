@@ -148,7 +148,7 @@
 #define configUSE_MUTEXES                         1
 #define configCHECK_FOR_STACK_OVERFLOW            1 /* 0 is disabling stack overflow. Set it to 1 for Method1 or 2 for Method2 */
 #define configCHECK_FOR_STACK_OVERFLOW_NAME       vApplicationStackOverflowHook
-#define configUSE_RECURSIVE_MUTEXES               1
+#define configUSE_RECURSIVE_MUTEXES               0
 #define configQUEUE_REGISTRY_SIZE                 5
 #define configUSE_QUEUE_SETS                      0
 #define configUSE_COUNTING_SEMAPHORES             1
@@ -229,7 +229,11 @@ See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html. */
 #define configMAX_SYSCALL_INTERRUPT_PRIORITY      (configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY<<(8-configPRIO_BITS))
 
 /* Normal assert() semantics without relying on the provision of an assert.h header file. */
-#define configASSERT(x) if((x)==0) { taskDISABLE_INTERRUPTS(); for( ;; ); }
+#if 1
+  #define configASSERT(x) if((x)==0) { taskDISABLE_INTERRUPTS(); for( ;; ); }
+#else
+  #define configASSERT(x) /*if((x)==0) { taskDISABLE_INTERRUPTS(); for( ;; ); }*/
+#endif
 
 #endif /* FREERTOS_CONFIG_H */
 

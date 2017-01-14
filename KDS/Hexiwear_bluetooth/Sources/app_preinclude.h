@@ -42,14 +42,14 @@
  * 	Drivers Configuration
  ********************************************************************************** */
 
-#define osNumberOfSemaphores 1
+#define osNumberOfSemaphores    1
 
 #define gKeyBoardSupported_d    0
 
 /* Specifies the number of physical LEDs on the target board */
 #define gLEDsOnTargetBoardCnt_c 0
 
-#define gLEDBlipEnabled_d  0
+#define gLEDBlipEnabled_d       0
 
 /* Specifies the type of EEPROM available on the target board */
 #define gEepromType_d           gEepromDevice_M25P80_c
@@ -65,7 +65,7 @@
 #define FWK_SMALL_RAM_CONFIG
 
 /* Defines Size for TMR Task*/
-#define gTmrTaskStackSize_c  384
+//#define gTmrTaskStackSize_c  384
 
 /* Defines pools by block size and number of blocks. Must be aligned to 4 bytes.*/
 #define PoolsDetails_c \
@@ -133,32 +133,33 @@
 #define osNumberOfEvents        8
 
 /* Defines main task stack size */
-#define gMainThreadStackSize_c  600
+#define gMainThreadStackSize_c  650
 
 /* Defines total heap size used by the OS */
-#define gTotalHeapSize_c       9800
+#define gTotalHeapSize_c       9500
            
 /*! *********************************************************************************
  * 	BLE Stack Configuration
  ********************************************************************************** */
 #define CONFIG_HAS_OTAP_SERVICE     0 /* over-the-air-application-programming service */
-#define CONFIG_HAS_HEALTH_SERVICE   0 /* health service */
-#define CONFIG_HAS_TSI              0 /* touch sensing interface */
-#define CONFIG_HAS_SEGGER_RTT       1 /* using SEGGER RTT */
+#define CONFIG_HAS_HEALTH_SERVICE   1 /* health service */
+#define CONFIG_HAS_TSI              1 /* touch sensing interface */
+#define CONFIG_HAS_SEGGER_RTT       1 /* using SEGGER RTT. Turn on Segger Systemview in FreeRTOSConfig.h */
+#define CONFIG_HAS_NEW_HOST_LIB     1 /* new BLE host library */
 
 /* Defines Controller task stack size */
-#define gControllerTaskStackSize_c 800
+#define gControllerTaskStackSize_c 1150
 
 /* Defines Host task stack size */
-#define gHost_TaskStackSize_c 1050
+#define gHost_TaskStackSize_c 1300
 //#define gHost_TaskPriority_c 5
 
 /* Defines L2cap task stack size */
-#define gL2ca_TaskStackSize_c 500 /*400*/
+#define gL2ca_TaskStackSize_c 530 /*400*/
 //#define gL2ca_TaskPriority_c 4
 
 /* serial manager (FWK_Task) stack size */
-#define gSerialTaskStackSize_c  500
+#define gSerialTaskStackSize_c  530
            
 #define BD_ADDR             0x01,0x00,0x00,0x9F,0x04,0x00
 #define gUseHciTransport_d  0

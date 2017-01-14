@@ -385,7 +385,7 @@ osaStatus_t HostInterface_RxInit(void)
     }
     
     // Create Rx Handler Task
-    status = OSA_TaskCreate(HostInterface_RxHandlerTask, (uint8_t*)"HostInterface_RxHandlerTask", gHostInterfaceRxTaskStackSize_c, 0,
+    status = OSA_TaskCreate(HostInterface_RxHandlerTask, (uint8_t*)"Host_RxTask", gHostInterfaceRxTaskStackSize_c, 0,
                             gHostInterfaceRxHandlerPriority_c, (task_param_t)NULL, FALSE, &gHostInterface_RxHandlerTaskId); 
     if( kStatus_OSA_Success != status )
     {

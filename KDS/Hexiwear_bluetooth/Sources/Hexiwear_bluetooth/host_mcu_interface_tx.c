@@ -98,7 +98,7 @@ osaStatus_t HostInterface_TxInit(void)
     }
     
     // Create Tx Task
-    status = OSA_TaskCreate(HostInterface_TxTask, (uint8_t*)"HostInterface_TxTask", gHostInterfaceTxTaskStackSize_c, 0,
+    status = OSA_TaskCreate(HostInterface_TxTask, (uint8_t*)"Host_TxTask", gHostInterfaceTxTaskStackSize_c, 0,
                             gHostInterfaceTxPriority_c, (task_param_t)NULL, FALSE, &gHostInterface_TxTaskId); 
     if( kStatus_OSA_Success != status )
     {
@@ -106,7 +106,7 @@ osaStatus_t HostInterface_TxInit(void)
     } 
     
     // Create Tx Task
-    status = OSA_TaskCreate(HostInterface_OkTask, (uint8_t*)"HostInterface_OkTask", gHostInterfaceOkTaskStackSize_c, 0,
+    status = OSA_TaskCreate(HostInterface_OkTask, (uint8_t*)"Host_OkTask", gHostInterfaceOkTaskStackSize_c, 0,
                             gHostInterfaceOkPriority_c, (task_param_t)NULL, FALSE, &gHostInterface_OkTaskId); 
     if( kStatus_OSA_Success != status )
     {

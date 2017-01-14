@@ -114,7 +114,7 @@ static int32_t _ft_keydetector_safa_init(struct ft_electrode_data *electrode)
 static void _ft_keydetector_safa_enable(struct ft_electrode_data *electrode, uint32_t touch)
 {
   struct ft_keydetector_safa_data *ram = electrode->keydetector_data.safa;
-  uint32_t signal = _ft_electrode_get_signal(electrode);
+  //uint32_t signal = _ft_electrode_get_signal(electrode);
   
   if(touch)
   {

@@ -138,9 +138,6 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.990865096.1224486619" name="ble_host_tasks.c" rcbsApplicability="disable" resourcePath="Sources/lib/ble_host_tasks.c" toolsToInvoke="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.535641018.200791221">
-						<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.535641018.200791221" name="Cross ARM C Compiler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.535641018"/>
-					</fileInfo>
 					<sourceEntries>
 						<entry excluding="Sources/lib/ble_host_tasks.c|Sources/_FreeRTOS|Sources/Hexiwear_bluetooth/ft_control_slider.c|Sources/Hexiwear_bluetooth/ft_module_gpioint.c|Sources/Hexiwear_bluetooth/ft_control_matrix.c|Sources/Hexiwear_bluetooth/ft_keydetector_afid.c|Sources/Hexiwear_bluetooth/ft_control_arotary.c|Sources/Hexiwear_bluetooth/ft_module_gpio.c|Sources/Hexiwear_bluetooth/ft_control_rotary.c|Sources/Hexiwear_bluetooth/ft_control_aslider.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>

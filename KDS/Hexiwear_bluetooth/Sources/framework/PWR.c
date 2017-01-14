@@ -540,10 +540,10 @@ static void PWR_HandleDeepSleepMode_6(void)
  * Parameters: -
  * Return: -
  *---------------------------------------------------------------------------*/
+#if (cPWR_UsePowerDownMode)
 static PWRLib_WakeupReason_t PWR_HandleDeepSleep(void)
 {
   PWRLib_MCU_WakeupReason.AllBits = 0;  
-#if (cPWR_UsePowerDownMode)
   {
     uint8_t lpMode;
     lpMode = PWRLib_GetDeepSleepMode();
@@ -552,9 +552,9 @@ static PWRLib_WakeupReason_t PWR_HandleDeepSleep(void)
       maHandleDeepSleep[lpMode-1]();      
     }
   }
-#endif
   return PWRLib_MCU_WakeupReason;            
 }
+#endif
 
 /*---------------------------------------------------------------------------
  * Name: PWR_HandleSleep
@@ -562,15 +562,16 @@ static PWRLib_WakeupReason_t PWR_HandleDeepSleep(void)
  * Parameters: -
  * Return: -
  *---------------------------------------------------------------------------*/
+#if (cPWR_UsePowerDownMode)
 static PWRLib_WakeupReason_t PWR_HandleSleep
 (
 )
 {
   PWRLib_WakeupReason_t  Res;
   
+#if (cPWR_UsePowerDownMode)
   Res.AllBits = 0;
     
-#if (cPWR_UsePowerDownMode)
   /*---------------------------------------------------------------------------*/
 #if (cPWR_SleepMode==0)
   return Res;
@@ -593,6 +594,7 @@ static PWRLib_WakeupReason_t PWR_HandleSleep
   return Res;          /* (PWRLib_WakeupReason_t) DozeDuration */
 #endif  /* #if (cPWR_UsePowerDownMode) end */
 }
+#endif
 
 /*---------------------------------------------------------------------------
  * Name: PWR_SleepAllowed
@@ -600,6 +602,7 @@ static PWRLib_WakeupReason_t PWR_HandleSleep
  * Parameters: -
  * Return: -
  *---------------------------------------------------------------------------*/
+#if (cPWR_UsePowerDownMode)
 static bool_t PWR_SleepAllowed
 (
 void
@@ -624,13 +627,14 @@ void
   return TRUE;
 #endif  /* #if (cPWR_UsePowerDownMode) else */
 }
-
+#endif
 /*---------------------------------------------------------------------------
  * Name: PWR_DeepSleepAllowed
  * Description: -
  * Parameters: -
  * Return: -
  *---------------------------------------------------------------------------*/
+#if (cPWR_UsePowerDownMode)
 static bool_t PWR_DeepSleepAllowed
 (
 void
@@ -665,7 +669,7 @@ void
   return TRUE;
 #endif  /* #if (cPWR_UsePowerDownMode)*/
 }
-
+#endif
 /*---------------------------------------------------------------------------
  * Name: PWR_CheckForAndEnterNewPowerState
  * Description: - 
