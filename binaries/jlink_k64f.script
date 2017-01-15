@@ -2,6 +2,6 @@ si swd
 speed 4000
 r
 h
-loadbin "HEXIWEAR_MK64.bin",0
+loadbin "HEXIWEAR_MK64_V1.0.2.bin",0
 r
 exit
