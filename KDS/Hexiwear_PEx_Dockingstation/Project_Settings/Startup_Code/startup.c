@@ -194,7 +194,7 @@ void __iar_program_start()
 
 __attribute__((naked)) void __thumb_startup(void)
 {
-int addr = (int)__SP_INIT;
+   int addr = (int)&__SP_INIT;
 
     /* setup the stack before we attempt anything else
        skip stack setup if __SP_INIT is 0
