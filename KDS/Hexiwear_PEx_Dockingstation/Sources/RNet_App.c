@@ -7,6 +7,8 @@
  * This module implements the application part of the program.
  */
 
+#include "Platform.h"
+#if PL_CONFIG_HAS_RADIO
 #include "RNetConf.h"
 #if RNET_CONFIG_REMOTE_STDIO
   #include "RStdIO.h"
@@ -215,4 +217,4 @@ uint8_t RNETA_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_S
   }
   return res;
 }
-
+#endif

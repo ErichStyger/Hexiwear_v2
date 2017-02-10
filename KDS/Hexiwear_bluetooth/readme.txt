@@ -40,10 +40,17 @@ Code Size:
  141672    1968   18728  162368   27a40 Hexiwear_bluetooth.elf     removed CONFIG_HAS_TSI
  146940    1980   18612  167532   28e6c Hexiwear_bluetooth.elf     added cPWR_UsePowerDownMode
  159664    2024   19504  181192   2c3c8 Hexiwear_bluetooth.elf     added TSI
- New libs:
-  157472     1920   19704  179096   2bb98 Hexiwear_bluetooth.elf
- With -LTO
-  145868     1884   20260  168012   2904c Hexiwear_bluetooth.elf
+New libs:
+ 157472     1920   19704  179096   2bb98 Hexiwear_bluetooth.elf
 With IAR libs:
-  148424     1992   19608  170024   29828 Hexiwear_bluetooth.elf
+ 148424     1992   19608  170024   29828 Hexiwear_bluetooth.elf
+With -LTO, no OTAP
+ 145948    1884   20284  168116   290b4 Hexiwear_bluetooth.elf
+with -LTO and OTAP
+ 152104    2216   20512  174832   2aaf0 Hexiwear_bluetooth.elf
+
  
+ 
+Notes:
+- communication from KW40 to K64F: Sources\Hexiwear_bluetooth\host_mcu_interface_tx.c
+- K64F to KW40: code/intf/src/host_mcu_interface.c

@@ -62,10 +62,10 @@
 #define TSM_RX_LO_MASK  0xFF000000
 #define TSM_RX_LO_SHIFT 24
 /* Make a register write value */
-#define TSM_REG_VALUE(rx_wd,rx_wu,tx_wd,tx_wu) ((((unsigned int)rx_wd<<TSM_RX_LO_SHIFT)&TSM_RX_LO_MASK) | \
-                                                (((unsigned int)rx_wu<<TSM_RX_HI_SHIFT)&TSM_RX_HI_MASK) | \
-                                                (((unsigned int)tx_wd<<TSM_TX_LO_SHIFT)&TSM_TX_LO_MASK) | \
-                                                (((unsigned int)tx_wu<<TSM_TX_HI_SHIFT)&TSM_TX_HI_MASK))
+#define TSM_REG_VALUE(rx_wd,rx_wu,tx_wd,tx_wu) ((((unsigned int)(rx_wd)<<TSM_RX_LO_SHIFT)&TSM_RX_LO_MASK) | \
+                                                (((unsigned int)(rx_wu)<<TSM_RX_HI_SHIFT)&TSM_RX_HI_MASK) | \
+                                                (((unsigned int)(tx_wd)<<TSM_TX_LO_SHIFT)&TSM_TX_LO_MASK) | \
+                                                (((unsigned int)(tx_wu)<<TSM_TX_HI_SHIFT)&TSM_TX_HI_MASK))
 
 /* Shortcuts for TSM disabled signals */
 #define TSM_SIGNAL_TX_RX_DIS            (0xFFFFFFFF)    /* Entire signal is disabled */

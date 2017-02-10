@@ -48,41 +48,27 @@
 #include "MCUC1.h"
 #include "CS1.h"
 #include "CLS1.h"
-#include "SM1.h"
-#include "SMasterLdd1.h"
-#include "RNET1.h"
-#include "RF1.h"
-#include "CE1.h"
-#include "BitIoLdd4.h"
-#include "CSN1.h"
-#include "BitIoLdd5.h"
-#include "IRQ1.h"
-#include "ExtIntLdd1.h"
-#include "HLED1.h"
-#include "LEDpin4.h"
-#include "BitIoLdd6.h"
-#include "HLED2.h"
-#include "LEDpin5.h"
-#include "BitIoLdd7.h"
-#include "HLED3.h"
-#include "LEDpin6.h"
-#include "BitIoLdd8.h"
-#include "HLED4.h"
-#include "LEDpin7.h"
-#include "BitIoLdd9.h"
-#include "HLED5.h"
-#include "LEDpin8.h"
-#include "BitIoLdd10.h"
-#include "HLED6.h"
-#include "LEDpin9.h"
-#include "BitIoLdd11.h"
+#include "BLEUart.h"
+#include "ASerialLdd2.h"
+#include "Vibro.h"
+#include "BitIoLdd12.h"
+#include "GDisp1.h"
+#include "LCD1.h"
+#include "RESpin1.h"
+#include "BitIoLdd13.h"
+#include "D_Cpin1.h"
+#include "BitIoLdd14.h"
+#include "SCEpin1.h"
+#include "BitIoLdd15.h"
+#include "SM2.h"
+#include "SMasterLdd2.h"
+#include "OLED_Pwr.h"
+#include "BitIoLdd16.h"
 #include "XF1.h"
 #include "HF1.h"
 #include "RTT1.h"
 #include "FRTOS1.h"
 #include "KIN1.h"
-#include "AS1.h"
-#include "ASerialLdd1.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -165,9 +151,9 @@ void FRTOS1_vApplicationMallocFailedHook(void);
 
 /*
 ** ===================================================================
-**     Event       :  AS1_OnError (module Events)
+**     Event       :  BLEUart_OnError (module Events)
 **
-**     Component   :  AS1 [AsynchroSerial]
+**     Component   :  BLEUart [AsynchroSerial]
 **     Description :
 **         This event is called when a channel error (not the error
 **         returned by a given method) occurs. The errors can be read
@@ -178,13 +164,13 @@ void FRTOS1_vApplicationMallocFailedHook(void);
 **     Returns     : Nothing
 ** ===================================================================
 */
-void AS1_OnError(void);
+void BLEUart_OnError(void);
 
 /*
 ** ===================================================================
-**     Event       :  AS1_OnRxChar (module Events)
+**     Event       :  BLEUart_OnRxChar (module Events)
 **
-**     Component   :  AS1 [AsynchroSerial]
+**     Component   :  BLEUart [AsynchroSerial]
 **     Description :
 **         This event is called after a correct character is received.
 **         The event is available only when the <Interrupt
@@ -195,26 +181,26 @@ void AS1_OnError(void);
 **     Returns     : Nothing
 ** ===================================================================
 */
-void AS1_OnRxChar(void);
+void BLEUart_OnRxChar(void);
 
 /*
 ** ===================================================================
-**     Event       :  AS1_OnTxChar (module Events)
+**     Event       :  BLEUart_OnTxChar (module Events)
 **
-**     Component   :  AS1 [AsynchroSerial]
+**     Component   :  BLEUart [AsynchroSerial]
 **     Description :
 **         This event is called after a character is transmitted.
 **     Parameters  : None
 **     Returns     : Nothing
 ** ===================================================================
 */
-void AS1_OnTxChar(void);
+void BLEUart_OnTxChar(void);
 
 /*
 ** ===================================================================
-**     Event       :  AS1_OnFullRxBuf (module Events)
+**     Event       :  BLEUart_OnFullRxBuf (module Events)
 **
-**     Component   :  AS1 [AsynchroSerial]
+**     Component   :  BLEUart [AsynchroSerial]
 **     Description :
 **         This event is called when the input buffer is full;
 **         i.e. after reception of the last character 
@@ -223,13 +209,13 @@ void AS1_OnTxChar(void);
 **     Returns     : Nothing
 ** ===================================================================
 */
-void AS1_OnFullRxBuf(void);
+void BLEUart_OnFullRxBuf(void);
 
 /*
 ** ===================================================================
-**     Event       :  AS1_OnFreeTxBuf (module Events)
+**     Event       :  BLEUart_OnFreeTxBuf (module Events)
 **
-**     Component   :  AS1 [AsynchroSerial]
+**     Component   :  BLEUart [AsynchroSerial]
 **     Description :
 **         This event is called after the last character in output
 **         buffer is transmitted.
@@ -237,87 +223,7 @@ void AS1_OnFullRxBuf(void);
 **     Returns     : Nothing
 ** ===================================================================
 */
-void AS1_OnFreeTxBuf(void);
-
-void SM1_OnRxChar(void);
-/*
-** ===================================================================
-**     Event       :  SM1_OnRxChar (module Events)
-**
-**     Component   :  SM1 [SynchroMaster]
-**     Description :
-**         This event is called after a correct character is received.
-**         The event is available only when the <Interrupt
-**         service/event> property is enabled.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-
-void SM1_OnTxChar(void);
-/*
-** ===================================================================
-**     Event       :  SM1_OnTxChar (module Events)
-**
-**     Component   :  SM1 [SynchroMaster]
-**     Description :
-**         This event is called after a character is transmitted.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-
-void SM1_OnFullRxBuf(void);
-/*
-** ===================================================================
-**     Event       :  SM1_OnFullRxBuf (module Events)
-**
-**     Component   :  SM1 [SynchroMaster]
-**     Description :
-**         This event is called when the input buffer is full, i.e.
-**         after reception of the last character that was successfully
-**         placed into input buffer.
-**         This event is available only when the <Interrupt
-**         service/event> property is enabled and the <Input buffer
-**         size> property is set to non-zero value.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-
-void SM1_OnFreeTxBuf(void);
-/*
-** ===================================================================
-**     Event       :  SM1_OnFreeTxBuf (module Events)
-**
-**     Component   :  SM1 [SynchroMaster]
-**     Description :
-**         This event is called after the last character in output
-**         buffer is transmitted.
-**         This event is available only when the <Interrupt
-**         service/event> property is enabled and the <Output buffer
-**         size> property is set to non-zero value.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-
-void SM1_OnError(void);
-/*
-** ===================================================================
-**     Event       :  SM1_OnError (module Events)
-**
-**     Component   :  SM1 [SynchroMaster]
-**     Description :
-**         This event is called when a channel error (not the error
-**         returned by a given method) occurs. The errors can be read
-**         using <GetError> method.
-**         The event is available only when the <Interrupt
-**         service/event> property is enabled.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
+void BLEUart_OnFreeTxBuf(void);
 
 /* END Events */
 

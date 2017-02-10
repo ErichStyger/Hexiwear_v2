@@ -240,8 +240,8 @@ volatile PWRLib_WakeupReason_t PWRLib_MCU_WakeupReason;
  *---------------------------------------------------------------------------*/
 void PWRLib_BLL_ConfigDSM( uint8_t lpMode )
 {
-  BLE_LL_REG(WAKEUP_CONFIG) =  ((cPWR_BLE_LL_OffsetToWakeupInstant << BLE_LL_WAKEUP_CONFIG_DSM_OFFSET_SHIFT)&BLE_LL_WAKEUP_CONFIG_DSM_OFFSET_MASK |
-                                (cPWR_BLE_LL_OscStartupDelay<<BLE_LL_WAKEUP_CONFIG_OSC_DELAY_SHIFT)& BLE_LL_WAKEUP_CONFIG_OSC_DELAY_MASK );
+  BLE_LL_REG(WAKEUP_CONFIG) =  (((cPWR_BLE_LL_OffsetToWakeupInstant << BLE_LL_WAKEUP_CONFIG_DSM_OFFSET_SHIFT)&BLE_LL_WAKEUP_CONFIG_DSM_OFFSET_MASK) |
+                                ((cPWR_BLE_LL_OscStartupDelay<<BLE_LL_WAKEUP_CONFIG_OSC_DELAY_SHIFT)& BLE_LL_WAKEUP_CONFIG_OSC_DELAY_MASK ));
   if(lpMode)
   {
   BLE_LL_REG(EVENT_ENABLE)  |= (BLE_LL_EVENT_ENABLE_DSM_INT_MASK);

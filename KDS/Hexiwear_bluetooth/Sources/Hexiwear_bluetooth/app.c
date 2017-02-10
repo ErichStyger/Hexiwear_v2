@@ -318,10 +318,14 @@ static void OtapClient_HandleErrorNotificationConfirmation (deviceId_t deviceId)
 static void OtapClient_HandleStopImageTransferConfirmation (deviceId_t deviceId);
 /* Connection and Disconnection events */
 static void OtapClient_HandleConnectionEvent (deviceId_t deviceId);
+#if 0 /* not used */
 static void OtapClient_HandleDisconnectionEvent (deviceId_t deviceId);
+#endif
 /* Otap Client operations */
 static void OtapClient_ContinueImageDownload (deviceId_t deviceId);
+#if 0 /* not used */
 static bool_t OtapClient_IsRemoteImageNewer (uint8_t* pRemoteImgId, uint8_t* pRemoteImgVer);
+#endif
 static bool_t OtapClient_CheckRemoteID(uint8_t* pRemoteImgId);
 static otapStatus_t OtapClient_IsImageFileHeaderValid (bleOtaImageFileHeader_t* imgFileHeader);
 
@@ -438,8 +442,8 @@ static bool BleApp_VerifyFlashRead(uint8_t * data, uint16_t size)
 #if CONFIG_HAS_OTAP_SERVICE
 static void BleApp_ReadFwImagProps(void)
 {
-    uint8_t *imgId;
-    uint8_t *imgVer;
+    uint8_t *imgId = 0;
+    uint8_t *imgVer = 0;
     
     // Read image version.
     if(BleApp_VerifyFlashRead((uint8_t *)gHardwareParameters.imageVersionMK64, gOtap_ImageVersionFieldSize_c) == true)
@@ -1098,10 +1102,11 @@ static void BleApp_ConnectionCallback (deviceId_t peerDeviceId, gapConnectionEve
                 }
                 #endif            
 
+#if gLEDsOnTargetBoardCnt_c > 0
                 /* UI */
                 LED_StopFlashingAllLeds();
                 Led1On();
-                
+#endif
                 if(deviceState != deviceState_watch)
                 {
                     /* Device does not need to sleep until some information is exchanged with the peer. */
@@ -2635,7 +2640,7 @@ static void OtapClient_HandleConnectionEvent (deviceId_t deviceId)
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
-#if CONFIG_HAS_OTAP_SERVICE
+#if 0 && CONFIG_HAS_OTAP_SERVICE /* not used */
 static void OtapClient_HandleDisconnectionEvent(deviceId_t deviceId)
 {
     /* Check if the peer OTAP server was disconnected and if so reset block download
@@ -2827,7 +2832,7 @@ static bool_t OtapClient_CheckRemoteID(uint8_t* pRemoteImgId)
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 
-#if CONFIG_HAS_OTAP_SERVICE
+#if 0 && CONFIG_HAS_OTAP_SERVICE /* not used */
 static bool_t OtapClient_IsRemoteImageNewer (uint8_t* pRemoteImgId, uint8_t* pRemoteImgVer)
 {
     uint32_t    remoteBuildVer;

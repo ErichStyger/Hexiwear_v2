@@ -191,7 +191,9 @@ static void App_Idle_Task(task_param_t argument);
 #endif
 
 static void App_Thread (uint32_t param);
+#if gKBD_KeysCount_c > 0
 static void App_KeyboardCallBack(uint8_t events);
+#endif
 static void App_HandleHostMessageInput(appMsgFromHost_t* pMsg);
 static void App_GenericCallback (gapGenericEvent_t* pGenericEvent);
 static void App_ConnectionCallback (deviceId_t peerDeviceId, gapConnectionEvent_t* pConnectionEvent);
@@ -442,14 +444,14 @@ extern void BleApp_LowPowerExitCallback(void);
 
 static void App_Idle(void)
 {
-    PWRLib_WakeupReason_t wakeupReason;
+    //PWRLib_WakeupReason_t wakeupReason;
     
     if( PWR_CheckIfDeviceCanGoToSleep() )
     {
         PORT_HAL_SetPinIntMode(PORTB,0u,kPortIntDisabled);
         
         /* Enter Low Power */
-        wakeupReason = PWR_EnterLowPower();
+        /*wakeupReason = */ (void)PWR_EnterLowPower();
         
         BleApp_LowPowerExitCallback();
 

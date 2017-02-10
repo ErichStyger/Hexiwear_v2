@@ -111,9 +111,7 @@ SECTIONS
     KEEP (*(.init))
     KEEP (*(.fini))
     . = ALIGN(4);
-    
-  /*  *(.BootloaderFlags) */
-    
+    /*  *(.BootloaderFlags) */    
   } > m_text
 
   .ARM.extab :

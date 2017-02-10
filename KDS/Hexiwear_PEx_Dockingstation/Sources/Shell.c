@@ -12,9 +12,14 @@
 #include "Application.h"
 #include "FRTOS1.h"
 #include "KIN1.h"
-#include "RNET1.h"
-#include "RNetConf.h"
-#include "RNet_App.h"
+#if PL_CONFIG_HAS_RADIO
+  #include "RNET1.h"
+  #include "RNetConf.h"
+  #include "RNet_App.h"
+#endif
+#if PL_CONFIG_HAS_SHELL_RTT
+  #include "RTT1.h"
+#endif
 #if RNET_CONFIG_REMOTE_STDIO
   #include "RStdIO.h"
 #endif
@@ -92,7 +97,10 @@ static void ShellTask(void *pvParameters) {
 }
 
 void SHELL_Init(void) {
-  if (FRTOS1_xTaskCreate(ShellTask, "Shell", configMINIMAL_STACK_SIZE+100, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
+#if PL_CONFIG_HAS_SHELL_RTT
+  CLS1_SetStdio(RTT1_GetStdio());
+#endif
+  if (xTaskCreate(ShellTask, "Shell", configMINIMAL_STACK_SIZE+100, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
     for(;;){} /* error */
   }
 }

@@ -693,8 +693,9 @@ static void _ft_module_tsi_driver_callback(uint32_t instance, void* usrData)
     if(enabled_electrodes & (1<<(elec->rom->pin_input)))
     {
       uint16_t data;
-      TSI_DRV_GetCounter(instance, elec->rom->pin_input, &data);
-      _ft_electrode_set_raw_signal(elec, data);
+      if (TSI_DRV_GetCounter(instance, elec->rom->pin_input, &data)==kStatus_TSI_Success) { /* << EST check return value */
+        _ft_electrode_set_raw_signal(elec, data);
+      }
     }
   }
   _ft_module_set_flag(module, FT_MODULE_NEW_DATA_FLAG);

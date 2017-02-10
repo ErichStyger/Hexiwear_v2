@@ -146,7 +146,7 @@
 #define CONFIG_HAS_HEALTH_SERVICE   1 /* health service */
 #define CONFIG_HAS_TSI              1 /* touch sensing interface */
 #define CONFIG_HAS_SEGGER_RTT       0 /* using SEGGER RTT. Turn on Segger Systemview in FreeRTOSConfig.h */
-#define CONFIG_HAS_NEW_HOST_LIB     0 /* 1: new BLE host library built with gcc; 0: using libraries built with IAR */
+#define CONFIG_HAS_NEW_HOST_LIB     1 /* 1: new BLE host library built with gcc; 0: using libraries built with IAR */
 
 /* Defines Controller task stack size */
 #define gControllerTaskStackSize_c 1150
