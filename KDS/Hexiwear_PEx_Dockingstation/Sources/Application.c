@@ -23,11 +23,15 @@
 #endif
 #if PL_CONFIG_HAS_KW40_COMM
   #include "KW40Comm.h"
+  #include "HostComm.h"
 #endif
 #include "Vibro.h"
 #include "GDisp1.h"
 #include "LCD1.h"
-#include "OLED_Pwr.h"
+#include "Cube.h"
+
+#if 0
+//#include "OLED_Pwr.h"
 
 // command byte number
 #define FIRST_BYTE (1)
@@ -35,7 +39,6 @@
 
 #define OLED_CMD_SET_COLUMN ( 0x15 )
 #define OLED_CMD_SET_ROW    ( 0x75 )
-
 
 #define OLED_CMD_STARTLINE (0xA1)
 
@@ -65,7 +68,9 @@
 #define OLED_CMD_HORIZSCROLL    (0x96)
 #define OLED_CMD_STOPSCROLL     (0x9E)
 #define OLED_CMD_STARTSCROLL    (0x9F)
+#endif
 
+#if 0
 /**
  * set lock command
  * the locked OLED driver MCU interface prohibits all commands
@@ -141,6 +146,8 @@ typedef struct {
 #define CMD_BYTE   (1)
 #define DATA_BYTE  (0)
 
+#define OLED_COLUMN_OFFSET (16)
+#define OLED_ROW_OFFSET    (0)
 
 static const init_cmd_t seq[] = {
     OLED_CMD_SET_CMD_LOCK,  CMD_BYTE,
@@ -193,11 +200,21 @@ static const init_cmd_t seq[] = {
 #define CS_LOW()     SCEpin1_ClrVal()   /* CE signal low */
 
 static void spi_write(uint8_t ch) {
-  //uint8_t dummy;
+  uint8_t dummy;
 
-  while(SM2_SendChar(ch)!=ERR_OK) {}    /* send LSB data byte */
-  while(SM2_GetCharsInTxBuf()!=0) {};  /* wait until everything is sent */
-  //while(SM2_RecvChar(&dummy)!=ERR_OK) {};
+  while(SM2_SendChar(ch)!=ERR_OK) {
+    __asm("nop");
+  }    /* send LSB data byte */
+#if 0
+  while(SM2_GetCharsInTxBuf()!=0) {
+    __asm("nop");
+  };  /* wait until everything is sent */
+  SM2_RecvChar(&dummy);
+#else
+  while(SM2_CharsInTxBuf()!=0) {
+    __asm("nop");
+  }
+#endif
 }
 
 static void OLED_SendCmd(uint8_t cmd, bool isCmd) {
@@ -211,12 +228,47 @@ static void OLED_SendCmd(uint8_t cmd, bool isCmd) {
   CS_HIGH();
 }
 
+static void OLED_WriteData(uint8_t data) {
+  OLED_SendCmd(data, DATA_BYTE);
+}
 
+static void OLED_WriteCmd(uint8_t cmd) {
+  OLED_SendCmd(cmd, CMD_BYTE);
+}
+
+void OLED_Cursor(int x, int y) {
+  if ((x >= LCD1_GetWidth()) || (y >= LCD1_GetHeight())) {
+    return;
+  }
+  x+=OLED_COLUMN_OFFSET;
+  // set x and y coordinate
+  OLED_WriteCmd(OLED_CMD_SET_COLUMN); /* set column command */
+  OLED_WriteData(x); /* start column */
+  OLED_WriteData(LCD1_HW_WIDTH-1); /* end column */
+
+  OLED_WriteCmd(OLED_CMD_SET_ROW); /* set row start address command */
+  OLED_WriteData(y); /* start row number */
+  OLED_WriteData(LCD1_HW_HEIGHT-1); /* end row number */
+
+  OLED_WriteCmd(OLED_CMD_WRITERAM);
+}
+
+void OLED_Pixel(int x, int y, uint16_t color) {
+  OLED_Cursor(x, y);
+  OLED_WriteCmd(OLED_CMD_WRITERAM);
+  DATA_MODE(); /* DC high */
+  CS_LOW(); /* CS low */
+  OLED_WriteData(color>>8);
+  OLED_WriteData(color);
+  CS_HIGH(); /* CS high */
+}
+#endif
+#if 0
 static uint8_t OLED_Init(void) {
   int i;
 
-  //  LCD1_Init();
-
+    LCD1_Init();
+#if 0
   OLED_Pwr_ClrVal(); /* OLED power off */
   vTaskDelay(pdMS_TO_TICKS(1));
   RESET_LOW();
@@ -229,7 +281,9 @@ static uint8_t OLED_Init(void) {
   {
     OLED_SendCmd(seq[i].cmd, seq[i].type);
   }
-
+  OLED_Pixel(20, 20, 0x1234);
+  OLED_Pixel(25, 25, 0xFF00);
+#endif
 #if 0
   if ( ERR_OK != OLED_SendCmd( OLED_CMD_SET_CMD_LOCK, FIRST_BYTE ) )
   {
@@ -406,6 +460,9 @@ static uint8_t OLED_Init(void) {
   }
 #endif
 }
+#endif
+
+static CUBE_WindowDesc cubeWindow;
 
 static void AppTask(void *param) {
   RGBR_On();
@@ -440,10 +497,26 @@ static void AppTask(void *param) {
   //Vibro_SetVal();
   //Vibro_ClrVal();
 
-  OLED_Init();
-  GDisp1_Clear();
-  GDisp1_DrawBox(5, 5, 10, 20, 2, GDisp1_COLOR_BLUE);
-  GDisp1_UpdateFull();
+  LCD1_Init();
+  LCD1_Clear();
+  GDisp1_PutPixel(0, 0, GDisp1_COLOR_RED);
+  GDisp1_PutPixel(0, 1, GDisp1_COLOR_RED);
+  GDisp1_PutPixel(0, 2, GDisp1_COLOR_RED);
+  GDisp1_PutPixel(0, 3, GDisp1_COLOR_RED);
+
+  GDisp1_PutPixel(1, 0, GDisp1_COLOR_BLUE);
+  GDisp1_PutPixel(2, 0, GDisp1_COLOR_BLUE);
+  GDisp1_PutPixel(3, 0, GDisp1_COLOR_BLUE);
+  GDisp1_PutPixel(4, 0, GDisp1_COLOR_BLUE);
+
+  GDisp1_DrawLine(50, 80, 70, 90, GDisp1_COLOR_RED);
+  GDisp1_DrawBox(0, 0, 20, 20, 1, GDisp1_COLOR_BLUE);
+  GDisp1_DrawBox(30, 30, 40, 20, 1, GDisp1_COLOR_GREEN);
+
+  GDisp1_DrawCircle(30, 50, 20, GDisp1_COLOR_WHITE);
+  GDisp1_DrawBox(0, 0, GDisp1_GetWidth()-1, GDisp1_GetHeight()-1, 5, GDisp1_COLOR_RED);
+
+  CUBE_CreateWindow(&cubeWindow);
   for(;;) {
     RGBG_On();
     FRTOS1_vTaskDelay(pdMS_TO_TICKS(50));

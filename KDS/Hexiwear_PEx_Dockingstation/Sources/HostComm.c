@@ -6,6 +6,7 @@
  */
 
 #include "Platform.h"
+#if PL_CONFIG_HAS_KW40_COMM
 #include "HostComm.h"
 #include "KW40Comm.h"
 #include <string.h> /* for memcpy() */
@@ -266,3 +267,5 @@ void HostComm_SendGetVersion(uint8_t major, uint8_t minor, uint8_t patch) {
 
 void HostComm_Init(void) {
 }
+
+#endif /* PL_CONFIG_HAS_KW40_COMM */
