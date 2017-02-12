@@ -486,21 +486,21 @@ static void CUBE_CreateScreen(void) {
   UI1_CreateScreen(&cubeParam.descP->screen, UI1_COLOR_WHITE);
   
   /* Cube window */
-  (void)UI1_CreateWindow(&cubeParam.descP->screen, &cubeParam.descP->windowCube, CUBE_COLOR_BACKGROUND, 0, 0, GDisp1_GetWidth(), GDisp1_GetHeight());
+  (void)UIWindow_Create(&cubeParam.descP->screen, &cubeParam.descP->windowCube, CUBE_COLOR_BACKGROUND, 0, 0, GDisp1_GetWidth(), GDisp1_GetHeight());
   UI1_WindowSetBorder(&cubeParam.descP->windowCube);
   (void)UI1_CreateHeader(&cubeParam.descP->windowCube, &cubeParam.descP->headerCube, (unsigned char*)"3D Cube", FONT, UI1_COLOR_BLUE);
   UI1_ChangeTextFgColor(&cubeParam.descP->headerCube.element, UI1_COLOR_WHITE);
   UI1_SetWindowEventCallback(&cubeParam.descP->windowCube, cubeW_WindowCallback);
   /* Icon: Close */
   h = (UI1_PixelDim)(UI1_GetElementHeight(&cubeParam.descP->headerCube));
-  (void)UI1_CreateIcon(&cubeParam.descP->windowCube, &cubeParam.descP->iconCloseCube, 1, 1, (UI1_PixelDim)(h-2), (UI1_PixelDim)(h-2), UI1_ICON_CLOSE);
+  (void)UIIcon_CreateIcon(&cubeParam.descP->windowCube, &cubeParam.descP->iconCloseCube, 1, 1, (UI1_PixelDim)(h-2), (UI1_PixelDim)(h-2), UI1_ICON_CLOSE);
   cubeParam.descP->iconCloseCube.element.prop.flags |= UI1_FLAGS_ALIGN_RIGHT;
   UI1_OnWindowResize(&cubeParam.descP->windowCube); /* right align element(s) if needed */
   UI1_ChangeElementColor(&cubeParam.descP->iconCloseCube, UI1_COLOR_BLUE);
   UI1_ChangeIconFgColor(&cubeParam.descP->iconCloseCube, UI1_COLOR_WHITE);
   UI1_EnableElementSelection(&cubeParam.descP->iconCloseCube);
 
-#if PL_HAS_SHIP_DEMO
+#if PL_CONFIG_HAS_SHIP_DEMO
 {
   /* Ship window */
   UI1_DisplayOrientation orientation = UI1_GetDisplayOrientation();
@@ -537,7 +537,7 @@ void CUBE_CreateWindow(CUBE_WindowDesc *desc) {
   if (FRTOS1_xTaskCreate(Task3Dcube, "Cube", configMINIMAL_STACK_SIZE+80, &cubeParam, tskIDLE_PRIORITY+3, NULL)!=pdPASS) {
     for(;;) {} /* out of memory? */
   }
-#if PL_HAS_SHIP_DEMO
+#if PL_CONFIG_HAS_SHIP_DEMO
   doCloseShipWindow = FALSE;
   /* Start space ship task */
   if (FRTOS1_xTaskCreate(Task3Dship, "Ship", configMINIMAL_STACK_SIZE+80, &cubeParam, tskIDLE_PRIORITY+3, &xHandleTask3Dship)!=pdPASS) {
@@ -577,6 +577,5 @@ void CUBE_OnEvent(UI1_Screen *screen, UI1_Window *window, UI1_Element *element, 
 }
 
 #endif /* PL_HAS_CUBE_DEMO */
-
 
 /* END Cube */

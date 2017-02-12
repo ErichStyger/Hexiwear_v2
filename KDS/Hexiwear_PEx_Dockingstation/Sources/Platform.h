@@ -18,7 +18,9 @@
 #define PL_CONFIG_HAS_KW40_COMM   (0)  /* Communication with KW40, including touch buttons */
 #define PL_CONFIG_HAS_OLED        (1)  /* support for OLED display */
 
-#define PL_CONFIG_HAS_CUBE_DEMO   (1)
-#define PL_CONFIG_HAS_SHIP_DEMO   (1)
+#define PL_CONFIG_HAS_CUBE_DEMO   (0)
+#define PL_CONFIG_HAS_SHIP_DEMO   (0 && PL_CONFIG_HAS_CUBE_DEMO)
+
+#define PL_CONFIG_HAS_QUIZZ       (1)
 
 #endif /* SOURCES_PLATFORM_H_ */

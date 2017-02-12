@@ -14,9 +14,10 @@
 
 /* MODULE Cube */
 
+#include "Platform.h"
+#if PL_CONFIG_HAS_CUBE_DEMO
 #include "UI1.h"
 #include "FRTOS1.h"
-#include "Platform.h"
 
 typedef struct {
   UI1_Screen screen;
@@ -41,6 +42,7 @@ void CUBE_CloseShipWindow(void);
 void CUBE_CloseCubeWindow(void);
 
 /* END Cube */
+#endif /* PL_CONFIG_HAS_CUBE_DEMO */
 
 #endif
 
