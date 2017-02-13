@@ -32,13 +32,24 @@
 #include "GDisp1.h"
 #include "LCD1.h"
 #include "Cube.h"
+#include "UI1.h"
 
 #if PL_CONFIG_HAS_CUBE_DEMO
   static CUBE_WindowDesc cubeWindow;
 #endif
-#if PL_CONFIG_HAS_QUIZZ
-  static QUIZZ_WindowDesc quizzWindow;
-#endif
+
+void APP_Event(APP_EventType kind) {
+  switch(kind) {
+  case APP_EVENT_BUTTON_LEFT:
+  case APP_EVENT_BUTTON_UP:
+    UI1_SelectNextElement(UI1_GetRoot(), FALSE);
+    break;
+  case APP_EVENT_BUTTON_RIGHT:
+  case APP_EVENT_BUTTON_DOWN:
+    UI1_SelectNextElement(UI1_GetRoot(), TRUE);
+    break;
+  } /* switch */
+}
 
 static void AppTask(void *param) {
   bool closeIt = FALSE;
@@ -82,7 +93,7 @@ static void AppTask(void *param) {
   CUBE_CreateWindow(&cubeWindow);
 #endif
 #if PL_CONFIG_HAS_QUIZZ
-  QUIZZ_CreateTask(&quizzWindow);
+  QUIZZ_CreateTask();
 #endif
   for(;;) {
 #if PL_CONFIG_HAS_QUIZZ

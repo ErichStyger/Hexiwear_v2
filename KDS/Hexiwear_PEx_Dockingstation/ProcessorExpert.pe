@@ -3,7 +3,7 @@
   <Header>
     <Name>Hexiwear_PEx_Dockingstation</Name>
     <SavedBy>Erich Styger Local</SavedBy>
-    <ModificationStamp>84</ModificationStamp>
+    <ModificationStamp>88</ModificationStamp>
     <Date>2016-11-29</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.12.2.RT7_b1550-0615</PEversion>
@@ -47805,7 +47805,7 @@
     <UserFolderName>UI</UserFolderName>
     <Comment lines_count="0" />
     <Template />
-    <BeanVersion>01.066</BeanVersion>
+    <BeanVersion>01.077</BeanVersion>
     <LightErrorsIgnored>false</LightErrorsIgnored>
     <Properties>
       <ItemState>
@@ -47825,22 +47825,22 @@
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Index>1</Index>
-        <Value>false</Value>
+        <Index>0</Index>
+        <Value>true</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>RTOSenabled</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Value>false</Value>
-        <Expanded>false</Expanded>
+        <Value>true</Value>
+        <Expanded>true</Expanded>
       </ItemState>
       <ItemState>
         <ItemSymbol>RTOS</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value />
+        <Value>FRTOS1</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>SystemGroup</ItemSymbol>
@@ -48320,6 +48320,17 @@
         <UsrMethodName>GetRoot</UsrMethodName>
       </ItemState>
       <ItemState>
+        <ItemSymbol>SetRoot</ItemSymbol>
+        <ReadOnly>false</ReadOnly>
+        <UserReadOnly>false</UserReadOnly>
+        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
+        <Index>0</Index>
+        <Value>true</Value>
+        <LastSelection>true</LastSelection>
+        <LastUserSel>yes</LastUserSel>
+        <UsrMethodName>SetRoot</UsrMethodName>
+      </ItemState>
+      <ItemState>
         <ItemSymbol>SendMessage</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
@@ -48683,8 +48694,8 @@
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Index>0</Index>
-        <Value>true</Value>
+        <Index>1</Index>
+        <Value>false</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>WindowBorderColor</ItemSymbol>
@@ -48832,7 +48843,7 @@
     <UserFolderName>UI</UserFolderName>
     <Comment lines_count="0" />
     <Template />
-    <BeanVersion>01.075</BeanVersion>
+    <BeanVersion>01.081</BeanVersion>
     <LightErrorsIgnored>false</LightErrorsIgnored>
     <Properties>
       <ItemState>
@@ -49145,7 +49156,7 @@
     <UserFolderName>UI</UserFolderName>
     <Comment lines_count="0" />
     <Template />
-    <BeanVersion>01.076</BeanVersion>
+    <BeanVersion>01.077</BeanVersion>
     <LightErrorsIgnored>false</LightErrorsIgnored>
     <Properties>
       <ItemState>
@@ -49391,7 +49402,7 @@
     <UserFolderName>UI</UserFolderName>
     <Comment lines_count="0" />
     <Template />
-    <BeanVersion>01.073</BeanVersion>
+    <BeanVersion>01.081</BeanVersion>
     <LightErrorsIgnored>false</LightErrorsIgnored>
     <Properties>
       <ItemState>
@@ -49418,6 +49429,15 @@
         <EnumSymbVal>WHITE</EnumSymbVal>
       </ItemState>
       <ItemState>
+        <ItemSymbol>DefaultHeaderForegroundColor</ItemSymbol>
+        <ReadOnly>false</ReadOnly>
+        <UserReadOnly>false</UserReadOnly>
+        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
+        <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
+        <Index>0</Index>
+        <EnumSymbVal>BLACK</EnumSymbVal>
+      </ItemState>
+      <ItemState>
         <ItemSymbol>HeaderBorderSize</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
@@ -49432,15 +49452,6 @@
         <UserReadOnly>false</UserReadOnly>
         <Value>UIText</Value>
         <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
-      </ItemState>
-      <ItemState>
-        <ItemSymbol>DefaultHeaderTextForegroundColor</ItemSymbol>
-        <ReadOnly>false</ReadOnly>
-        <UserReadOnly>false</UserReadOnly>
-        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
-        <Index>0</Index>
-        <EnumSymbVal>BLACK</EnumSymbVal>
       </ItemState>
       <ItemState>
         <ItemSymbol>defaultText</ItemSymbol>
@@ -49476,6 +49487,15 @@
         <UserReadOnly>false</UserReadOnly>
         <Value>MCUC1</Value>
         <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
+      </ItemState>
+      <ItemState>
+        <ItemSymbol>DefaultHeaderTextForegroundColor</ItemSymbol>
+        <ReadOnly>false</ReadOnly>
+        <UserReadOnly>false</UserReadOnly>
+        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
+        <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
+        <Index>0</Index>
+        <EnumSymbVal>BLACK</EnumSymbVal>
       </ItemState>
     </Properties>
     <Methods>
@@ -49528,7 +49548,7 @@
         <UsrMethodName>SetBackgroundColor</UsrMethodName>
       </ItemState>
       <ItemState>
-        <ItemSymbol>SetTextForegroundColor</ItemSymbol>
+        <ItemSymbol>SetForegroundColor</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
@@ -49537,7 +49557,19 @@
         <Value>true</Value>
         <LastSelection>true</LastSelection>
         <LastUserSel>yes</LastUserSel>
-        <UsrMethodName>SetTextForegroundColor</UsrMethodName>
+        <UsrMethodName>SetForegroundColor</UsrMethodName>
+      </ItemState>
+      <ItemState>
+        <ItemSymbol>SetText</ItemSymbol>
+        <ReadOnly>false</ReadOnly>
+        <UserReadOnly>false</UserReadOnly>
+        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
+        <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
+        <Index>0</Index>
+        <Value>true</Value>
+        <LastSelection>true</LastSelection>
+        <LastUserSel>yes</LastUserSel>
+        <UsrMethodName>SetText</UsrMethodName>
       </ItemState>
       <ItemState>
         <ItemSymbol>ResizeIcon</ItemSymbol>
@@ -49586,6 +49618,18 @@
         <LastSelection>true</LastSelection>
         <LastUserSel>yes</LastUserSel>
         <UsrMethodName>SetUserMsgHandler</UsrMethodName>
+      </ItemState>
+      <ItemState>
+        <ItemSymbol>SetTextForegroundColor</ItemSymbol>
+        <ReadOnly>false</ReadOnly>
+        <UserReadOnly>false</UserReadOnly>
+        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
+        <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
+        <Index>0</Index>
+        <Value>true</Value>
+        <LastSelection>true</LastSelection>
+        <LastUserSel>yes</LastUserSel>
+        <UsrMethodName>SetTextForegroundColor</UsrMethodName>
       </ItemState>
     </Methods>
     <Events />
