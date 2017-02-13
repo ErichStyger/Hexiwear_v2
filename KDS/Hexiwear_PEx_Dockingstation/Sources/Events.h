@@ -72,6 +72,7 @@
 #include "UIWindow.h"
 #include "UIText.h"
 #include "UIIcon.h"
+#include "UIHeader.h"
 #include "FDisp1.h"
 #include "Helv08n.h"
 #include "XF1.h"

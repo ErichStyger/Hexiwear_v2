@@ -76,18 +76,15 @@ void QUIZZ_CloseWindow(void) {
 #endif
 }
 
-#if 0
-static void windowCallback(UI1_Window *window, UI1_Element *element, UI1_EventCallbackKind kind, UI1_Pvoid data) {
-  (void)window;
-  (void)data; /* unused argument */
-  if (kind==UI1_EVENT_CLICK) {
-    if (UI1_EqualElement(element, &params.descP->iconClose)) {
+static void windowCallback(UI1_Element *element, UI1_MsgKind kind, void *pData) {
+  (void)pData; /* unused argument */
+  if (kind==UI1_MSG_CLICK) {
+    if (UI1_EqualElement(element, &params.descP->header.iconWidget.element)) {
       QUIZZ_CloseWindow();
       return;
     }
   }
 }
-#endif
 
 static void QUIZZ_CreateScreen(void) {
   UI1_PixelDim h;
@@ -96,26 +93,34 @@ static void QUIZZ_CreateScreen(void) {
   (void)UIScreen_Create(NULL, &params.descP->screen, 0, 0, UI1_GetWidth(), UI1_GetHeight());
   UIScreen_SetBackgroundColor(&params.descP->screen, UI1_COLOR_RED);
   /* window */
-  (void)UIWindow_Create((UI1_Element*)&params.descP->screen, &params.descP->window, 5, 5, GDisp1_GetWidth()-10, GDisp1_GetHeight()-10);
+  (void)UIWindow_Create((UI1_Element*)&params.descP->screen, &params.descP->window,
+      5, 5,
+      GDisp1_GetWidth()-10, GDisp1_GetHeight()-10);
   UIWindow_SetBackgroundColor(&params.descP->window, UI1_COLOR_BRIGHT_GREEN);
   UIWindow_SetBorder(&params.descP->window);
-#if 0
-  (void)UIHeader_Create((UIHeader_Element *)&params.descP->window, &params.descP->header, 0, 0, 20, 10);
-  //(unsigned char*)"Quizz", FONT
+
+  /* header */
+  (void)UIHeader_Create((UIHeader_Element*)&params.descP->window, &params.descP->header,
+      1, 1,
+      0, /* auto-size */
+      10);
   UIHeader_SetBackgroundColor(&params.descP->header, UI1_COLOR_BLUE);
+  UIHeader_SetTextForegroundColor(&params.descP->header, UI1_COLOR_BLACK);
+  UIHeader_SetUserMsgHandler(&params.descP->header, windowCallback);
 
-//  UIHeader_ChangeTextFgColor(&params.descP->header.element, UI1_COLOR_WHITE);
-//  UIHeader_SetUserMsgHandler(&params.descP->window, windowCallback);
-  /* Icon: Close */
-  h = (UI1_PixelDim)(UI1_GetElementHeight(&params.descP->header));
-  (void)UIIcon_CreateIcon((UI1_Element *)&params.descP->window, &params.descP->iconClose, 1, 1, (UI1_PixelDim)(h-2), (UI1_PixelDim)(h-2), UIIcon_ICON_CLOSE);
-  params.descP->iconClose.element.prop.flags |= UI1_FLAGS_ALIGN_RIGHT;
-  UI1_OnWindowResize(&params.descP->window); /* right align element(s) if needed */
-  UI1_ChangeElementColor(&params.descP->iconClose, UI1_COLOR_BLUE);
-  UIIcon_ChangeIconFgColor(&params.descP->iconClose, UI1_COLOR_WHITE);
+  /* Icon: Radio button */
+  h = (UI1_PixelDim)(UI1_GetElementHeight(&params.descP->header.element));
+  (void)UIIcon_Create((UI1_Element *)&params.descP->window, &params.descP->iconRadio,
+      0, h,
+      10, 10);
+  UIIcon_SetType(&params.descP->iconRadio, UIIcon_ICON_CIRCLE_DOT);
+  UIIcon_SetForegroundColor(&params.descP->iconRadio, UI1_COLOR_BLACK);
+  UIIcon_SetBackgroundColor(&params.descP->iconRadio, UI1_COLOR_WHITE);
+  //params.descP->iconClose.element.prop.flags |= UI1_FLAGS_ALIGN_RIGHT;
+  //UI1_OnWindowResize(&params.descP->window); /* right align element(s) if needed */
   UI1_EnableElementSelection(&params.descP->iconClose);
-#endif
 
+#if 0
   /* icon */
   UIIcon_Create((UI1_Element*)&params.descP->window, &params.descP->iconClose,
       UI1_GetElementPosX(&params.descP->window.element)+3,
@@ -123,16 +128,15 @@ static void QUIZZ_CreateScreen(void) {
   UIIcon_SetForegroundColor(&params.descP->iconClose, UI1_COLOR_BLACK);
   UIIcon_SetBackgroundColor(&params.descP->iconClose, UI1_COLOR_WHITE);
   UIIcon_SetType(&params.descP->iconClose, UIIcon_ICON_X_BOXED);
-
+#endif
   /* text */
   UIText_Create((UI1_Element*)&params.descP->window, &params.descP->text,
-      UI1_GetElementPosX(&params.descP->window.element)+3,
-      UI1_GetElementPosY(&params.descP->window.element)+15, 0, 0);
-  UIText_SetText(&params.descP->text, (unsigned char*)"This is an answer");
+      15, 30, 0, 0);
+  UIText_SetText(&params.descP->text, (unsigned char*)"Fast Mode");
   UIText_Resize(&params.descP->text);
   /* update the screen */
   UI1_MsgPaintAllElements((UI1_Element*)&params.descP->screen);
-
+#if 0
   UIIcon_SetType(&params.descP->iconClose, UIIcon_ICON_BOX);
   UI1_MsgPaintAllElements((UI1_Element*)&params.descP->screen);
 
@@ -147,6 +151,7 @@ static void QUIZZ_CreateScreen(void) {
 
   UIIcon_SetType(&params.descP->iconClose, UIIcon_ICON_CHECKMARK_BOXED);
   UI1_MsgPaintAllElements((UI1_Element*)&params.descP->screen);
+#endif
 }
 
 void QUIZZ_CreateTask(QUIZZ_WindowDesc *desc) {

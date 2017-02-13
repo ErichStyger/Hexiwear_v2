@@ -8,15 +8,13 @@
 #include "UIWindow.h"
 #include "UIText.h"
 #include "UIIcon.h"
-//#include "UIHeader.h"
-//#include "UIIcon.h"
-//#include "UIHeader.h"
+#include "UIHeader.h"
 
 typedef struct {
   UIScreen_ScreenWidget screen;
   UIWindow_WindowWidget window;
-  //UIHeader_HeaderWidget header;
-  UIIcon_IconWidget iconClose;
+  UIHeader_HeaderWidget header;
+  UIIcon_IconWidget iconRadio;
   UIText_TextWidget text;
 } QUIZZ_WindowDesc;
 
