@@ -9,6 +9,8 @@
 #define SOURCES_UI_H_
 
 #include "Platform.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
 typedef enum {
   UI_EVENT_BUTTON_DOWN,
@@ -17,9 +19,10 @@ typedef enum {
   UI_EVENT_BUTTON_RIGHT,
 } UI_EventType;
 
+void UI_SetCurrentUITask(xTaskHandle handle);
+
 void UI_Event(UI_EventType kind);
 
 void UI_Init(void);
-
 
 #endif /* SOURCES_UI_H_ */

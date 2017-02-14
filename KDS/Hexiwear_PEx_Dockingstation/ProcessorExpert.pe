@@ -3,7 +3,7 @@
   <Header>
     <Name>Hexiwear_PEx_Dockingstation</Name>
     <SavedBy>Erich Styger Local</SavedBy>
-    <ModificationStamp>88</ModificationStamp>
+    <ModificationStamp>90</ModificationStamp>
     <Date>2016-11-29</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.12.2.RT7_b1550-0615</PEversion>
@@ -21219,7 +21219,7 @@
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Value>8192</Value>
+        <Value>20000</Value>
         <Base>DEC</Base>
       </ItemState>
       <ItemState>
@@ -48510,7 +48510,7 @@
     <UserFolderName>UI</UserFolderName>
     <Comment lines_count="0" />
     <Template />
-    <BeanVersion>01.017</BeanVersion>
+    <BeanVersion>01.018</BeanVersion>
     <LightErrorsIgnored>false</LightErrorsIgnored>
     <Properties>
       <ItemState>
@@ -48593,18 +48593,6 @@
         <UsrMethodName>UpdateScreen</UsrMethodName>
       </ItemState>
       <ItemState>
-        <ItemSymbol>Create</ItemSymbol>
-        <ReadOnly>false</ReadOnly>
-        <UserReadOnly>false</UserReadOnly>
-        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
-        <Index>0</Index>
-        <Value>true</Value>
-        <LastSelection>true</LastSelection>
-        <LastUserSel>yes</LastUserSel>
-        <UsrMethodName>Create</UsrMethodName>
-      </ItemState>
-      <ItemState>
         <ItemSymbol>SetBackgroundColor</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
@@ -48615,6 +48603,18 @@
         <LastSelection>true</LastSelection>
         <LastUserSel>yes</LastUserSel>
         <UsrMethodName>SetBackgroundColor</UsrMethodName>
+      </ItemState>
+      <ItemState>
+        <ItemSymbol>Paint</ItemSymbol>
+        <ReadOnly>false</ReadOnly>
+        <UserReadOnly>false</UserReadOnly>
+        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
+        <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
+        <Index>0</Index>
+        <Value>true</Value>
+        <LastSelection>true</LastSelection>
+        <LastUserSel>yes</LastUserSel>
+        <UsrMethodName>Paint</UsrMethodName>
       </ItemState>
       <ItemState>
         <ItemSymbol>MessageHandler</ItemSymbol>
@@ -48629,7 +48629,7 @@
         <UsrMethodName>MessageHandler</UsrMethodName>
       </ItemState>
       <ItemState>
-        <ItemSymbol>Paint</ItemSymbol>
+        <ItemSymbol>Create</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
@@ -48638,7 +48638,7 @@
         <Value>true</Value>
         <LastSelection>true</LastSelection>
         <LastUserSel>yes</LastUserSel>
-        <UsrMethodName>Paint</UsrMethodName>
+        <UsrMethodName>Create</UsrMethodName>
       </ItemState>
       <ItemState>
         <ItemSymbol>Update</ItemSymbol>
@@ -48666,7 +48666,7 @@
     <UserFolderName>UI</UserFolderName>
     <Comment lines_count="0" />
     <Template />
-    <BeanVersion>01.046</BeanVersion>
+    <BeanVersion>01.047</BeanVersion>
     <LightErrorsIgnored>false</LightErrorsIgnored>
     <Properties>
       <ItemState>
@@ -48742,28 +48742,6 @@
     </Properties>
     <Methods>
       <ItemState>
-        <ItemSymbol>Create</ItemSymbol>
-        <ReadOnly>false</ReadOnly>
-        <UserReadOnly>false</UserReadOnly>
-        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Index>0</Index>
-        <Value>true</Value>
-        <LastSelection>true</LastSelection>
-        <LastUserSel>yes</LastUserSel>
-        <UsrMethodName>Create</UsrMethodName>
-      </ItemState>
-      <ItemState>
-        <ItemSymbol>Paint</ItemSymbol>
-        <ReadOnly>false</ReadOnly>
-        <UserReadOnly>false</UserReadOnly>
-        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Index>0</Index>
-        <Value>true</Value>
-        <LastSelection>true</LastSelection>
-        <LastUserSel>yes</LastUserSel>
-        <UsrMethodName>Paint</UsrMethodName>
-      </ItemState>
-      <ItemState>
         <ItemSymbol>SetBackgroundColor</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
@@ -48797,6 +48775,28 @@
         <UsrMethodName>MakeWindowMovable</UsrMethodName>
       </ItemState>
       <ItemState>
+        <ItemSymbol>Paint</ItemSymbol>
+        <ReadOnly>false</ReadOnly>
+        <UserReadOnly>false</UserReadOnly>
+        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
+        <Index>0</Index>
+        <Value>true</Value>
+        <LastSelection>true</LastSelection>
+        <LastUserSel>yes</LastUserSel>
+        <UsrMethodName>Paint</UsrMethodName>
+      </ItemState>
+      <ItemState>
+        <ItemSymbol>SetUserMsgHandler</ItemSymbol>
+        <ReadOnly>false</ReadOnly>
+        <UserReadOnly>false</UserReadOnly>
+        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
+        <Index>0</Index>
+        <Value>true</Value>
+        <LastSelection>true</LastSelection>
+        <LastUserSel>yes</LastUserSel>
+        <UsrMethodName>SetUserMsgHandler</UsrMethodName>
+      </ItemState>
+      <ItemState>
         <ItemSymbol>MessageHandler</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
@@ -48808,15 +48808,15 @@
         <UsrMethodName>MessageHandler</UsrMethodName>
       </ItemState>
       <ItemState>
-        <ItemSymbol>SetUserMsgHandler</ItemSymbol>
+        <ItemSymbol>Create</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Index>1</Index>
-        <Value>false</Value>
+        <Index>0</Index>
+        <Value>true</Value>
         <LastSelection>true</LastSelection>
-        <LastUserSel>no</LastUserSel>
-        <UsrMethodName>SetUserMsgHandler</UsrMethodName>
+        <LastUserSel>yes</LastUserSel>
+        <UsrMethodName>Create</UsrMethodName>
       </ItemState>
       <ItemState>
         <ItemSymbol>WindowSetBorder</ItemSymbol>
@@ -48843,7 +48843,7 @@
     <UserFolderName>UI</UserFolderName>
     <Comment lines_count="0" />
     <Template />
-    <BeanVersion>01.081</BeanVersion>
+    <BeanVersion>01.084</BeanVersion>
     <LightErrorsIgnored>false</LightErrorsIgnored>
     <Properties>
       <ItemState>
@@ -48939,7 +48939,7 @@
     </Properties>
     <Methods>
       <ItemState>
-        <ItemSymbol>Create</ItemSymbol>
+        <ItemSymbol>SetBackgroundColor</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
@@ -48948,10 +48948,10 @@
         <Value>true</Value>
         <LastSelection>true</LastSelection>
         <LastUserSel>yes</LastUserSel>
-        <UsrMethodName>Create</UsrMethodName>
+        <UsrMethodName>SetBackgroundColor</UsrMethodName>
       </ItemState>
       <ItemState>
-        <ItemSymbol>Paint</ItemSymbol>
+        <ItemSymbol>SetForegroundColor</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
@@ -48960,19 +48960,7 @@
         <Value>true</Value>
         <LastSelection>true</LastSelection>
         <LastUserSel>yes</LastUserSel>
-        <UsrMethodName>Paint</UsrMethodName>
-      </ItemState>
-      <ItemState>
-        <ItemSymbol>ChangeText</ItemSymbol>
-        <ReadOnly>false</ReadOnly>
-        <UserReadOnly>false</UserReadOnly>
-        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
-        <Index>0</Index>
-        <Value>true</Value>
-        <LastSelection>true</LastSelection>
-        <LastUserSel>yes</LastUserSel>
-        <UsrMethodName>ChangeText</UsrMethodName>
+        <UsrMethodName>SetForegroundColor</UsrMethodName>
       </ItemState>
       <ItemState>
         <ItemSymbol>SetFont</ItemSymbol>
@@ -49023,7 +49011,7 @@
         <UsrMethodName>GetText</UsrMethodName>
       </ItemState>
       <ItemState>
-        <ItemSymbol>MessageHandler</ItemSymbol>
+        <ItemSymbol>ChangeText</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
@@ -49032,7 +49020,7 @@
         <Value>true</Value>
         <LastSelection>true</LastSelection>
         <LastUserSel>yes</LastUserSel>
-        <UsrMethodName>MessageHandler</UsrMethodName>
+        <UsrMethodName>ChangeText</UsrMethodName>
       </ItemState>
       <ItemState>
         <ItemSymbol>GetTextBoxWidth</ItemSymbol>
@@ -49083,7 +49071,7 @@
         <UsrMethodName>Resize</UsrMethodName>
       </ItemState>
       <ItemState>
-        <ItemSymbol>SetBackgroundColor</ItemSymbol>
+        <ItemSymbol>Paint</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
@@ -49092,19 +49080,7 @@
         <Value>true</Value>
         <LastSelection>true</LastSelection>
         <LastUserSel>yes</LastUserSel>
-        <UsrMethodName>SetBackgroundColor</UsrMethodName>
-      </ItemState>
-      <ItemState>
-        <ItemSymbol>SetForegroundColor</ItemSymbol>
-        <ReadOnly>false</ReadOnly>
-        <UserReadOnly>false</UserReadOnly>
-        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
-        <Index>0</Index>
-        <Value>true</Value>
-        <LastSelection>true</LastSelection>
-        <LastUserSel>yes</LastUserSel>
-        <UsrMethodName>SetForegroundColor</UsrMethodName>
+        <UsrMethodName>Paint</UsrMethodName>
       </ItemState>
       <ItemState>
         <ItemSymbol>SetUserMsgHandler</ItemSymbol>
@@ -49112,11 +49088,35 @@
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
         <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
-        <Index>1</Index>
-        <Value>false</Value>
+        <Index>0</Index>
+        <Value>true</Value>
         <LastSelection>true</LastSelection>
-        <LastUserSel>no</LastUserSel>
+        <LastUserSel>yes</LastUserSel>
         <UsrMethodName>SetUserMsgHandler</UsrMethodName>
+      </ItemState>
+      <ItemState>
+        <ItemSymbol>MessageHandler</ItemSymbol>
+        <ReadOnly>false</ReadOnly>
+        <UserReadOnly>false</UserReadOnly>
+        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
+        <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
+        <Index>0</Index>
+        <Value>true</Value>
+        <LastSelection>true</LastSelection>
+        <LastUserSel>yes</LastUserSel>
+        <UsrMethodName>MessageHandler</UsrMethodName>
+      </ItemState>
+      <ItemState>
+        <ItemSymbol>Create</ItemSymbol>
+        <ReadOnly>false</ReadOnly>
+        <UserReadOnly>false</UserReadOnly>
+        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
+        <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
+        <Index>0</Index>
+        <Value>true</Value>
+        <LastSelection>true</LastSelection>
+        <LastUserSel>yes</LastUserSel>
+        <UsrMethodName>Create</UsrMethodName>
       </ItemState>
       <ItemState>
         <ItemSymbol>SetBgColor</ItemSymbol>
@@ -49156,7 +49156,7 @@
     <UserFolderName>UI</UserFolderName>
     <Comment lines_count="0" />
     <Template />
-    <BeanVersion>01.077</BeanVersion>
+    <BeanVersion>01.080</BeanVersion>
     <LightErrorsIgnored>false</LightErrorsIgnored>
     <Properties>
       <ItemState>
@@ -49199,6 +49199,15 @@
         <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
         <Index>0</Index>
         <EnumSymbVal>BLACK</EnumSymbVal>
+      </ItemState>
+      <ItemState>
+        <ItemSymbol>DefaultInsideColor</ItemSymbol>
+        <ReadOnly>false</ReadOnly>
+        <UserReadOnly>false</UserReadOnly>
+        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
+        <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
+        <Index>1</Index>
+        <EnumSymbVal>WHITE</EnumSymbVal>
       </ItemState>
       <ItemState>
         <ItemSymbol>SystemGroup</ItemSymbol>
@@ -49293,7 +49302,7 @@
         <UsrMethodName>ChangeIconFgColor</UsrMethodName>
       </ItemState>
       <ItemState>
-        <ItemSymbol>Create</ItemSymbol>
+        <ItemSymbol>SetBackgroundColor</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
@@ -49302,19 +49311,7 @@
         <Value>true</Value>
         <LastSelection>true</LastSelection>
         <LastUserSel>yes</LastUserSel>
-        <UsrMethodName>Create</UsrMethodName>
-      </ItemState>
-      <ItemState>
-        <ItemSymbol>Paint</ItemSymbol>
-        <ReadOnly>false</ReadOnly>
-        <UserReadOnly>false</UserReadOnly>
-        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
-        <Index>0</Index>
-        <Value>true</Value>
-        <LastSelection>true</LastSelection>
-        <LastUserSel>yes</LastUserSel>
-        <UsrMethodName>Paint</UsrMethodName>
+        <UsrMethodName>SetBackgroundColor</UsrMethodName>
       </ItemState>
       <ItemState>
         <ItemSymbol>SetForegroundColor</ItemSymbol>
@@ -49329,7 +49326,7 @@
         <UsrMethodName>SetForegroundColor</UsrMethodName>
       </ItemState>
       <ItemState>
-        <ItemSymbol>SetBackgroundColor</ItemSymbol>
+        <ItemSymbol>SetInsideColor</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
@@ -49338,7 +49335,7 @@
         <Value>true</Value>
         <LastSelection>true</LastSelection>
         <LastUserSel>yes</LastUserSel>
-        <UsrMethodName>SetBackgroundColor</UsrMethodName>
+        <UsrMethodName>SetInsideColor</UsrMethodName>
       </ItemState>
       <ItemState>
         <ItemSymbol>SetType</ItemSymbol>
@@ -49353,15 +49350,27 @@
         <UsrMethodName>SetType</UsrMethodName>
       </ItemState>
       <ItemState>
+        <ItemSymbol>Paint</ItemSymbol>
+        <ReadOnly>false</ReadOnly>
+        <UserReadOnly>false</UserReadOnly>
+        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
+        <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
+        <Index>0</Index>
+        <Value>true</Value>
+        <LastSelection>true</LastSelection>
+        <LastUserSel>yes</LastUserSel>
+        <UsrMethodName>Paint</UsrMethodName>
+      </ItemState>
+      <ItemState>
         <ItemSymbol>SetUserMsgHandler</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
         <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
-        <Index>1</Index>
-        <Value>false</Value>
+        <Index>0</Index>
+        <Value>true</Value>
         <LastSelection>true</LastSelection>
-        <LastUserSel>no</LastUserSel>
+        <LastUserSel>yes</LastUserSel>
         <UsrMethodName>SetUserMsgHandler</UsrMethodName>
       </ItemState>
       <ItemState>
@@ -49375,6 +49384,18 @@
         <LastSelection>true</LastSelection>
         <LastUserSel>yes</LastUserSel>
         <UsrMethodName>MessageHandler</UsrMethodName>
+      </ItemState>
+      <ItemState>
+        <ItemSymbol>Create</ItemSymbol>
+        <ReadOnly>false</ReadOnly>
+        <UserReadOnly>false</UserReadOnly>
+        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
+        <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
+        <Index>0</Index>
+        <Value>true</Value>
+        <LastSelection>true</LastSelection>
+        <LastUserSel>yes</LastUserSel>
+        <UsrMethodName>Create</UsrMethodName>
       </ItemState>
       <ItemState>
         <ItemSymbol>ChangeFgColor</ItemSymbol>
@@ -49402,7 +49423,7 @@
     <UserFolderName>UI</UserFolderName>
     <Comment lines_count="0" />
     <Template />
-    <BeanVersion>01.081</BeanVersion>
+    <BeanVersion>01.083</BeanVersion>
     <LightErrorsIgnored>false</LightErrorsIgnored>
     <Properties>
       <ItemState>
@@ -49512,30 +49533,6 @@
         <UsrMethodName>SetTextForeroundColor</UsrMethodName>
       </ItemState>
       <ItemState>
-        <ItemSymbol>Paint</ItemSymbol>
-        <ReadOnly>false</ReadOnly>
-        <UserReadOnly>false</UserReadOnly>
-        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
-        <Index>0</Index>
-        <Value>true</Value>
-        <LastSelection>true</LastSelection>
-        <LastUserSel>yes</LastUserSel>
-        <UsrMethodName>Paint</UsrMethodName>
-      </ItemState>
-      <ItemState>
-        <ItemSymbol>Create</ItemSymbol>
-        <ReadOnly>false</ReadOnly>
-        <UserReadOnly>false</UserReadOnly>
-        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
-        <Index>0</Index>
-        <Value>true</Value>
-        <LastSelection>true</LastSelection>
-        <LastUserSel>yes</LastUserSel>
-        <UsrMethodName>Create</UsrMethodName>
-      </ItemState>
-      <ItemState>
         <ItemSymbol>SetBackgroundColor</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
@@ -49596,7 +49593,7 @@
         <UsrMethodName>Resize</UsrMethodName>
       </ItemState>
       <ItemState>
-        <ItemSymbol>MessageHandler</ItemSymbol>
+        <ItemSymbol>Paint</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
@@ -49605,7 +49602,7 @@
         <Value>true</Value>
         <LastSelection>true</LastSelection>
         <LastUserSel>yes</LastUserSel>
-        <UsrMethodName>MessageHandler</UsrMethodName>
+        <UsrMethodName>Paint</UsrMethodName>
       </ItemState>
       <ItemState>
         <ItemSymbol>SetUserMsgHandler</ItemSymbol>
@@ -49618,6 +49615,30 @@
         <LastSelection>true</LastSelection>
         <LastUserSel>yes</LastUserSel>
         <UsrMethodName>SetUserMsgHandler</UsrMethodName>
+      </ItemState>
+      <ItemState>
+        <ItemSymbol>MessageHandler</ItemSymbol>
+        <ReadOnly>false</ReadOnly>
+        <UserReadOnly>false</UserReadOnly>
+        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
+        <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
+        <Index>0</Index>
+        <Value>true</Value>
+        <LastSelection>true</LastSelection>
+        <LastUserSel>yes</LastUserSel>
+        <UsrMethodName>MessageHandler</UsrMethodName>
+      </ItemState>
+      <ItemState>
+        <ItemSymbol>Create</ItemSymbol>
+        <ReadOnly>false</ReadOnly>
+        <UserReadOnly>false</UserReadOnly>
+        <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
+        <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
+        <Index>0</Index>
+        <Value>true</Value>
+        <LastSelection>true</LastSelection>
+        <LastUserSel>yes</LastUserSel>
+        <UsrMethodName>Create</UsrMethodName>
       </ItemState>
       <ItemState>
         <ItemSymbol>SetTextForegroundColor</ItemSymbol>
