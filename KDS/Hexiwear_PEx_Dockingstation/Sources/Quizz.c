@@ -80,10 +80,11 @@ static void QUIZZ_CreateGUI(QUIZZ_GUIDesc *gui) {
   /* screen */
   (void)UIScreen_Create(NULL, &gui->screen, 0, 0, UI1_GetWidth(), UI1_GetHeight());
   UIScreen_SetBackgroundColor(&gui->screen, UI1_COLOR_RED);
+
   /* window */
   (void)UIWindow_Create((UI1_Element*)&gui->screen, &gui->window,
       5, 5,
-      GDisp1_GetWidth()-10, GDisp1_GetHeight()-10);
+      GDisp1_GetWidth()-10, GDisp1_GetHeight()-30);
   UIWindow_SetBackgroundColor(&gui->window, UI1_COLOR_BRIGHT_GREEN);
   UIWindow_SetBorder(&gui->window);
 
@@ -104,7 +105,7 @@ static void QUIZZ_CreateGUI(QUIZZ_GUIDesc *gui) {
   UIIcon_SetType(&gui->iconRadioFast, UIIcon_ICON_CIRCLE_DOT);
   UIIcon_SetForegroundColor(&gui->iconRadioFast, UI1_COLOR_BLACK);
   UIIcon_SetBackgroundColor(&gui->iconRadioFast, gui->window.bgColor);
-  UI1_EnableElementSelection(&gui->iconRadioFast.element);
+//  UI1_EnableElementSelection(&gui->iconRadioFast.element);
 
   /* text */
   x = (UI1_PixelDim)(UI1_GetElementPosRight(&gui->iconRadioFast.element)+1);
@@ -113,6 +114,7 @@ static void QUIZZ_CreateGUI(QUIZZ_GUIDesc *gui) {
   UIText_SetText(&gui->textFast, (unsigned char*)"Fast Mode");
   UIText_SetBackgroundColor(&gui->textFast, gui->window.bgColor);
   UIText_Resize(&gui->textFast);
+  UI1_EnableElementSelection(&gui->textFast.element);
 
   /* Icon: Radio button Slow */
   h = UI1_GetElementPosBottom(&gui->iconRadioFast.element);
@@ -121,7 +123,7 @@ static void QUIZZ_CreateGUI(QUIZZ_GUIDesc *gui) {
   UIIcon_SetType(&gui->iconRadioSlow, UIIcon_ICON_CIRCLE);
   UIIcon_SetForegroundColor(&gui->iconRadioSlow, UI1_COLOR_BLACK);
   UIIcon_SetBackgroundColor(&gui->iconRadioSlow, gui->window.bgColor);
-  UI1_EnableElementSelection(&gui->iconRadioSlow.element);
+//  UI1_EnableElementSelection(&gui->iconRadioSlow.element);
 
   /* text */
   x = (UI1_PixelDim)(UI1_GetElementPosRight(&gui->iconRadioSlow.element)+1);
@@ -130,6 +132,7 @@ static void QUIZZ_CreateGUI(QUIZZ_GUIDesc *gui) {
   UIText_SetText(&gui->textSlow, (unsigned char*)"Slow Mode");
   UIText_SetBackgroundColor(&gui->textSlow, gui->window.bgColor);
   UIText_Resize(&gui->textSlow);
+  UI1_EnableElementSelection(&gui->textSlow.element);
 
   /* Icon: Check box */
   h = UI1_GetElementPosBottom(&gui->iconRadioSlow.element)+5;
@@ -138,7 +141,7 @@ static void QUIZZ_CreateGUI(QUIZZ_GUIDesc *gui) {
   UIIcon_SetType(&gui->iconCheckEnabled, UIIcon_ICON_CHECKMARK_BOXED);
   UIIcon_SetForegroundColor(&gui->iconCheckEnabled, UI1_COLOR_BLACK);
   UIIcon_SetBackgroundColor(&gui->iconCheckEnabled, gui->window.bgColor);
-  UI1_EnableElementSelection(&gui->iconCheckEnabled.element);
+//  UI1_EnableElementSelection(&gui->iconCheckEnabled.element);
 
   /* text */
   x = (UI1_PixelDim)(UI1_GetElementPosRight(&gui->iconCheckEnabled.element)+1);
@@ -147,11 +150,12 @@ static void QUIZZ_CreateGUI(QUIZZ_GUIDesc *gui) {
   UIText_SetText(&gui->textEnabled, (unsigned char*)"Debug");
   UIText_SetBackgroundColor(&gui->textEnabled, gui->window.bgColor);
   UIText_Resize(&gui->textEnabled);
+  UI1_EnableElementSelection(&gui->textEnabled.element);
 
   /* update the screen */
   UI1_MsgPaintAllElements((UI1_Element*)&gui->screen);
   /* assign root element */
-  UI1_SetRoot(&gui->screen);
+  UI1_SetRoot(&gui->screen.element);
 
 #if 0 /* test different icons */
   UIIcon_SetType(&gui->iconClose, UIIcon_ICON_BOX);
@@ -189,12 +193,14 @@ static void QuizzTask(void *pvParameters) {
     }
     notified = xTaskNotifyWait(0UL, QUIZZ_KILL_TASK, &notifcationValue, 1); /* check flags, need to wait for one tick */
     if (notified==pdTRUE) { /* received notification */
+#if 1
       if ((notifcationValue&QUIZZ_KILL_TASK)) {
         LCD1_Clear();//GDisp1_Clear();
         vPortFree(QUIZZ_Gui);
         QUIZZ_Gui = NULL;
         vTaskDelete(NULL); /* killing myself */
       }
+#endif
     }
     vTaskDelay(pdMS_TO_TICKS(80)); /* give user a chance to see the cube rotating... */
   } /* for */

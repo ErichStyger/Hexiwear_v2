@@ -10,7 +10,7 @@
 #include "FRTOS1.h"
 #include "BLEUart.h"
 #include "HostComm.h"
-#include "Application.h"
+#include "UI.h"
 
 #define NOF_RX_QUEUE_ITEMS   5
 #define NOF_TX_QUEUE_ITEMS   5
@@ -72,10 +72,16 @@ static void KW40TxTask(void *param) {
 static void HandlePacket(hostInterface_packet_t *packet) {
   switch(packet->type) {
     case packetType_pressUp:
+      UI_Event(UI_EVENT_BUTTON_UP);
+      break;
     case packetType_pressDown:
+      UI_Event(UI_EVENT_BUTTON_DOWN);
+      break;
     case packetType_pressRight:
+      UI_Event(UI_EVENT_BUTTON_RIGHT);
+      break;
     case packetType_pressLeft:
-      APP_Event(APP_EVENT_BUTTON_DOWN);
+      UI_Event(UI_EVENT_BUTTON_LEFT);
       break;
   } /* switch */
 }

@@ -28,6 +28,9 @@
 #if PL_CONFIG_HAS_QUIZZ
   #include "Quizz.h"
 #endif
+#if PL_CONFIG_HAS_UI
+  #include "UI.h"
+#endif
 #include "Vibro.h"
 #include "GDisp1.h"
 #include "LCD1.h"
@@ -38,50 +41,19 @@
   static CUBE_WindowDesc cubeWindow;
 #endif
 
-void APP_Event(APP_EventType kind) {
-  switch(kind) {
-  case APP_EVENT_BUTTON_LEFT:
-  case APP_EVENT_BUTTON_UP:
-    UI1_SelectNextElement(UI1_GetRoot(), FALSE);
-    break;
-  case APP_EVENT_BUTTON_RIGHT:
-  case APP_EVENT_BUTTON_DOWN:
-    UI1_SelectNextElement(UI1_GetRoot(), TRUE);
-    break;
-  } /* switch */
-}
-
 static void AppTask(void *param) {
   bool closeIt = FALSE;
 
-  RGBR_On();
-  FRTOS1_vTaskDelay(pdMS_TO_TICKS(100));
-  RGBR_Off();
-  RGBG_On();
-  FRTOS1_vTaskDelay(pdMS_TO_TICKS(100));
-  RGBG_Off();
-  RGBB_On();
-  FRTOS1_vTaskDelay(pdMS_TO_TICKS(100));
-  RGBB_Off();
+  RGBR_On(); vTaskDelay(pdMS_TO_TICKS(100)); RGBR_Off();
+  RGBG_On(); vTaskDelay(pdMS_TO_TICKS(100)); RGBG_Off();
+  RGBB_On(); vTaskDelay(pdMS_TO_TICKS(100)); RGBB_Off();
 #if PL_CONFIG_HAS_HOME_LEDS
-  HLED1_On();
-  FRTOS1_vTaskDelay(pdMS_TO_TICKS(100));
-  HLED1_Off();
-  HLED2_On();
-  FRTOS1_vTaskDelay(pdMS_TO_TICKS(100));
-  HLED2_Off();
-  HLED3_On();
-  FRTOS1_vTaskDelay(pdMS_TO_TICKS(100));
-  HLED3_Off();
-  HLED4_On();
-  FRTOS1_vTaskDelay(pdMS_TO_TICKS(100));
-  HLED4_Off();
-  HLED5_On();
-  FRTOS1_vTaskDelay(pdMS_TO_TICKS(100));
-  HLED5_Off();
-  HLED6_On();
-  FRTOS1_vTaskDelay(pdMS_TO_TICKS(100));
-  HLED6_Off();
+  HLED1_On(); vTaskDelay(pdMS_TO_TICKS(100)); HLED1_Off();
+  HLED2_On(); vTaskDelay(pdMS_TO_TICKS(100)); HLED2_Off();
+  HLED3_On(); vTaskDelay(pdMS_TO_TICKS(100)); HLED3_Off();
+  HLED4_On(); vTaskDelay(pdMS_TO_TICKS(100)); HLED4_Off();
+  HLED5_On(); vTaskDelay(pdMS_TO_TICKS(100)); HLED5_Off();
+  HLED6_On(); vTaskDelay(pdMS_TO_TICKS(100)); HLED6_Off();
 #endif
   //Vibro_SetVal();
   //Vibro_ClrVal();
@@ -102,9 +74,9 @@ static void AppTask(void *param) {
     }
 #endif
     RGBG_On();
-    FRTOS1_vTaskDelay(pdMS_TO_TICKS(50));
+    vTaskDelay(pdMS_TO_TICKS(20));
     RGBG_Off();
-    FRTOS1_vTaskDelay(pdMS_TO_TICKS(1000));
+    vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }
 
@@ -119,6 +91,9 @@ void APP_Run(void) {
 #endif
 #if PL_CONFIG_HAS_QUIZZ
   QUIZZ_Init();
+#endif
+#if PL_CONFIG_HAS_UI
+  UI_Init();
 #endif
   if (xTaskCreate(AppTask, (uint8_t *)"App", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
     for(;;){} /* error case only, stay here! */
