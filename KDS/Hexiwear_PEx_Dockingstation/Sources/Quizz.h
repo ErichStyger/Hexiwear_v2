@@ -3,12 +3,6 @@
 
 #include "Platform.h"
 #if PL_CONFIG_HAS_QUIZZ
-#include "UI1.h"
-#include "UIScreen.h"
-#include "UIWindow.h"
-#include "UIText.h"
-#include "UIIcon.h"
-#include "UIHeader.h"
 
 void QUIZZ_CreateTask(void);
 

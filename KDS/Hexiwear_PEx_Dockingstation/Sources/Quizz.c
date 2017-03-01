@@ -1,16 +1,3 @@
-/** ###################################################################
-**     Filename  : Cube.C
-**     Project   : Tower_LCD
-**     Processor : MCF51JM128VLH
-**     Compiler  : CodeWarrior ColdFireV1 C Compiler
-**     Date/Time : 09.01.2010, 20:03
-**     Contents  :
-**         User source code
-**
-** ###################################################################*/
-
-/* MODULE Cube */
-
 #include "Platform.h"
 
 #if PL_CONFIG_HAS_QUIZZ
@@ -19,6 +6,7 @@
 #include "UI1.h"
 #include "UIScreen.h"
 #include "UIWindow.h"
+#include "UIHeader.h"
 #include "GDisp1.h"
 #include "FRTOS1.h"
 #include "Helv08n.h"
