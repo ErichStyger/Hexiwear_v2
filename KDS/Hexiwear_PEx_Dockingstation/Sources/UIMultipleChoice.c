@@ -126,7 +126,6 @@ void UIMC_SelectionHandler(UI1_Element *element, UI1_MsgKind kind, void *pData) 
   } /* switch */
 }
 
-
 uint8_t UIMC_Create(UI1_Element *parent, UIMC_MultipleChoiceWidget *widget, UI1_PixelDim x, UI1_PixelDim y, UI1_PixelDim width, UI1_PixelDim height) {
   FDisp1_Font *font;
   int i;

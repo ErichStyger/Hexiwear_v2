@@ -24,4 +24,6 @@
 
 #define PL_CONFIG_HAS_QUIZZ       (1 && PL_CONFIG_HAS_OLED)
 
+#define PL_CONFIG_HAS_BUZZER      (1)
+
 #endif /* SOURCES_PLATFORM_H_ */

@@ -31,6 +31,9 @@
   #include "HLED5.h"
   #include "HLED6.h"
 #endif
+#if PL_CONFIG_HAS_BUZZER
+  #include "Buzzer.h"
+#endif
 #include "RGBR.h"
 #include "RGBG.h"
 #include "RGBB.h"
@@ -67,6 +70,9 @@ static const CLS1_ParseCommandCallback CmdParserTable[] =
 #endif
 #if RGBB_PARSE_COMMAND_ENABLED
   RGBB_ParseCommand,
+#endif
+#if PL_CONFIG_HAS_BUZZER
+   BUZ_ParseCommand,
 #endif
 #if PL_CONFIG_HAS_RADIO
   RNET1_ParseCommand,

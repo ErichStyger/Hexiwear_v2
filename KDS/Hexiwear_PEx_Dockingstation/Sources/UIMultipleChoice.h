@@ -43,6 +43,11 @@
 #define UIMC_NOF_QUESTIONS 5
 
 typedef struct {
+  const unsigned char *question;
+  const unsigned char *answer[UIMC_NOF_QUESTIONS];
+} UIMC_MultipleChoicQuestion;
+
+typedef struct {
   UIIcon_IconWidget icon;
   UIText_TextWidget text;
 } UIMC_Question;

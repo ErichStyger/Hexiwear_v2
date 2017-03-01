@@ -110,6 +110,25 @@ static void guiCallback(UI1_Element *element, UI1_MsgKind kind, void *pData) {
   } /* if click */
 }
 
+static const UIMC_MultipleChoicQuestion questions[] = {
+    {
+        .question = "Disable Inter-\nrupts on ARM\nCortex-M4F:",
+        .answer[0] = "cpsie i",
+        .answer[1] = "cpsid i",
+        .answer[2] = "cpsie primask",
+        .answer[3] = "cpsie basepri",
+        .answer[4] = "mov i, basepri",
+    },
+    {
+        .question = "How are you\ndoing?",
+        .answer[0] = "Excellent!",
+        .answer[1] = "Doing fine",
+        .answer[2] = "Could be better",
+        .answer[3] = "Oh, well ...",
+        .answer[4] = "@!#!?!!",
+    },
+};
+
 static void QUIZZ_CreateGUI(QUIZZ_GUIDesc *gui) {
   UI1_PixelDim x, y, h;
 
@@ -159,7 +178,7 @@ static void QUIZZ_CreateGUI(QUIZZ_GUIDesc *gui) {
      );
   UIHeader_SetBackgroundColor(&gui->header, UI1_COLOR_BRIGHT_BLUE);
   UIHeader_SetForegroundColor(&gui->header, UI1_COLOR_BLACK);
-  UIHeader_SetText(&gui->header, "How are you\ndoing?");
+  UIHeader_SetText(&gui->header, (uint8_t*)questions[0].question);
   UIHeader_Resize(&gui->header); /* adjust size */
   UIIcon_SetUserMsgHandler(&gui->header.iconWidget, guiCallback);
   UI1_EnableElementSelection(&gui->header.iconWidget.element);
@@ -171,11 +190,9 @@ static void QUIZZ_CreateGUI(QUIZZ_GUIDesc *gui) {
   /* multiple choice questions */
   UIMC_Create(&gui->window.element, &gui->quizz, 0, h, 0, 0);
   UIMC_SetBackgroundColor(&gui->quizz, gui->window.bgColor);
-  UIMC_SetChoiceText(&gui->quizz, 0, "Excellent!");
-  UIMC_SetChoiceText(&gui->quizz, 1, "Doing fine");
-  UIMC_SetChoiceText(&gui->quizz, 2, "Could be better");
-  UIMC_SetChoiceText(&gui->quizz, 3, "Oh, well ...");
-  UIMC_SetChoiceText(&gui->quizz, 4, "@!#!?!!");
+  for(int i=0;i<UIMC_NOF_QUESTIONS;i++) {
+    UIMC_SetChoiceText(&gui->quizz, i, (uint8_t*)questions[0].answer[i]);
+  }
 
   h += UI1_GetElementHeight(&gui->quizz.element);
 #else

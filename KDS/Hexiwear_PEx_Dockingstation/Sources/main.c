@@ -72,6 +72,7 @@
 #include "UIHeader.h"
 #include "FDisp1.h"
 #include "Helv08n.h"
+#include "TRG1.h"
 #include "XF1.h"
 #include "HF1.h"
 #include "RTT1.h"
