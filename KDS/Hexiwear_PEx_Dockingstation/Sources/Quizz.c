@@ -12,11 +12,7 @@
 #include "Helv08n.h"
 #include "UIMultipleChoice.h"
 
-#if PL_USE_SINGLE_FONT /* use only one font */
-  #define FONT   PL_FONT()
-#else
-  #define FONT   Helv08n_GetFont()
-#endif
+#define FONT   Helv08n_GetFont()
 
 typedef enum {
   ICON_RADIO_FAST,
@@ -42,7 +38,6 @@ typedef struct {
   UIText_TextWidget textSlow;
   ICON_RADIO_State iconRadioStatus;
 
-
   UIIcon_IconWidget iconCheckboxDebug;
   UIText_TextWidget textCheckboxDebug;
   bool isiconCheckboxDebugEnabled;
@@ -58,7 +53,8 @@ static QUIZZ_GUIDesc *QUIZZ_Gui;
 
 /* task notification bits */
 #define QUIZZ_KILL_TASK            (1<<0)  /* close window and kill task */
-#define QUIZZ_USER_BUTTON_PRESSED  (1<<1)  /* user has pressed button */
+#define QUIZZ_SUSPEND_TASK         (1<<1)  /* blank screen and suspend task */
+#define QUIZZ_USER_BUTTON_PRESSED  (1<<2)  /* user has pressed button */
 static xTaskHandle QuizzTaskHandle;
 
 static void guiCallback(UI1_Element *element, UI1_MsgKind kind, void *pData) {
@@ -246,11 +242,6 @@ static void QUIZZ_CreateGUI(QUIZZ_GUIDesc *gui) {
   gui->isiconCheckboxDebugEnabled = TRUE;
 #endif
 
-  /* update the screen */
-  UI1_MsgPaintAllElements((UI1_Element*)&gui->screen);
-  /* assign root element */
-  UI1_SetRoot(&gui->screen.element);
-
 #if 0 /* test different icons */
   UIIcon_SetType(&gui->iconClose, UIIcon_ICON_BOX);
   UI1_MsgPaintAllElements((UI1_Element*)&gui->screen);
@@ -267,6 +258,10 @@ static void QUIZZ_CreateGUI(QUIZZ_GUIDesc *gui) {
   UIIcon_SetType(&gui->iconClose, UIIcon_ICON_CHECKMARK_BOXED);
   UI1_MsgPaintAllElements((UI1_Element*)&gui->screen);
 #endif
+
+  /* assign root element */
+  UI1_SetRoot(&gui->screen.element);
+  UI_ShowScreen();
 }
 
 static void QuizzTask(void *pvParameters) {
@@ -284,7 +279,7 @@ static void QuizzTask(void *pvParameters) {
   for(;;) {
     ticks = xTaskGetTickCount();
     if (((ticks-startTicks)/portTICK_RATE_MS)>(timeoutSecs*1000)) {
-      QUIZZ_KillTask();
+      UI_BlankScreen();
     }
     notified = xTaskNotifyWait(0UL, QUIZZ_KILL_TASK, &notifcationValue, 1); /* check flags, need to wait for one tick */
     if (notified==pdTRUE) { /* received notification */
@@ -297,7 +292,14 @@ static void QuizzTask(void *pvParameters) {
         vTaskDelete(NULL); /* killing myself */
       }
       if (notifcationValue&QUIZZ_USER_BUTTON_PRESSED) {
+        UI_ShowScreen();
         startTicks = xTaskGetTickCount(); /* restart timeout */
+      }
+      if (notifcationValue&QUIZZ_SUSPEND_TASK) {
+        UI_BlankScreen();
+        vTaskSuspend(NULL); /* suspend */
+        /* here we are taken back from suspending */
+        UI_ShowScreen(); /* show GUI again */
       }
 #endif
     }
@@ -314,6 +316,15 @@ void QUIZZ_CreateTask(void) {
   UI_SetCurrentUITask(QuizzTaskHandle);
 }
 
+void QUIZZ_SuspendTask(void) {
+  (void)xTaskNotify(QuizzTaskHandle, QUIZZ_SUSPEND_TASK, eSetBits);
+}
+
+void QUIZZ_ResumeTask(void) {
+  vTaskResume(QuizzTaskHandle); /* resume task */
+}
+
+
 void QUIZZ_KillTask(void) {
   (void)xTaskNotify(QuizzTaskHandle, QUIZZ_KILL_TASK, eSetBits);
 }
@@ -324,5 +335,3 @@ void QUIZZ_Init(void) {
 }
 
 #endif /* PL_CONFIG_HAS_QUIZZ */
-
-/* END Cube */

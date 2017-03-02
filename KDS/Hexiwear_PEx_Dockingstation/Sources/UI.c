@@ -12,18 +12,34 @@
 #include "Quizz.h"
 
 static xTaskHandle UI_CurrentUserInterfacTask = NULL;
+static bool isBlankScreen = FALSE;
 
 void UI_SetCurrentUITask(xTaskHandle handle) {
   UI_CurrentUserInterfacTask = handle;
+}
+
+void UI_BlankScreen(void) {
+  isBlankScreen = TRUE;
+  LCD1_Clear(); /* blank display */
+}
+
+void UI_ShowScreen(void) {
+  UI1_MsgPaintAllElements(UI1_GetRoot());
+  isBlankScreen = FALSE;
 }
 
 void UI_Event(UI_EventType kind) {
   UI1_Element *element;
 
   if (UI_CurrentUserInterfacTask==NULL) {
-    //return; /* no active UI task */
+    return; /* no active UI task */
+#if 0 && PL_CONFIG_HAS_QUIZZ
     QUIZZ_CreateTask(); /* create task again */
-    return;
+#endif
+    // return;
+  }
+  if (isBlankScreen) {
+    UI_ShowScreen();
   }
   switch(kind) {
     case UI_EVENT_BUTTON_LEFT:

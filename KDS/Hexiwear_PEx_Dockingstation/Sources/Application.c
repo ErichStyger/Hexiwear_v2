@@ -36,6 +36,9 @@
 #include "LCD1.h"
 #include "Cube.h"
 #include "UI1.h"
+#if PL_CONFIG_HAS_PAIRING
+  #include "Pairing.h"
+#endif
 
 #if PL_CONFIG_HAS_CUBE_DEMO
   static CUBE_WindowDesc cubeWindow;
@@ -67,8 +70,11 @@ static void AppTask(void *param) {
 #if PL_CONFIG_HAS_QUIZZ
   QUIZZ_CreateTask();
 #endif
+#if PL_CONFIG_HAS_PAIRING
+  PAIRING_CreateTask();
+#endif
   for(;;) {
-#if PL_CONFIG_HAS_QUIZZ
+#if 0 && PL_CONFIG_HAS_QUIZZ
     if (closeIt) {
       QUIZZ_KillTask();
     }
@@ -94,6 +100,9 @@ void APP_Run(void) {
 #endif
 #if PL_CONFIG_HAS_UI
   UI_Init();
+#endif
+#if PL_CONFIG_HAS_PAIRING
+  PAIRING_Init();
 #endif
   if (xTaskCreate(AppTask, (uint8_t *)"App", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
     for(;;){} /* error case only, stay here! */

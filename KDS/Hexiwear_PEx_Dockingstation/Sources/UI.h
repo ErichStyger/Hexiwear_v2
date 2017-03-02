@@ -20,6 +20,8 @@ typedef enum {
 } UI_EventType;
 
 void UI_SetCurrentUITask(xTaskHandle handle);
+void UI_BlankScreen(void);
+void UI_ShowScreen(void);
 
 void UI_Event(UI_EventType kind);
 
