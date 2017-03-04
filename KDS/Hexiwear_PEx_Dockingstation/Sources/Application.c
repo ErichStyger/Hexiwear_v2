@@ -61,24 +61,10 @@ static void AppTask(void *param) {
   //Vibro_SetVal();
   //Vibro_ClrVal();
 
-  LCD1_Init();
-  LCD1_Clear();
-
 #if PL_CONFIG_HAS_CUBE_DEMO
-  CUBE_CreateWindow(&cubeWindow);
-#endif
-#if PL_CONFIG_HAS_QUIZZ
-  QUIZZ_CreateTask();
-#endif
-#if PL_CONFIG_HAS_PAIRING
-  PAIRING_CreateTask();
+ // CUBE_CreateWindow(&cubeWindow);
 #endif
   for(;;) {
-#if 0 && PL_CONFIG_HAS_QUIZZ
-    if (closeIt) {
-      QUIZZ_KillTask();
-    }
-#endif
     RGBG_On();
     vTaskDelay(pdMS_TO_TICKS(20));
     RGBG_Off();

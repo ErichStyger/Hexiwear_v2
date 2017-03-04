@@ -11,6 +11,7 @@
 #include "UI1.h"
 #include "UIIcon.h"
 #include "UIText.h"
+#include "Helv08n.h"
 
 void UIMC_SetBackgroundColor(UIMC_MultipleChoiceWidget *widget, UI1_PixelColor color) {
   int i;

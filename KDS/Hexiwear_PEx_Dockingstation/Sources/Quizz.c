@@ -26,12 +26,11 @@ typedef struct {
 } QUIZZ_MultipleChoice;
 
 typedef struct {
-  UIScreen_ScreenWidget screen;
   UIWindow_WindowWidget window;
   UIHeader_HeaderWidget header;
 
   UIMC_MultipleChoiceWidget quizz;
-
+#if 0
   UIIcon_IconWidget iconRadioFast;
   UIText_TextWidget textFast;
   UIIcon_IconWidget iconRadioSlow;
@@ -41,7 +40,7 @@ typedef struct {
   UIIcon_IconWidget iconCheckboxDebug;
   UIText_TextWidget textCheckboxDebug;
   bool isiconCheckboxDebugEnabled;
-
+#endif
   /* navigation */
   UIIcon_IconWidget iconNavigationUp;
   UIIcon_IconWidget iconNavigationDown;
@@ -51,18 +50,20 @@ typedef struct {
 
 static QUIZZ_GUIDesc *QUIZZ_Gui;
 
-/* task notification bits */
-#define QUIZZ_KILL_TASK            (1<<0)  /* close window and kill task */
-#define QUIZZ_SUSPEND_TASK         (1<<1)  /* blank screen and suspend task */
-#define QUIZZ_USER_BUTTON_PRESSED  (1<<2)  /* user has pressed button */
 static xTaskHandle QuizzTaskHandle;
 
 static void guiCallback(UI1_Element *element, UI1_MsgKind kind, void *pData) {
   (void)pData; /* unused argument */
-  if (kind==UI1_MSG_CLICK) {
-    if (UI1_EqualElement(element, &QUIZZ_Gui->header.iconWidget.element)) {
-      QUIZZ_KillTask();
-      return;
+  if (kind==UI1_MSG_CANCEL) {
+    UI_CloseAppUI();
+  } else if (kind==UI1_MSG_CLICK) {
+    if (UI1_EqualElement(element, &QUIZZ_Gui->header.iconWidget.element)) { /* X/close in header */
+      UI_CloseAppUI();
+    } else if (UI1_EqualElement(element, &QUIZZ_Gui->iconNavigationExit.element)) { /* close icon */
+      UI_CloseAppUI();
+    } else if (UI1_EqualElement(element, &QUIZZ_Gui->iconNavigationEnter.element)) { /* close icon */
+      UI_CloseAppUI();
+#if 0
     } else if (UI1_EqualElement(element, &QUIZZ_Gui->textCheckboxDebug.element)) {
       QUIZZ_Gui->isiconCheckboxDebugEnabled = !QUIZZ_Gui->isiconCheckboxDebugEnabled; /* toggle */
       if (QUIZZ_Gui->isiconCheckboxDebugEnabled) {
@@ -90,70 +91,39 @@ static void guiCallback(UI1_Element *element, UI1_MsgKind kind, void *pData) {
         UI1_SendMessage(&QUIZZ_Gui->iconRadioFast.element, UI1_MSG_WIDGET_UPDATE, NULL);
         UI1_SendMessage(&QUIZZ_Gui->iconRadioSlow.element, UI1_MSG_WIDGET_UPDATE, NULL);
       }
+#endif
     }
   } /* if click */
 }
 
 static const UIMC_MultipleChoicQuestion questions[] = {
-    {
-        .question = "Disable Inter-\nrupts on ARM\nCortex-M4F:",
-        .answer[0] = "cpsie i",
-        .answer[1] = "cpsid i",
-        .answer[2] = "cpsie primask",
-        .answer[3] = "cpsie basepri",
-        .answer[4] = "mov i, basepri",
-    },
-    {
-        .question = "How are you\ndoing?",
-        .answer[0] = "Excellent!",
-        .answer[1] = "Doing fine",
-        .answer[2] = "Could be better",
-        .answer[3] = "Oh, well ...",
-        .answer[4] = "@!#!?!!",
-    },
+  {
+    .question = "Disable Inter-\nrupts on ARM\nCortex-M4F:",
+    .answer[0] = "cpsie i",
+    .answer[1] = "cpsid i",
+    .answer[2] = "cpsie primask",
+    .answer[3] = "cpsie basepri",
+    .answer[4] = "mov i, basepri",
+  },
+  {
+    .question = "How are you\ndoing?",
+    .answer[0] = "Excellent!",
+    .answer[1] = "Doing fine",
+    .answer[2] = "Could be better",
+    .answer[3] = "Oh, well ...",
+    .answer[4] = "@!#!?!!",
+  },
 };
 
 static void QUIZZ_CreateGUI(QUIZZ_GUIDesc *gui) {
   UI1_PixelDim x, y, h;
 
-  /* screen */
-  (void)UIScreen_Create(NULL, &gui->screen, 0, 0, UI1_GetWidth(), UI1_GetHeight());
-  UIScreen_SetBackgroundColor(&gui->screen, GDisp1_COLOR_BRIGHT_YELLOW);
-
-  /* Navigation Icons */
-  (void)UIIcon_Create(&gui->screen.element, &gui->iconNavigationUp,
-      UI1_GetWidth()-10, 20, 10, 10);
-  UIIcon_SetType(&gui->iconNavigationUp, UIIcon_ICON_ARROW_UP);
-  UIIcon_SetForegroundColor(&gui->iconNavigationUp, UI1_COLOR_BLACK);
-  UIIcon_SetBackgroundColor(&gui->iconNavigationUp, gui->screen.bgColor);
-  UIIcon_SetInsideColor(&gui->iconNavigationUp, UI1_COLOR_WHITE);
-
-  (void)UIIcon_Create(&gui->screen.element, &gui->iconNavigationDown,
-      UI1_GetWidth()-10, 65, 10, 10);
-  UIIcon_SetType(&gui->iconNavigationDown, UIIcon_ICON_ARROW_DOWN);
-  UIIcon_SetForegroundColor(&gui->iconNavigationDown, UI1_COLOR_BLACK);
-  UIIcon_SetBackgroundColor(&gui->iconNavigationDown, gui->screen.bgColor);
-  UIIcon_SetInsideColor(&gui->iconNavigationDown, UI1_COLOR_WHITE);
-
-  (void)UIIcon_Create(&gui->screen.element, &gui->iconNavigationEnter,
-      UI1_GetWidth()-30, UI1_GetHeight()-10, 10, 10);
-  UIIcon_SetType(&gui->iconNavigationEnter, UIIcon_ICON_CHECKMARK);
-  UIIcon_SetForegroundColor(&gui->iconNavigationEnter, UI1_COLOR_BLACK);
-  UIIcon_SetBackgroundColor(&gui->iconNavigationEnter, gui->screen.bgColor);
-  UIIcon_SetInsideColor(&gui->iconNavigationEnter, UI1_COLOR_WHITE);
-
-  (void)UIIcon_Create(&gui->screen.element, &gui->iconNavigationExit,
-      15, UI1_GetHeight()-10, 10, 10);
-  UIIcon_SetType(&gui->iconNavigationExit, UIIcon_ICON_X);
-  UIIcon_SetForegroundColor(&gui->iconNavigationExit, UI1_COLOR_BLACK);
-  UIIcon_SetBackgroundColor(&gui->iconNavigationExit, gui->screen.bgColor);
-  UIIcon_SetInsideColor(&gui->iconNavigationExit, UI1_COLOR_WHITE);
-
   /* window */
-  (void)UIWindow_Create(&gui->screen.element, &gui->window,
-      0, 0, GDisp1_GetWidth()-10, GDisp1_GetHeight()-10);
+  (void)UIWindow_Create(NULL, &gui->window,
+      0, 0, GDisp1_GetWidth(), GDisp1_GetHeight());
   UIWindow_SetBackgroundColor(&gui->window, UI1_COLOR_BRIGHT_GREEN);
   UIWindow_SetBorder(&gui->window);
+  UIWindow_SetUserMsgHandler(&gui->window, guiCallback);
 
   /* header */
   (void)UIHeader_Create(&gui->window.element, &gui->header,
@@ -167,9 +137,7 @@ static void QUIZZ_CreateGUI(QUIZZ_GUIDesc *gui) {
   UIIcon_SetUserMsgHandler(&gui->header.iconWidget, guiCallback);
   UI1_EnableElementSelection(&gui->header.iconWidget.element);
 
-  h = 0;
-
-  h += UI1_GetElementHeight(&gui->header.element);
+  h = UI1_GetElementHeight(&gui->header.element);
 #if 1
   /* multiple choice questions */
   UIMC_Create(&gui->window.element, &gui->quizz, 0, h, 0, 0);
@@ -259,65 +227,75 @@ static void QUIZZ_CreateGUI(QUIZZ_GUIDesc *gui) {
   UI1_MsgPaintAllElements((UI1_Element*)&gui->screen);
 #endif
 
-  /* assign root element */
-  UI1_SetRoot(&gui->screen.element);
-  UI_ShowScreen();
+  /* Navigation Icons */
+  (void)UIIcon_Create(&gui->window.element, &gui->iconNavigationUp,
+      UI1_GetElementWidth(&gui->window.element)-10, 20, 10, 10);
+  UIIcon_SetType(&gui->iconNavigationUp, UIIcon_ICON_ARROW_UP);
+  UIIcon_SetForegroundColor(&gui->iconNavigationUp, UI1_COLOR_BLACK);
+  UIIcon_SetBackgroundColor(&gui->iconNavigationUp, gui->window.bgColor);
+  UIIcon_SetInsideColor(&gui->iconNavigationUp, UI1_COLOR_WHITE);
+
+  (void)UIIcon_Create(&gui->window.element, &gui->iconNavigationDown,
+      UI1_GetElementWidth(&gui->window.element)-10, 65, 10, 10);
+  UIIcon_SetType(&gui->iconNavigationDown, UIIcon_ICON_ARROW_DOWN);
+  UIIcon_SetForegroundColor(&gui->iconNavigationDown, UI1_COLOR_BLACK);
+  UIIcon_SetBackgroundColor(&gui->iconNavigationDown, gui->window.bgColor);
+  UIIcon_SetInsideColor(&gui->iconNavigationDown, UI1_COLOR_WHITE);
+
+  (void)UIIcon_Create(&gui->window.element, &gui->iconNavigationEnter, 15, UI1_GetElementHeight(&gui->window.element)-10, 10, 10);
+  UIIcon_SetType(&gui->iconNavigationEnter, UIIcon_ICON_CHECKMARK);
+  UIIcon_SetForegroundColor(&gui->iconNavigationEnter, UI1_COLOR_BLACK);
+  UIIcon_SetBackgroundColor(&gui->iconNavigationEnter, gui->window.bgColor);
+  UIIcon_SetInsideColor(&gui->iconNavigationEnter, UI1_COLOR_WHITE);
+  UI1_EnableElementSelection(&gui->iconNavigationEnter.element);
+  UIIcon_SetUserMsgHandler(&gui->iconNavigationEnter, guiCallback);
+
+  (void)UIIcon_Create(&gui->window.element, &gui->iconNavigationExit, UI1_GetElementWidth(&gui->window.element)-30, UI1_GetElementHeight(&gui->window.element)-10, 10, 10);
+  UIIcon_SetType(&gui->iconNavigationExit, UIIcon_ICON_X);
+  UIIcon_SetForegroundColor(&gui->iconNavigationExit, UI1_COLOR_BLACK);
+  UIIcon_SetBackgroundColor(&gui->iconNavigationExit, gui->window.bgColor);
+  UIIcon_SetInsideColor(&gui->iconNavigationExit, UI1_COLOR_WHITE);
+  UI1_EnableElementSelection(&gui->iconNavigationExit.element);
+  UIIcon_SetUserMsgHandler(&gui->iconNavigationExit, guiCallback);
 }
 
 static void QuizzTask(void *pvParameters) {
   uint32_t notifcationValue;
   BaseType_t notified;
-  TickType_t startTicks, ticks;
-  const int timeoutSecs = 60;
 
+  for(;;) {
+    notified = xTaskNotifyWait(0UL, (UI_NOTIFY_KILL_TASK|UI_NOTIFY_SUSPEND_TASK), &notifcationValue, 1); /* check flags, need to wait for one tick */
+    if (notified==pdTRUE) { /* received notification */
+      if (notifcationValue&UI_NOTIFY_KILL_TASK) {
+        vPortFree(QUIZZ_Gui);
+        QUIZZ_Gui = NULL;
+        vTaskDelete(NULL); /* killing myself */
+      }
+      if (notifcationValue&UI_NOTIFY_SUSPEND_TASK) {
+        vTaskSuspend(NULL); /* suspend */
+        /* here we are taken back from suspending */
+      }
+    }
+    vTaskDelay(pdMS_TO_TICKS(10));
+  } /* for */
+}
+
+xTaskHandle QUIZZ_CreateUITask(UI1_Element **root) {
   QUIZZ_Gui = pvPortMalloc(sizeof(QUIZZ_GUIDesc));
   if (QUIZZ_Gui==NULL) {
     for(;;) {}
   }
   QUIZZ_CreateGUI(QUIZZ_Gui);
-  startTicks = xTaskGetTickCount();
-  for(;;) {
-    ticks = xTaskGetTickCount();
-    if (((ticks-startTicks)/portTICK_RATE_MS)>(timeoutSecs*1000)) {
-      UI_BlankScreen();
-    }
-    notified = xTaskNotifyWait(0UL, QUIZZ_KILL_TASK, &notifcationValue, 1); /* check flags, need to wait for one tick */
-    if (notified==pdTRUE) { /* received notification */
-#if 1
-      if (notifcationValue&QUIZZ_KILL_TASK) {
-        LCD1_Clear();//GDisp1_Clear();
-        vPortFree(QUIZZ_Gui);
-        QUIZZ_Gui = NULL;
-        UI_SetCurrentUITask(NULL);
-        vTaskDelete(NULL); /* killing myself */
-      }
-      if (notifcationValue&QUIZZ_USER_BUTTON_PRESSED) {
-        UI_ShowScreen();
-        startTicks = xTaskGetTickCount(); /* restart timeout */
-      }
-      if (notifcationValue&QUIZZ_SUSPEND_TASK) {
-        UI_BlankScreen();
-        vTaskSuspend(NULL); /* suspend */
-        /* here we are taken back from suspending */
-        UI_ShowScreen(); /* show GUI again */
-      }
-#endif
-    }
-    vTaskDelay(pdMS_TO_TICKS(80)); /* give user a chance to see the cube rotating... */
-  } /* for */
-}
-
-void QUIZZ_CreateTask(void) {
-  QUIZZ_Gui = NULL;
-  QuizzTaskHandle = NULL;
   if (xTaskCreate(QuizzTask, "Quizz", configMINIMAL_STACK_SIZE+80, NULL, tskIDLE_PRIORITY+3, &QuizzTaskHandle)!=pdPASS) {
     for(;;) {} /* out of memory? */
   }
-  UI_SetCurrentUITask(QuizzTaskHandle);
+  /* assign root element */
+  *root = &QUIZZ_Gui->window.element;
+  return QuizzTaskHandle;
 }
 
 void QUIZZ_SuspendTask(void) {
-  (void)xTaskNotify(QuizzTaskHandle, QUIZZ_SUSPEND_TASK, eSetBits);
+  (void)xTaskNotify(QuizzTaskHandle, UI_NOTIFY_SUSPEND_TASK, eSetBits);
 }
 
 void QUIZZ_ResumeTask(void) {
@@ -326,7 +304,7 @@ void QUIZZ_ResumeTask(void) {
 
 
 void QUIZZ_KillTask(void) {
-  (void)xTaskNotify(QuizzTaskHandle, QUIZZ_KILL_TASK, eSetBits);
+  (void)xTaskNotify(QuizzTaskHandle, UI_NOTIFY_KILL_TASK, eSetBits);
 }
 
 void QUIZZ_Init(void) {

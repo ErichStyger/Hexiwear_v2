@@ -10,8 +10,11 @@
 
 #include "Platform.h"
 #if PL_CONFIG_HAS_PAIRING
+#include "UI1.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
-void PAIRING_CreateTask(void);
+xTaskHandle PAIRING_CreateUITask(UI1_Element **root);
 
 void PAIRING_KillTask(void);
 

@@ -3,8 +3,11 @@
 
 #include "Platform.h"
 #if PL_CONFIG_HAS_QUIZZ
+#include "FreeRTOS.h"
+#include "task.h"
+#include "UI1.h"
 
-void QUIZZ_CreateTask(void);
+xTaskHandle QUIZZ_CreateUITask(UI1_Element **root);
 
 void QUIZZ_SuspendTask(void);
 

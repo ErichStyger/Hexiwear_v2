@@ -72,16 +72,23 @@ static void KW40TxTask(void *param) {
 static void HandlePacket(hostInterface_packet_t *packet) {
   switch(packet->type) {
     case packetType_pressUp:
-      UI_Event(UI_EVENT_BUTTON_UP);
+      UI_Event(UI_EVENT_BUTTON_UP, NULL);
       break;
     case packetType_pressDown:
-      UI_Event(UI_EVENT_BUTTON_DOWN);
+      UI_Event(UI_EVENT_BUTTON_DOWN, NULL);
       break;
     case packetType_pressRight:
-      UI_Event(UI_EVENT_BUTTON_RIGHT);
+      UI_Event(UI_EVENT_BUTTON_RIGHT, NULL);
       break;
     case packetType_pressLeft:
-      UI_Event(UI_EVENT_BUTTON_LEFT);
+      UI_Event(UI_EVENT_BUTTON_LEFT, NULL);
+      break;
+    case packetType_passDisplay:
+      {
+        uint32_t passkey = 0;
+        memcpy(&passkey, packet->data, 3); /* copy into local variabel */
+        UI_Event(UI_EVENT_PARING_CODE, &passkey);
+      }
       break;
   } /* switch */
 }
