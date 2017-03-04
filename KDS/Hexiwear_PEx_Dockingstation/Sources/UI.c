@@ -15,6 +15,7 @@
 #include "UI1.h"
 #include "UIScreen.h"
 #include "UIText.h"
+#include "UIIcon.h"
 #if PL_CONFIG_HAS_QUIZZ
   #include "Quizz.h"
 #endif
@@ -46,6 +47,10 @@ static struct {
     UI1_Element *currSelection;
     UIText_TextWidget textMenu1;
     UIText_TextWidget textMenu2;
+    /* navigation */
+    UIIcon_IconWidget iconNavigationUp;
+    UIIcon_IconWidget iconNavigationDown;
+    UIIcon_IconWidget iconNavigationEnter;
   } home;
   /* UI page state */
   UI_PageType prevPage; /* used to switch back to the previous state */
@@ -217,6 +222,28 @@ static void CreateHomeScreen(void) {
   UIText_Resize(&UI_CurrState.home.textMenu2);
   UI1_EnableElementSelection(&UI_CurrState.home.textMenu2.element);
   UIText_SetUserMsgHandler(&UI_CurrState.home.textMenu2, guiCallback);
+
+  /* Navigation Icons */
+  (void)UIIcon_Create(&UI_CurrState.home.screen.element, &UI_CurrState.home.iconNavigationEnter,
+      15, UI1_GetElementHeight(&UI_CurrState.home.screen.element)-10, 10, 10);
+  UIIcon_SetType(&UI_CurrState.home.iconNavigationEnter, UIIcon_ICON_CHECKMARK);
+  UIIcon_SetForegroundColor(&UI_CurrState.home.iconNavigationEnter, UI1_COLOR_BLACK);
+  UIIcon_SetBackgroundColor(&UI_CurrState.home.iconNavigationEnter, UI_CurrState.home.screen.bgColor);
+  UIIcon_SetInsideColor(&UI_CurrState.home.iconNavigationEnter, UI1_COLOR_WHITE);
+
+  (void)UIIcon_Create(&UI_CurrState.home.screen.element, &UI_CurrState.home.iconNavigationUp,
+      UI1_GetElementWidth(&UI_CurrState.home.screen.element)-10, 20, 10, 10);
+  UIIcon_SetType(&UI_CurrState.home.iconNavigationUp, UIIcon_ICON_ARROW_UP);
+  UIIcon_SetForegroundColor(&UI_CurrState.home.iconNavigationUp, UI1_COLOR_BLACK);
+  UIIcon_SetBackgroundColor(&UI_CurrState.home.iconNavigationUp, UI_CurrState.home.screen.bgColor);
+  UIIcon_SetInsideColor(&UI_CurrState.home.iconNavigationUp, UI1_COLOR_WHITE);
+
+  (void)UIIcon_Create(&UI_CurrState.home.screen.element, &UI_CurrState.home.iconNavigationDown,
+      UI1_GetElementWidth(&UI_CurrState.home.screen.element)-10, 65, 10, 10);
+  UIIcon_SetType(&UI_CurrState.home.iconNavigationDown, UIIcon_ICON_ARROW_DOWN);
+  UIIcon_SetForegroundColor(&UI_CurrState.home.iconNavigationDown, UI1_COLOR_BLACK);
+  UIIcon_SetBackgroundColor(&UI_CurrState.home.iconNavigationDown, UI_CurrState.home.screen.bgColor);
+  UIIcon_SetInsideColor(&UI_CurrState.home.iconNavigationDown, UI1_COLOR_WHITE);
 }
 
 static void UITask(void *pvParameters) {
