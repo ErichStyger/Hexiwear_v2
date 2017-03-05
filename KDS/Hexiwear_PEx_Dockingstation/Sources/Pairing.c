@@ -108,7 +108,7 @@ static void PairingTask(void *pvParameters) {
         vTaskDelete(NULL); /* killing myself */
       }
     }
-    vTaskDelay(pdMS_TO_TICKS(100)); /* give user a chance to see the cube rotating... */
+    vTaskDelay(pdMS_TO_TICKS(100));
   } /* for */
 }
 

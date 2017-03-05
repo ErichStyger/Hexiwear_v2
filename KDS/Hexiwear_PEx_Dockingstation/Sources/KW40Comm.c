@@ -11,6 +11,8 @@
 #include "BLEUart.h"
 #include "HostComm.h"
 #include "UI.h"
+#include "Bluetooth.h"
+#include "UART_PDD.h"
 
 #define NOF_RX_QUEUE_ITEMS   5
 #define NOF_TX_QUEUE_ITEMS   5
@@ -64,7 +66,7 @@ static void KW40TxTask(void *param) {
   for(;;) {
     res = xQueueReceive(txQueueHandle, &packet, portMAX_DELAY); /* get Tx packet */
     if (res==pdPASS) { /* received packet */
-      BLEUart_SendBlock((uint8_t*)&packet, sizeof(packet.start1)+sizeof(packet.start2)+sizeof(packet.type)+sizeof(packet.length)+packet.length, &snt);
+      BLEUart_SendBlock((uint8_t*)&packet, sizeof(packet.start1)+sizeof(packet.start2)+sizeof(packet.type)+sizeof(packet.length)+packet.length+1/*trailer*/, &snt);
     }
   }
 }
@@ -90,6 +92,15 @@ static void HandlePacket(hostInterface_packet_t *packet) {
         UI_Event(UI_EVENT_PARING_CODE, &passkey);
       }
       break;
+    case packetType_advModeSend: /* response to packetType_advModeGet */
+      BLUETOOTH_SetAdvMode(packet->data[0]);
+      break;
+    case packetType_buildVersion:
+      BLUETOOTH_SetVersionInformation(packet->data[0], packet->data[1], packet->data[2]);
+      break;
+
+    default:
+      break;
   } /* switch */
 }
 
@@ -113,6 +124,13 @@ void KW40SendPacket(const hostInterface_packet_t *packet) {
 }
 
 void KW40Comm_Init(void) {
+  /* communication is with 230400 baud on UART4: PTE25 (RxD) and PTE24 (RxD).
+   * 8 data bits
+   * 2 (!!!) stop bits  ==> need to set this manually as the AsynchroSerial component does not support this setting!
+   * no parity
+   */
+  UART_PDD_SetStopBitLength(UART4_BASE_PTR, UART_PDD_STOP_BIT_LEN_2); /* two stop bits */
+
   rxQueueHandle = xQueueCreate(NOF_RX_QUEUE_ITEMS, sizeof(hostInterface_packet_t));
   if (rxQueueHandle==NULL) {
     for(;;){} /* error case only, stay here! */

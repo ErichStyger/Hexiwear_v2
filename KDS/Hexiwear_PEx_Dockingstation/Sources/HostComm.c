@@ -11,6 +11,15 @@
 #include "KW40Comm.h"
 #include <string.h> /* for memcpy() */
 
+void HostComm_SendMessage(hostInterface_packet_t *msg, bool confirmationReq) {
+  msg->start1 = gHostInterface_startByte1;
+  msg->start2 = gHostInterface_startByte2;
+  if (confirmationReq) {
+    msg->start2 |= 1;
+  }
+  KW40SendPacket(msg);
+}
+
 void HostComm_SendOK(void) {
   static const hostInterface_packet_t okPacket = {
     .start1 = gHostInterface_startByte1,

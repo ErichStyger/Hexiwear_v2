@@ -46,6 +46,7 @@
 #if PL_CONFIG_HAS_PAIRING
   #include "Pairing.h"
 #endif
+#include "Bluetooth.h"
 
 #if PL_CONFIG_HAS_CUBE_DEMO
   static CUBE_WindowDesc cubeWindow;
@@ -78,6 +79,8 @@ static void AppTask(void *param) {
     RGBG_On();
     vTaskDelay(pdMS_TO_TICKS(20));
     RGBG_Off();
+    //BLUETOOTH_SendAdvModeGetReq();
+    BLUETOOTH_SendVersionReq();
     vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }
@@ -103,6 +106,7 @@ void APP_Run(void) {
 #if PL_CONFIG_HAS_WATCH
   WATCH_Init();
 #endif
+  BLUETOOTH_Init();
   if (xTaskCreate(AppTask, (uint8_t *)"App", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
     for(;;){} /* error case only, stay here! */
   }

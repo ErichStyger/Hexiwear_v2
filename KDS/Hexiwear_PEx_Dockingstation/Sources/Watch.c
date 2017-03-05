@@ -16,6 +16,31 @@
 #include "Helv12n.h"
 #include "UTIL1.h"
 #include "TmDt1.h"
+#include "HostComm.h"
+
+typedef enum {
+    linkState_disconnected = 0,
+    linkState_connected    = 1,
+} linkState_t;
+
+static linkState_t watch_linkState = linkState_disconnected;
+
+static void watch_SendGetLinkStateReq(void) {
+  static hostInterface_packet_t dataPacket =
+  {
+    .start1 = gHostInterface_startByte1,
+    .start2 = gHostInterface_startByte2,
+    .length = 0,
+    .data[0] = gHostInterface_trailerByte
+  };
+
+  dataPacket.type = packetType_linkStateGet;
+  HostComm_SendMessage(&dataPacket, TRUE);
+}
+
+static void WATCH_SetLinkState(linkState_t state) {
+  watch_linkState = state;
+}
 
 typedef struct {
   UIWindow_WindowWidget window;
@@ -90,7 +115,11 @@ static void WatchCreateGUI(WatchGUIDesc *gui) {
 static void WatchTask(void *pvParameters) {
   uint32_t notifcationValue;
   BaseType_t notified;
+  TIMEREC time;
+  DATEREC date;
+  uint8_t newTimeText[sizeof(TmDt1_DEFAULT_TIME_FORMAT_STR)];
 
+  //watch_SendGetLinkStateReq();
   for(;;) {
     notified = xTaskNotifyWait(0UL, UI_NOTIFY_KILL_TASK, &notifcationValue, 1); /* check flags, need to wait for one tick */
     if (notified==pdTRUE) { /* received notification */
@@ -100,7 +129,14 @@ static void WatchTask(void *pvParameters) {
         vTaskDelete(NULL); /* killing myself */
       }
     }
-    vTaskDelay(pdMS_TO_TICKS(100)); /* give user a chance to see the cube rotating... */
+    if (TmDt1_GetTimeDate(&time, &date)==ERR_OK) {
+      newTimeText[0] = '\0';
+      (void)TmDt1_AddTimeString(newTimeText, sizeof(newTimeText), &time, TmDt1_DEFAULT_TIME_FORMAT_STR);
+      UI1_GetUI();
+      (void)UIText_ChangeText(&WatchGui->textTime, sizeof(WatchGui->timeBuf), newTimeText);
+      UI1_GiveUI();
+    }
+    vTaskDelay(pdMS_TO_TICKS(200));
   } /* for */
 }
 
@@ -125,6 +161,7 @@ void WATCH_KillTask(void) {
 void WATCH_Init(void) {
   WatchGui = NULL;
   WatchTaskHandle = NULL;
+  watch_linkState = linkState_disconnected;
 }
 
 #endif /* PL_CONFIG_HAS_WATCH */

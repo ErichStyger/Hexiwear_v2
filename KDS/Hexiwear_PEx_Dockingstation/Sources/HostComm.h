@@ -87,6 +87,7 @@ typedef struct {
 } hostInterface_packet_t;
 
 
+void HostComm_SendMessage(hostInterface_packet_t *msg, bool confirmationReq);
 void HostComm_SendOK(void);
 void HostComm_SendBatteryLevel(uint8_t percentage);
 void HostComm_SendAccel(int16_t x, int16_t y, int16_t z);

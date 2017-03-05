@@ -28,6 +28,7 @@
 
 typedef enum {
   UI_PAGE_NONE,
+  UI_PAGE_SCREENSAVER,
   UI_PAGE_HOME,
   UI_PAGE_QUIZZ,
   UI_PAGE_PAIRING,
@@ -61,6 +62,7 @@ static struct {
   UI_PageType prevPage; /* used to switch back to the previous state */
   UI_PageType currentPage; /* current state/mode/UI */
   UI_PageType nextPage; /* next UI State */
+  UI_PageType prevScreenSaverPage; /* previous page before screensaver */
   bool screenSaverOn; /* screen saving mode */
   bool hapticTouch; /* haptic feature turned on or off */
   /* information about the current GUI */
@@ -70,19 +72,6 @@ static struct {
 
 static xTimerHandle screenSaverTimerHndl = NULL;
 static xTaskHandle UITaskHandle;
-
-static void UI_BlankScreen(void) {
-  if (!UI_CurrState.screenSaverOn) {
-    UI_CurrState.screenSaverOn = TRUE;
-    LCD1_Clear(); /* blank display */
-  }
-}
-
-static void UI_ShowScreen(void) {
-  xTimerReset(screenSaverTimerHndl, 0); /* reset timeout timer */
-  UI1_MsgPaintAllElements(UI1_GetRoot());
-  UI_CurrState.screenSaverOn = FALSE;
-}
 
 static void Haptic(void) {
   if (UI_CurrState.hapticTouch) {
@@ -139,8 +128,38 @@ void UI_Event(UI_EventType kind, void *data) {
   } /* switch */
 }
 
+static void UI_ShowScreen(void) {
+  xTimerReset(screenSaverTimerHndl, 0); /* reset timeout timer */
+  UI1_GetUI();
+  UI1_MsgPaintAllElements(UI1_GetRoot());
+  UI1_GiveUI();
+  UI_CurrState.screenSaverOn = FALSE;
+}
+
 static void SwitchToUI(UI_PageType newUI) {
   /* switch to new UI */
+  if (newUI==UI_PAGE_SCREENSAVER) { /* going into screensaver mode */
+    if (UI_CurrState.currentUITask!=NULL) {
+      vTaskSuspend(UI_CurrState.currentUITask);
+      //(void)xTaskNotify(UI_CurrState.currentUITask, UI_NOTIFY_SUSPEND_TASK, eSetBits);
+    }
+    if (!UI_CurrState.screenSaverOn) {
+      UI_CurrState.screenSaverOn = TRUE;
+      UI_CurrState.prevScreenSaverPage = UI_CurrState.currentPage;
+      UI1_GetUI();
+      LCD1_Clear(); /* blank display */
+      UI1_GiveUI();
+    }
+    return;
+  } else if (UI_CurrState.screenSaverOn) { /* exit screensaver mode */
+    UI_ShowScreen(); /* show UI */
+    UI_CurrState.prevScreenSaverPage = UI_PAGE_NONE;
+    if (UI_CurrState.currentUITask!=NULL) {
+      vTaskResume(UI_CurrState.currentUITask);
+    }
+    return;
+  }
+
   if (newUI==UI_PAGE_HOME) {
     if (UI_CurrState.currentUITask!=NULL) {
       (void)xTaskNotify(UI_CurrState.currentUITask, UI_NOTIFY_KILL_TASK, eSetBits);
@@ -297,7 +316,7 @@ static void UITask(void *pvParameters) {
         &notifcationValue, 1); /* check flags, need to wait for one tick */
     if (notified==pdTRUE) { /* received notification */
       if (notifcationValue&UI_TASK_NOTIFY_SCREENSAVER_EXPIRED) {
-        UI_BlankScreen(); /* blank screen */
+        SwitchToUI(UI_PAGE_SCREENSAVER);
       }
       if (notifcationValue&UI_TASK_NOTIFY_UI_ACTIVATE) {
       }
@@ -305,7 +324,7 @@ static void UITask(void *pvParameters) {
         Haptic();
         xTimerReset(screenSaverTimerHndl, 0); /* reset screensaver timeout timer */
         if (UI_CurrState.screenSaverOn) {
-          UI_ShowScreen();
+          SwitchToUI(UI_CurrState.prevScreenSaverPage);
         }
       }
       if (notifcationValue&UI_TASK_NOTIFY_SHOW_PAIRING) {
