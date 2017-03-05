@@ -75,12 +75,12 @@ static void AppTask(void *param) {
 #if PL_CONFIG_HAS_ACCELEROMETER
   FX1_Init(); /* init and enable device */
 #endif
+  BLUETOOTH_SendVersionReq(); /* get version number */
+  BLUETOOTH_SendAdvModeGetReq(); /* get advertisement mode */
   for(;;) {
     RGBG_On();
     vTaskDelay(pdMS_TO_TICKS(20));
     RGBG_Off();
-    //BLUETOOTH_SendAdvModeGetReq();
-    BLUETOOTH_SendVersionReq();
     vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }

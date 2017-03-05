@@ -34,6 +34,7 @@
 #if PL_CONFIG_HAS_BUZZER
   #include "Buzzer.h"
 #endif
+#include "Bluetooth.h"
 #if PL_CONFIG_HAS_ACCELEROMETER
   #include "FX1.h"
 #endif
@@ -103,6 +104,7 @@ static const CLS1_ParseCommandCallback CmdParserTable[] =
   RNETA_ParseCommand,
 #endif
   FRTOS1_ParseCommand,
+  BLUETOOTH_ParseCommand,
   NULL /* Sentinel */
 };
 
