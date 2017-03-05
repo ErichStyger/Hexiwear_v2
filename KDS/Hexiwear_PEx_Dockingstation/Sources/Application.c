@@ -71,20 +71,11 @@ static void AppTask(void *param) {
 #if PL_CONFIG_HAS_CUBE_DEMO
  // CUBE_CreateWindow(&cubeWindow);
 #endif
-#if PL_CONFIG_HAS_RTC
-  if (TmDt1_SyncWithInternalRTC()!=ERR_OK) { /* sync software RTC from HW RTC */
-    CLS1_SendStr("Sync RTC Failed!\r\n", CLS1_GetStdio()->stdErr);
-  }
-#endif
-
 #if PL_CONFIG_HAS_ACCELEROMETER
-  {
-    FX1_Init();
-    //Accel_RST_SetVal();
-    //vTaskDelay(pdMS_TO_TICKS(50));
-    //Accel_RST_ClrVal();
-    FX1_Enable();
-  }
+  FX1_Init(); /* init and enable device */
+#endif
+#if PL_CONFIG_HAS_RTC
+  //TmDta1_SyncSWtimeToInternalRTCsec();
 #endif
   for(;;) {
     RGBG_On();
