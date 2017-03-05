@@ -76,7 +76,20 @@ static void AppTask(void *param) {
   FX1_Init(); /* init and enable device */
 #endif
   BLUETOOTH_SendVersionReq(); /* get version number */
-  BLUETOOTH_SendAdvModeGetReq(); /* get advertisement mode */
+
+  /* advertisement mode: flash might be erased, it gets properly set with 'toggle' first */
+  BLUETOOTH_SendToggleAdvModeReq();
+  vTaskDelay(pdMS_TO_TICKS(100)); /* give it some time, it will respond with advModeSend so I will have the current mode */
+  if (BLUETOOTH_GetAdvMode()!=bluetooth_advMode_disable) { /* check if we are in the right mode */
+    BLUETOOTH_SendToggleAdvModeReq(); /* no? request toggle */
+  }
+
+  /* active buttons: flash might be erased, it gets properly set with 'toggle' first */
+  BLUETOOTH_SendToggleActiveButtonsReq();
+  vTaskDelay(pdMS_TO_TICKS(100)); /* give it some time, it will respond with buttonsGroupSendActive so I will have the current mode */
+  if (BLUETOOTH_GetActiveButtons()!=buttonsGroup_right) { /* check if we are in the right mode */
+    BLUETOOTH_SendToggleActiveButtonsReq(); /* no? request toggle */
+  }
   for(;;) {
     RGBG_On();
     vTaskDelay(pdMS_TO_TICKS(20));

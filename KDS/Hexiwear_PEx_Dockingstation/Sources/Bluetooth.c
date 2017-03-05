@@ -12,6 +12,7 @@
 #include "UTIL1.h"
 
 static bluetooth_advMode_t currAdvMode = bluetooth_advMode_disable;
+static buttonsGroup_t buttonsGroupCurrentActive = buttonsGroup_right;
 
 typedef struct {
   uint8_t major, minor, patch;
@@ -20,8 +21,44 @@ typedef struct {
 static versionInfo versionKW40;  /* version number of KW40 */
 static const versionInfo versionK64F = {10,0,1}; /* K64F version */
 
+buttonsGroup_t BLUETOOTH_GetActiveButtons(void) {
+  return buttonsGroupCurrentActive;
+}
+
+void BLUETOOTH_SetActiveButtons(buttonsGroup_t active) {
+  if (active == buttonsGroup_left || active==buttonsGroup_right) {
+    buttonsGroupCurrentActive = active;
+  } else {
+    CLS1_SendStr("Wrong active buttons group: ", CLS1_GetStdio()->stdErr);
+    CLS1_SendNum8u(active, CLS1_GetStdio()->stdErr);
+    CLS1_SendStr("\r\n", CLS1_GetStdio()->stdErr);
+  }
+}
+
+void BLUETOOTH_SendToggleActiveButtonsReq(void) {
+  hostInterface_packet_t dataPacket;
+
+  dataPacket.type    = packetType_buttonsGroupToggleActive;
+  dataPacket.length  = 0;
+  HostComm_SendMessage(&dataPacket, TRUE);
+}
+
+void BLUETOOTH_SendActiveButtonsGetReq(void) {
+  hostInterface_packet_t dataPacket;
+
+  dataPacket.type    = packetType_buttonsGroupGetActive;
+  dataPacket.length  = 0;
+  HostComm_SendMessage(&dataPacket, TRUE);
+}
+
 void BLUETOOTH_SetAdvMode(bluetooth_advMode_t mode) {
-  currAdvMode = mode;
+  if (mode == bluetooth_advMode_disable || mode==bluetooth_advMode_enable) {
+    currAdvMode = mode;
+  } else {
+    CLS1_SendStr("Wrong Advertisement mode: ", CLS1_GetStdio()->stdErr);
+    CLS1_SendNum8u(mode, CLS1_GetStdio()->stdErr);
+    CLS1_SendStr("\r\n", CLS1_GetStdio()->stdErr);
+  }
 }
 
 bluetooth_advMode_t BLUETOOTH_GetAdvMode(void) {
@@ -29,42 +66,29 @@ bluetooth_advMode_t BLUETOOTH_GetAdvMode(void) {
 }
 
 void BLUETOOTH_SendAdvModeGetReq(void) {
-  static hostInterface_packet_t dataPacket =
-  {
-    .start1 = gHostInterface_startByte1,
-    .start2 = gHostInterface_startByte2,
-    .length = 0,
-    .data[0] = gHostInterface_trailerByte
-  };
+  hostInterface_packet_t dataPacket;
 
-  dataPacket.type = packetType_advModeGet;
+  dataPacket.type    = packetType_advModeGet;
+  dataPacket.length  = 0;
   HostComm_SendMessage(&dataPacket, TRUE);
 }
 
 void BLUETOOTH_SendToggleAdvModeReq(void) {
-  static hostInterface_packet_t dataPacket =
-  {
-    .start1 = gHostInterface_startByte1,
-    .start2 = gHostInterface_startByte2,
-    .length = 0,
-    .data[0] = gHostInterface_trailerByte
-  };
+  hostInterface_packet_t dataPacket;
 
-  dataPacket.type = packetType_advModeToggle;
+  dataPacket.type    = packetType_advModeToggle;
+  dataPacket.length  = 0;
   HostComm_SendMessage(&dataPacket, TRUE);
 }
 
 void BLUETOOTH_SendVersionReq(void) {
-  static hostInterface_packet_t dataPacket;
+  hostInterface_packet_t dataPacket;
 
-  dataPacket.length  = 3;
   dataPacket.type    = packetType_buildVersion;
-
+  dataPacket.length  = 3;
   dataPacket.data[0] = versionK64F.major;
   dataPacket.data[1] = versionK64F.minor;
   dataPacket.data[2] = versionK64F.patch;
-
-  dataPacket.data[3] = gHostInterface_trailerByte;
 
   HostComm_SendMessage(&dataPacket, TRUE);
 }
@@ -106,6 +130,14 @@ static uint8_t PrintStatus(const CLS1_StdIOType *io) {
   }
   CLS1_SendStatusStr((unsigned char*)"  adv mode", (const unsigned char*)buf, io->stdOut);
 
+  if (buttonsGroupCurrentActive==buttonsGroup_right) {
+    UTIL1_strcpy(buf, sizeof(buf), "right\r\n");
+  } else if (buttonsGroupCurrentActive==buttonsGroup_left) {
+      UTIL1_strcpy(buf, sizeof(buf), "left\r\n");
+  } else {
+    UTIL1_strcpy(buf, sizeof(buf), "UNKNOWN\r\n");
+  }
+  CLS1_SendStatusStr((unsigned char*)"  button grp", (const unsigned char*)buf, io->stdOut);
   return ERR_OK;
 }
 
@@ -113,15 +145,34 @@ uint8_t BLUETOOTH_ParseCommand(const uint8_t *cmd, bool *handled, CLS1_ConstStdI
   if (UTIL1_strcmp((char*)cmd, CLS1_CMD_HELP)==0 || UTIL1_strcmp((char*)cmd, "bluetooth help")==0) {
     CLS1_SendHelpStr((unsigned char*)"bluetooth", (const unsigned char*)"Group of bluetooth commands\r\n", io->stdOut);
     CLS1_SendHelpStr((unsigned char*)"  help|status", (const unsigned char*)"Print help or status information\r\n", io->stdOut);
+    CLS1_SendHelpStr((unsigned char*)"  req version", (const unsigned char*)"Request version information\r\n", io->stdOut);
+    CLS1_SendHelpStr((unsigned char*)"  req advmode", (const unsigned char*)"Request advertisement mode information\r\n", io->stdOut);
+    CLS1_SendHelpStr((unsigned char*)"  toggle advmode", (const unsigned char*)"Send request toggling advertisement mode information\r\n", io->stdOut);
+    CLS1_SendHelpStr((unsigned char*)"  req buttongrp", (const unsigned char*)"Request touch button group\r\n", io->stdOut);
+    CLS1_SendHelpStr((unsigned char*)"  toggle buttongrp", (const unsigned char*)"Send request toggling button group\r\n", io->stdOut);
     *handled = TRUE;
     return ERR_OK;
   } else if ((UTIL1_strcmp((char*)cmd, CLS1_CMD_STATUS)==0) || (UTIL1_strcmp((char*)cmd, "bluetooth status")==0)) {
     *handled = TRUE;
     return PrintStatus(io);
+  } else if (UTIL1_strcmp((char*)cmd, "bluetooth req advmode")==0) {
+    BLUETOOTH_SendAdvModeGetReq();
+    *handled = TRUE;
+  } else if (UTIL1_strcmp((char*)cmd, "bluetooth toggle advmode")==0) {
+    BLUETOOTH_SendToggleAdvModeReq();
+    *handled = TRUE;
+  } else if (UTIL1_strcmp((char*)cmd, "bluetooth req version")==0) {
+    BLUETOOTH_SendVersionReq();
+    *handled = TRUE;
+  } else if (UTIL1_strcmp((char*)cmd, "bluetooth req buttongrp")==0) {
+    BLUETOOTH_SendActiveButtonsGetReq();
+    *handled = TRUE;
+  } else if (UTIL1_strcmp((char*)cmd, "bluetooth toggle buttongrp")==0) {
+    BLUETOOTH_SendToggleActiveButtonsReq();
+    *handled = TRUE;
   }
   return ERR_OK; /* no error */
 }
-
 
 void BLUETOOTH_Init(void) {
   BLUETOOTH_SetAdvMode(bluetooth_advMode_disable);
