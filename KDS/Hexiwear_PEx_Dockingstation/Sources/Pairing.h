@@ -14,6 +14,8 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
+void PAIRING_SetPairingCode(uint32_t code);
+
 xTaskHandle PAIRING_CreateUITask(UI1_Element **root);
 
 void PAIRING_KillTask(void);

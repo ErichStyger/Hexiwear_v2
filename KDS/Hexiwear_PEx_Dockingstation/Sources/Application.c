@@ -31,6 +31,9 @@
 #if PL_CONFIG_HAS_UI
   #include "UI.h"
 #endif
+#if PL_CONFIG_HAS_WATCH
+  #include "Watch.h"
+#endif
 #if PL_CONFIG_HAS_ACCELEROMETER
   #include "FX1.h"
   //#include "Accel_RST.h"
@@ -42,9 +45,6 @@
 #include "UI1.h"
 #if PL_CONFIG_HAS_PAIRING
   #include "Pairing.h"
-#endif
-#if PL_CONFIG_HAS_RTC
-  #include "TmDt1.h"
 #endif
 
 #if PL_CONFIG_HAS_CUBE_DEMO
@@ -74,9 +74,6 @@ static void AppTask(void *param) {
 #if PL_CONFIG_HAS_ACCELEROMETER
   FX1_Init(); /* init and enable device */
 #endif
-#if PL_CONFIG_HAS_RTC
-  //TmDta1_SyncSWtimeToInternalRTCsec();
-#endif
   for(;;) {
     RGBG_On();
     vTaskDelay(pdMS_TO_TICKS(20));
@@ -102,6 +99,9 @@ void APP_Run(void) {
 #endif
 #if PL_CONFIG_HAS_PAIRING
   PAIRING_Init();
+#endif
+#if PL_CONFIG_HAS_WATCH
+  WATCH_Init();
 #endif
   if (xTaskCreate(AppTask, (uint8_t *)"App", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
     for(;;){} /* error case only, stay here! */

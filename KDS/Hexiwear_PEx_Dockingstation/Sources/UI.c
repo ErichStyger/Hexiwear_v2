@@ -22,12 +22,16 @@
 #if PL_CONFIG_HAS_PAIRING
   #include "Pairing.h"
 #endif
+#if PL_CONFIG_HAS_WATCH
+  #include "Watch.h"
+#endif
 
 typedef enum {
   UI_PAGE_NONE,
   UI_PAGE_HOME,
   UI_PAGE_QUIZZ,
   UI_PAGE_PAIRING,
+  UI_PAGE_WATCH,
 } UI_PageType;
 
 #define UI_TASK_NOTIFY_SHOW_PAIRING           (1<<0)
@@ -45,8 +49,9 @@ static struct {
   struct {
     UIScreen_ScreenWidget screen;
     UI1_Element *currSelection;
-    UIText_TextWidget textMenu1;
-    UIText_TextWidget textMenu2;
+    UIText_TextWidget textMenu1; /* Quizz */
+    UIText_TextWidget textMenu2; /* Pairing */
+    UIText_TextWidget textMenu3; /* watch */
     /* navigation */
     UIIcon_IconWidget iconNavigationUp;
     UIIcon_IconWidget iconNavigationDown;
@@ -65,8 +70,6 @@ static struct {
 
 static xTimerHandle screenSaverTimerHndl = NULL;
 static xTaskHandle UITaskHandle;
-
-static uint32_t UI_pairingCode;
 
 static void UI_BlankScreen(void) {
   if (!UI_CurrState.screenSaverOn) {
@@ -128,7 +131,7 @@ void UI_Event(UI_EventType kind, void *data) {
       UI1_SelectNextElement(UI1_GetRoot(), TRUE);
       break;
     case UI_EVENT_PARING_CODE:
-      UI_pairingCode = *((uint32_t*)data);
+      PAIRING_SetPairingCode(*((uint32_t*)data));
       (void)xTaskNotify(UITaskHandle, UI_TASK_NOTIFY_SHOW_PAIRING, eSetBits);
       break;
     default:
@@ -141,7 +144,6 @@ static void SwitchToUI(UI_PageType newUI) {
   if (newUI==UI_PAGE_HOME) {
     if (UI_CurrState.currentUITask!=NULL) {
       (void)xTaskNotify(UI_CurrState.currentUITask, UI_NOTIFY_KILL_TASK, eSetBits);
-      //UI1_RemoveElement(UI_CurrState.currentPageUIElement); /* remove current UI */
     }
     UI_CurrState.prevPage = UI_CurrState.currentPage;
     UI_CurrState.currentPage = newUI;
@@ -158,10 +160,8 @@ static void SwitchToUI(UI_PageType newUI) {
   if (newUI==UI_PAGE_QUIZZ) {
     if (UI_CurrState.currentUITask!=NULL) {
       (void)xTaskNotify(UI_CurrState.currentUITask, UI_NOTIFY_KILL_TASK, eSetBits);
-      //UI1_RemoveElement(UI_CurrState.currentPageUIElement); /* remove current UI */
     }
     UI_CurrState.currentUITask = QUIZZ_CreateUITask(&UI_CurrState.currentPageUIElement);
-    //(void)UI1_AddSubElement(&UI_CurrState.home.screen.element, UI_CurrState.currentPageUIElement); /* add new element */
     UI_CurrState.prevPage = UI_CurrState.currentPage;
     UI_CurrState.currentPage = newUI;
     UI1_SetRoot(UI_CurrState.currentPageUIElement); /* set UI root */
@@ -172,10 +172,20 @@ static void SwitchToUI(UI_PageType newUI) {
   if (newUI==UI_PAGE_PAIRING) {
     if (UI_CurrState.currentUITask!=NULL) {
       (void)xTaskNotify(UI_CurrState.currentUITask, UI_NOTIFY_KILL_TASK, eSetBits);
-      //UI1_RemoveElement(UI_CurrState.currentPageUIElement); /* remove current UI */
     }
     UI_CurrState.currentUITask = PAIRING_CreateUITask(&UI_CurrState.currentPageUIElement);
-    //(void)UI1_AddSubElement(&UI_CurrState.home.screen.element, UI_CurrState.currentPageUIElement); /* add new element */
+    UI_CurrState.prevPage = UI_CurrState.currentPage;
+    UI_CurrState.currentPage = newUI;
+    UI1_SetRoot(UI_CurrState.currentPageUIElement); /* set UI root */
+    UI_ShowScreen(); /* show UI */
+  }
+#endif
+#if PL_CONFIG_HAS_WATCH
+  if (newUI==UI_PAGE_WATCH) {
+    if (UI_CurrState.currentUITask!=NULL) {
+      (void)xTaskNotify(UI_CurrState.currentUITask, UI_NOTIFY_KILL_TASK, eSetBits);
+    }
+    UI_CurrState.currentUITask = WATCH_CreateUITask(&UI_CurrState.currentPageUIElement);
     UI_CurrState.prevPage = UI_CurrState.currentPage;
     UI_CurrState.currentPage = newUI;
     UI1_SetRoot(UI_CurrState.currentPageUIElement); /* set UI root */
@@ -192,6 +202,9 @@ static void guiCallback(UI1_Element *element, UI1_MsgKind kind, void *pData) {
       (void)xTaskNotify(UITaskHandle, UI_TASK_NOTIFY_PAGE_SET_NEXT, eSetBits);
     } else if (UI1_EqualElement(element, &UI_CurrState.home.textMenu2.element)) {
       UI_CurrState.nextPage = UI_PAGE_PAIRING;
+      (void)xTaskNotify(UITaskHandle, UI_TASK_NOTIFY_PAGE_SET_NEXT, eSetBits);
+    } else if (UI1_EqualElement(element, &UI_CurrState.home.textMenu3.element)) {
+      UI_CurrState.nextPage = UI_PAGE_WATCH;
       (void)xTaskNotify(UITaskHandle, UI_TASK_NOTIFY_PAGE_SET_NEXT, eSetBits);
     }
   } /* if click */
@@ -222,6 +235,14 @@ static void CreateHomeScreen(void) {
   UIText_Resize(&UI_CurrState.home.textMenu2);
   UI1_EnableElementSelection(&UI_CurrState.home.textMenu2.element);
   UIText_SetUserMsgHandler(&UI_CurrState.home.textMenu2, guiCallback);
+
+  x = 0; y = UI1_GetElementPosBottom(&UI_CurrState.home.textMenu2.element);
+  UIText_Create((UI1_Element*)&UI_CurrState.home.screen, &UI_CurrState.home.textMenu3, x, y, 0, 0);
+  UIText_SetText(&UI_CurrState.home.textMenu3, (unsigned char*)"Watch");
+  UIText_SetBackgroundColor(&UI_CurrState.home.textMenu3, UI_CurrState.home.screen.bgColor);
+  UIText_Resize(&UI_CurrState.home.textMenu3);
+  UI1_EnableElementSelection(&UI_CurrState.home.textMenu3.element);
+  UIText_SetUserMsgHandler(&UI_CurrState.home.textMenu3, guiCallback);
 
   /* Navigation Icons */
   (void)UIIcon_Create(&UI_CurrState.home.screen.element, &UI_CurrState.home.iconNavigationEnter,
@@ -254,8 +275,6 @@ static void UITask(void *pvParameters) {
   LCD1_Clear();
 
   /* init */
-  UI_pairingCode = 0;
-
   CreateHomeScreen();
   UI_CurrState.prevPage = UI_PAGE_NONE;
   UI_CurrState.currentPage = UI_PAGE_NONE;

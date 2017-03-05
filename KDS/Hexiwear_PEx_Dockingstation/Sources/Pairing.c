@@ -17,6 +17,7 @@
 #include "GDisp1.h"
 #include "FRTOS1.h"
 #include "Helv12n.h"
+#include "UTIL1.h"
 
 typedef struct {
   UIScreen_ScreenWidget screen;
@@ -30,8 +31,12 @@ typedef struct {
 } PAIRING_GUIDesc;
 
 static PAIRING_GUIDesc *PAIRING_Gui;
-
 static xTaskHandle PairingTaskHandle;
+static uint8_t pairingTxt[sizeof("12345678")]; /* UI is using this text buffer */
+
+void PAIRING_SetPairingCode(uint32_t code) {
+  UTIL1_Num32uToStr(pairingTxt, sizeof(pairingTxt), code);
+}
 
 static void guiCallback(UI1_Element *element, UI1_MsgKind kind, void *pData) {
   (void)pData; /* unused argument */
@@ -84,7 +89,7 @@ static void PAIRING_CreateGUI(PAIRING_GUIDesc *gui) {
   x = 0;
   y = UI1_GetElementHeight(&gui->header.element)+10;
   UIText_Create((UI1_Element*)&gui->window, &gui->textParingCode, x, y, 0, 0);
-  UIText_SetText(&gui->textParingCode, (unsigned char*)"123456");
+  UIText_SetText(&gui->textParingCode, pairingTxt);
   UIText_SetBackgroundColor(&gui->textParingCode, gui->window.bgColor);
   UIText_SetFont(&gui->textParingCode, Helv12n_GetFont());
   UIText_Resize(&gui->textParingCode);
@@ -127,6 +132,7 @@ void PAIRING_KillTask(void) {
 void PAIRING_Init(void) {
   PAIRING_Gui = NULL;
   PairingTaskHandle = NULL;
+  PAIRING_SetPairingCode(0);
 }
 
 #endif /* PL_CONFIG_HAS_PAIRING */

@@ -86,7 +86,7 @@ static void HandlePacket(hostInterface_packet_t *packet) {
     case packetType_passDisplay:
       {
         uint32_t passkey = 0;
-        memcpy(&passkey, packet->data, 3); /* copy into local variabel */
+        memcpy(&passkey, packet->data, 3); /* copy into local variable */
         UI_Event(UI_EVENT_PARING_CODE, &passkey);
       }
       break;
