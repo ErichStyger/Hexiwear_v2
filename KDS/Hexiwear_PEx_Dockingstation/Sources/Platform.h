@@ -25,6 +25,9 @@
 #define PL_CONFIG_HAS_QUIZZ       (1 && PL_CONFIG_HAS_OLED)
 #define PL_CONFIG_HAS_PAIRING     (1 && PL_CONFIG_HAS_OLED)
 
-#define PL_CONFIG_HAS_BUZZER      (1)
+#define PL_CONFIG_HAS_BUZZER          (1)
+#define PL_CONFIG_HAS_ACCELEROMETER   (1)
+#define PL_CONFIG_HAS_I2C_SPY         (1)
+#define PL_CONFIG_HAS_RTC             (1)
 
 #endif /* SOURCES_PLATFORM_H_ */

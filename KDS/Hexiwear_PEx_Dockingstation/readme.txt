@@ -2,6 +2,13 @@ readme.txt
 ----------
 Project with Processor Expert for Hexiwear using custom docking station.
 
+Supported hardare:
+- buzzer
+- RGB LED
+- touch buttons
+- RTC
+- accelerometer/magnetometer
+
 Open points:
 - window border handling
 - cleanup GUI component
@@ -12,3 +19,10 @@ Open points:
 - hardware SPI
 - touch button handling
 - selections
+- RTC sync needs to wait for second change
+- humidity
+- gyro
+- ambient light
+- tap detection
+- I2C recovery
+- battery voltate/status

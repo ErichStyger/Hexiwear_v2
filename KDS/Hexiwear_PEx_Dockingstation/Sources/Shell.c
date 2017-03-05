@@ -34,6 +34,15 @@
 #if PL_CONFIG_HAS_BUZZER
   #include "Buzzer.h"
 #endif
+#if PL_CONFIG_HAS_ACCELEROMETER
+  #include "FX1.h"
+#endif
+#if PL_CONFIG_HAS_I2C_SPY
+  #include "I2CSPY1.h"
+#endif
+#if PL_CONFIG_HAS_RTC
+  #include "TmDt1.h"
+#endif
 #include "RGBR.h"
 #include "RGBG.h"
 #include "RGBB.h"
@@ -74,6 +83,21 @@ static const CLS1_ParseCommandCallback CmdParserTable[] =
 #if PL_CONFIG_HAS_BUZZER
    BUZ_ParseCommand,
 #endif
+#if PL_CONFIG_HAS_ACCELEROMETER
+  #if defined(FX1_PARSE_COMMAND_ENABLED)
+  FX1_ParseCommand,
+  #endif
+#endif
+#if PL_CONFIG_HAS_I2C_SPY
+  #if defined(I2CSPY1_PARSE_COMMAND_ENABLED)
+  I2CSPY1_ParseCommand,
+  #endif
+#endif
+#if PL_CONFIG_HAS_RTC
+  #if defined(TmDt1_PARSE_COMMAND_ENABLED)
+  TmDt1_ParseCommand,
+  #endif
+#endif
 #if PL_CONFIG_HAS_RADIO
   RNET1_ParseCommand,
   RNETA_ParseCommand,
@@ -91,7 +115,7 @@ static void ShellTask(void *pvParameters) {
 #if PL_CONFIG_HAS_RADIO && RNET_CONFIG_REMOTE_STDIO
   RSTDIO_DefaultShellBuffer[0] = '\0';
 #endif
-  CLS1_SendStr("hello world!\r\n", CLS1_GetStdio()->stdOut);
+  CLS1_SendStr("Started Shell Task.\r\n", CLS1_GetStdio()->stdOut);
   for(;;) {
     (void)CLS1_ReadAndParseWithCommandTable(CLS1_DefaultShellBuffer, sizeof(CLS1_DefaultShellBuffer), CLS1_GetStdio(), CmdParserTable);
 #if PL_CONFIG_HAS_RADIO && RNET_CONFIG_REMOTE_STDIO

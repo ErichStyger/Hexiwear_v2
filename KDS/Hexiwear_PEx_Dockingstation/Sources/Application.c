@@ -31,6 +31,10 @@
 #if PL_CONFIG_HAS_UI
   #include "UI.h"
 #endif
+#if PL_CONFIG_HAS_ACCELEROMETER
+  #include "FX1.h"
+  //#include "Accel_RST.h"
+#endif
 #include "Vibro.h"
 #include "GDisp1.h"
 #include "LCD1.h"
@@ -38,6 +42,9 @@
 #include "UI1.h"
 #if PL_CONFIG_HAS_PAIRING
   #include "Pairing.h"
+#endif
+#if PL_CONFIG_HAS_RTC
+  #include "TmDt1.h"
 #endif
 
 #if PL_CONFIG_HAS_CUBE_DEMO
@@ -63,6 +70,21 @@ static void AppTask(void *param) {
 
 #if PL_CONFIG_HAS_CUBE_DEMO
  // CUBE_CreateWindow(&cubeWindow);
+#endif
+#if PL_CONFIG_HAS_RTC
+  if (TmDt1_SyncWithInternalRTC()!=ERR_OK) { /* sync software RTC from HW RTC */
+    CLS1_SendStr("Sync RTC Failed!\r\n", CLS1_GetStdio()->stdErr);
+  }
+#endif
+
+#if PL_CONFIG_HAS_ACCELEROMETER
+  {
+    FX1_Init();
+    //Accel_RST_SetVal();
+    //vTaskDelay(pdMS_TO_TICKS(50));
+    //Accel_RST_ClrVal();
+    FX1_Enable();
+  }
 #endif
   for(;;) {
     RGBG_On();
