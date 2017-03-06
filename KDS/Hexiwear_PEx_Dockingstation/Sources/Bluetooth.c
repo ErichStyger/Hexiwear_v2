@@ -11,9 +11,6 @@
 #include "CLS1.h"
 #include "UTIL1.h"
 
-static bluetooth_advMode_t currAdvMode = bluetooth_advMode_disable;
-static buttonsGroup_t buttonsGroupCurrentActive = buttonsGroup_right;
-
 typedef struct {
   uint8_t major, minor, patch;
 } versionInfo;
@@ -21,12 +18,40 @@ typedef struct {
 static versionInfo versionKW40;  /* version number of KW40 */
 static const versionInfo versionK64F = {10,0,1}; /* K64F version */
 
+static bluetooth_advMode_t currAdvMode = bluetooth_advMode_disable;
+static buttonsGroup_t buttonsGroupCurrentActive = buttonsGroup_right;
+static linkState_t currLinkState = linkState_disconnected;
+
+
+void BLUETOOTH_SendLinkStateGetReq(void) {
+  hostInterface_packet_t dataPacket;
+
+  dataPacket.type    = packetType_linkStateGet;
+  dataPacket.length  = 0;
+  HostComm_SendMessage(&dataPacket, TRUE);
+}
+
+void BLUETOOTH_SetLinkState(linkState_t state) {
+  if (state==linkState_disconnected || state==linkState_connected) {
+    currLinkState = state;
+  } else {
+    CLS1_SendStr("Wrong link state: ", CLS1_GetStdio()->stdErr);
+    CLS1_SendNum8u(state, CLS1_GetStdio()->stdErr);
+    CLS1_SendStr("\r\n", CLS1_GetStdio()->stdErr);
+  }
+}
+
+linkState_t BLUETOOTH_GetLinkState(void) {
+  return currLinkState;
+}
+
+
 buttonsGroup_t BLUETOOTH_GetActiveButtons(void) {
   return buttonsGroupCurrentActive;
 }
 
 void BLUETOOTH_SetActiveButtons(buttonsGroup_t active) {
-  if (active == buttonsGroup_left || active==buttonsGroup_right) {
+  if (active==buttonsGroup_left || active==buttonsGroup_right) {
     buttonsGroupCurrentActive = active;
   } else {
     CLS1_SendStr("Wrong active buttons group: ", CLS1_GetStdio()->stdErr);
@@ -52,7 +77,7 @@ void BLUETOOTH_SendActiveButtonsGetReq(void) {
 }
 
 void BLUETOOTH_SetAdvMode(bluetooth_advMode_t mode) {
-  if (mode == bluetooth_advMode_disable || mode==bluetooth_advMode_enable) {
+  if (mode==bluetooth_advMode_disable || mode==bluetooth_advMode_enable) {
     currAdvMode = mode;
   } else {
     CLS1_SendStr("Wrong Advertisement mode: ", CLS1_GetStdio()->stdErr);
@@ -138,6 +163,15 @@ static uint8_t PrintStatus(const CLS1_StdIOType *io) {
     UTIL1_strcpy(buf, sizeof(buf), "UNKNOWN\r\n");
   }
   CLS1_SendStatusStr((unsigned char*)"  button grp", (const unsigned char*)buf, io->stdOut);
+
+  if (currLinkState==linkState_disconnected) {
+    UTIL1_strcpy(buf, sizeof(buf), "disconnected\r\n");
+  } else if (currLinkState==linkState_connected) {
+      UTIL1_strcpy(buf, sizeof(buf), "connected\r\n");
+  } else {
+    UTIL1_strcpy(buf, sizeof(buf), "UNKNOWN\r\n");
+  }
+  CLS1_SendStatusStr((unsigned char*)"  link state", (const unsigned char*)buf, io->stdOut);
   return ERR_OK;
 }
 
@@ -150,6 +184,7 @@ uint8_t BLUETOOTH_ParseCommand(const uint8_t *cmd, bool *handled, CLS1_ConstStdI
     CLS1_SendHelpStr((unsigned char*)"  toggle advmode", (const unsigned char*)"Send request toggling advertisement mode information\r\n", io->stdOut);
     CLS1_SendHelpStr((unsigned char*)"  req buttongrp", (const unsigned char*)"Request touch button group\r\n", io->stdOut);
     CLS1_SendHelpStr((unsigned char*)"  toggle buttongrp", (const unsigned char*)"Send request toggling button group\r\n", io->stdOut);
+    CLS1_SendHelpStr((unsigned char*)"  req linkstate", (const unsigned char*)"Request link state\r\n", io->stdOut);
     *handled = TRUE;
     return ERR_OK;
   } else if ((UTIL1_strcmp((char*)cmd, CLS1_CMD_STATUS)==0) || (UTIL1_strcmp((char*)cmd, "bluetooth status")==0)) {
@@ -170,6 +205,9 @@ uint8_t BLUETOOTH_ParseCommand(const uint8_t *cmd, bool *handled, CLS1_ConstStdI
   } else if (UTIL1_strcmp((char*)cmd, "bluetooth toggle buttongrp")==0) {
     BLUETOOTH_SendToggleActiveButtonsReq();
     *handled = TRUE;
+  } else if (UTIL1_strcmp((char*)cmd, "bluetooth req linkstate")==0) {
+    BLUETOOTH_SendLinkStateGetReq();
+    *handled = TRUE;
   }
   return ERR_OK; /* no error */
 }
@@ -177,4 +215,5 @@ uint8_t BLUETOOTH_ParseCommand(const uint8_t *cmd, bool *handled, CLS1_ConstStdI
 void BLUETOOTH_Init(void) {
   BLUETOOTH_SetAdvMode(bluetooth_advMode_disable);
   BLUETOOTH_SetVersionInformation(0,0,0);
+  BLUETOOTH_SetLinkState(linkState_disconnected);
 }

@@ -12,6 +12,17 @@
 #include "CLS1.h"
 
 /* ------------------------------------------ */
+/** Link state values */
+typedef enum {
+  linkState_disconnected = 0,                  /*!< Device is disconnected. */
+  linkState_connected    = 1,                  /*!< Device is connected. */
+} linkState_t;
+
+void BLUETOOTH_SendLinkStateGetReq(void);
+void BLUETOOTH_SetLinkState(linkState_t state);
+linkState_t BLUETOOTH_GetLinkState(void);
+
+/* ------------------------------------------ */
 typedef enum {
   bluetooth_advMode_disable  = 0,
   bluetooth_advMode_enable   = 1,

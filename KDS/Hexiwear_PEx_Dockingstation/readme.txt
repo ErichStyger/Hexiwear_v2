@@ -27,3 +27,4 @@ Open points:
 - I2C recovery
 - battery voltate/status
 - Accelerometer INT1, INT2 and RST
+- low power mode

@@ -18,30 +18,6 @@
 #include "TmDt1.h"
 #include "HostComm.h"
 
-typedef enum {
-    linkState_disconnected = 0,
-    linkState_connected    = 1,
-} linkState_t;
-
-static linkState_t watch_linkState = linkState_disconnected;
-
-static void watch_SendGetLinkStateReq(void) {
-  static hostInterface_packet_t dataPacket =
-  {
-    .start1 = gHostInterface_startByte1,
-    .start2 = gHostInterface_startByte2,
-    .length = 0,
-    .data[0] = gHostInterface_trailerByte
-  };
-
-  dataPacket.type = packetType_linkStateGet;
-  HostComm_SendMessage(&dataPacket, TRUE);
-}
-
-static void WATCH_SetLinkState(linkState_t state) {
-  watch_linkState = state;
-}
-
 typedef struct {
   UIWindow_WindowWidget window;
   /* date */
@@ -161,7 +137,6 @@ void WATCH_KillTask(void) {
 void WATCH_Init(void) {
   WatchGui = NULL;
   WatchTaskHandle = NULL;
-  watch_linkState = linkState_disconnected;
 }
 
 #endif /* PL_CONFIG_HAS_WATCH */

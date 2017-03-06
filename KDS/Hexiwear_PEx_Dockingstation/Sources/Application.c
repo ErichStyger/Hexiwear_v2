@@ -90,6 +90,9 @@ static void AppTask(void *param) {
   if (BLUETOOTH_GetActiveButtons()!=buttonsGroup_right) { /* check if we are in the right mode */
     BLUETOOTH_SendToggleActiveButtonsReq(); /* no? request toggle */
   }
+
+  /* request current link state */
+  BLUETOOTH_SendLinkStateGetReq();
   for(;;) {
     RGBG_On();
     vTaskDelay(pdMS_TO_TICKS(20));

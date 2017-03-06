@@ -98,26 +98,34 @@ void UI_Event(UI_EventType kind, void *data) {
   } /* switch */
   switch(kind) {
     case UI_EVENT_BUTTON_LEFT: /* lower left touch */
+      UI1_GetUI();
       element = UI1_GetSelectedElement();
       if (element!=NULL) {
         UI1_SendMessage(element, UI1_MSG_CLICK, NULL);
       } else { /* send message to root */
         UI1_SendMessage(UI1_GetRoot(), UI1_MSG_CLICK, NULL);
       }
+      UI1_GiveUI();
       break;
     case UI_EVENT_BUTTON_RIGHT: /* lower right touch */
+      UI1_GetUI();
       element = UI1_GetSelectedElement();
       if (element!=NULL) {
         UI1_SendMessage(element, UI1_MSG_CANCEL, NULL);
       } else { /* send message to root */
         UI1_SendMessage(UI1_GetRoot(), UI1_MSG_CANCEL, NULL);
       }
+      UI1_GiveUI();
       break;
     case UI_EVENT_BUTTON_UP:
+      UI1_GetUI();
       UI1_SelectNextElement(UI1_GetRoot(), FALSE);
+      UI1_GiveUI();
       break;
     case UI_EVENT_BUTTON_DOWN:
+      UI1_GetUI();
       UI1_SelectNextElement(UI1_GetRoot(), TRUE);
+      UI1_GiveUI();
       break;
     case UI_EVENT_PARING_CODE:
       PAIRING_SetPairingCode(*((uint32_t*)data));
@@ -164,11 +172,13 @@ static void SwitchToUI(UI_PageType newUI) {
     if (UI_CurrState.currentUITask!=NULL) {
       (void)xTaskNotify(UI_CurrState.currentUITask, UI_NOTIFY_KILL_TASK, eSetBits);
     }
+    UI1_GetUI();
     UI_CurrState.prevPage = UI_CurrState.currentPage;
     UI_CurrState.currentPage = newUI;
     UI1_SetRoot(&UI_CurrState.home.screen.element); /* set UI root */
     UI1_SetSelectedElement(UI_CurrState.home.currSelection); /* restore selection */
     UI1_SelectElement(UI_CurrState.home.currSelection);
+    UI1_GiveUI();
     UI_ShowScreen(); /* show UI */
   }
   if (UI_CurrState.currentPage==UI_PAGE_HOME) {
@@ -180,10 +190,12 @@ static void SwitchToUI(UI_PageType newUI) {
     if (UI_CurrState.currentUITask!=NULL) {
       (void)xTaskNotify(UI_CurrState.currentUITask, UI_NOTIFY_KILL_TASK, eSetBits);
     }
+    UI1_GetUI();
     UI_CurrState.currentUITask = QUIZZ_CreateUITask(&UI_CurrState.currentPageUIElement);
     UI_CurrState.prevPage = UI_CurrState.currentPage;
     UI_CurrState.currentPage = newUI;
     UI1_SetRoot(UI_CurrState.currentPageUIElement); /* set UI root */
+    UI1_GiveUI();
     UI_ShowScreen(); /* show UI */
   }
 #endif
@@ -192,10 +204,12 @@ static void SwitchToUI(UI_PageType newUI) {
     if (UI_CurrState.currentUITask!=NULL) {
       (void)xTaskNotify(UI_CurrState.currentUITask, UI_NOTIFY_KILL_TASK, eSetBits);
     }
+    UI1_GetUI();
     UI_CurrState.currentUITask = PAIRING_CreateUITask(&UI_CurrState.currentPageUIElement);
     UI_CurrState.prevPage = UI_CurrState.currentPage;
     UI_CurrState.currentPage = newUI;
     UI1_SetRoot(UI_CurrState.currentPageUIElement); /* set UI root */
+    UI1_GiveUI();
     UI_ShowScreen(); /* show UI */
   }
 #endif
@@ -204,10 +218,12 @@ static void SwitchToUI(UI_PageType newUI) {
     if (UI_CurrState.currentUITask!=NULL) {
       (void)xTaskNotify(UI_CurrState.currentUITask, UI_NOTIFY_KILL_TASK, eSetBits);
     }
+    UI1_GetUI();
     UI_CurrState.currentUITask = WATCH_CreateUITask(&UI_CurrState.currentPageUIElement);
     UI_CurrState.prevPage = UI_CurrState.currentPage;
     UI_CurrState.currentPage = newUI;
     UI1_SetRoot(UI_CurrState.currentPageUIElement); /* set UI root */
+    UI1_GiveUI();
     UI_ShowScreen(); /* show UI */
   }
 #endif
