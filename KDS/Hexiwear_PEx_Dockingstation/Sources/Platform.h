@@ -30,5 +30,6 @@
 #define PL_CONFIG_HAS_ACCELEROMETER   (1)
 #define PL_CONFIG_HAS_I2C_SPY         (1)
 #define PL_CONFIG_HAS_RTC             (1)
+#define PL_CONFIG_HAS_IDENTIFY        (1)
 
 #endif /* SOURCES_PLATFORM_H_ */

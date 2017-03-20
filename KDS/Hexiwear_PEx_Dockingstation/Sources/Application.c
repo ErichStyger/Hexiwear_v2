@@ -38,6 +38,9 @@
   #include "FX1.h"
   //#include "Accel_RST.h"
 #endif
+#if PL_CONFIG_HAS_IDENTIFY
+  #include "Identify.h"
+#endif
 #include "Vibro.h"
 #include "GDisp1.h"
 #include "LCD1.h"
@@ -121,6 +124,9 @@ void APP_Run(void) {
 #endif
 #if PL_CONFIG_HAS_WATCH
   WATCH_Init();
+#endif
+#if PL_CONFIG_HAS_IDENTIFY
+  ID_Init();
 #endif
   BLUETOOTH_Init();
   if (xTaskCreate(AppTask, (uint8_t *)"App", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {

@@ -81,6 +81,7 @@
 #include "TMOUT1.h"
 #include "TmDt1.h"
 #include "RTC1.h"
+#include "PTRC1.h"
 #include "XF1.h"
 #include "HF1.h"
 #include "RTT1.h"

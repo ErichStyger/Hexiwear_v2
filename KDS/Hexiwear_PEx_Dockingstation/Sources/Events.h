@@ -84,6 +84,7 @@
 #include "TMOUT1.h"
 #include "TmDt1.h"
 #include "RTC1.h"
+#include "PTRC1.h"
 #include "XF1.h"
 #include "HF1.h"
 #include "RTT1.h"
@@ -244,6 +245,20 @@ void BLEUart_OnFullRxBuf(void);
 ** ===================================================================
 */
 void BLEUart_OnFreeTxBuf(void);
+
+void PTRC1_OnTraceWrap(void);
+/*
+** ===================================================================
+**     Event       :  PTRC1_OnTraceWrap (module Events)
+**
+**     Component   :  PTRC1 [PercepioTrace]
+**     Description :
+**         Called for trace ring buffer wrap around. This gives the
+**         application a chance to dump the trace buffer.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
 
 /* END Events */
 
