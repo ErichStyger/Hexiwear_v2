@@ -25,6 +25,7 @@
 #if PL_CONFIG_HAS_WATCH
   #include "Watch.h"
 #endif
+#include "Helv08n.h"
 
 typedef enum {
   UI_PAGE_NONE,
@@ -43,7 +44,7 @@ typedef enum {
 #define UI_TASK_NOTIFY_PAGE_SET_NEXT          (1<<5) /* Set next GUI page */
 
 #define GUI_HAPTIC_TOUCH_MS         (30)
-#define GUI_SCREEN_BLANK_TIMEOUT_MS (10*1000)
+#define GUI_SCREEN_BLANK_TIMEOUT_MS (30*1000)
 
 static struct {
   /* UI elements in home screen */
@@ -306,8 +307,36 @@ static void UITask(void *pvParameters) {
   uint32_t notifcationValue;
   BaseType_t notified;
 
-  LCD1_Init();
-  LCD1_Clear();
+  LCD1_Init(); /* initialize display */
+  LCD1_Clear(); /* clear display */
+
+#if 1 /* display test code */
+  {
+    GDisp1_PixelDim x, y;
+
+    LCD1_SetDisplayOrientation(LCD1_ORIENTATION_PORTRAIT);
+    GDisp1_DrawFilledBox(0, 0, 80, 20, LCD1_COLOR_YELLOW);
+    x = 0; y = 0;
+    FDisp1_WriteString("Portrait", LCD1_COLOR_RED, &x, &y, Helv08n_GetFont());
+
+    LCD1_SetDisplayOrientation(LCD1_ORIENTATION_LANDSCAPE);
+    GDisp1_DrawFilledBox(0, 0, 80, 20, LCD1_COLOR_ORANGE);
+    x = 0; y = 0;
+    FDisp1_WriteString("Landscape", LCD1_COLOR_GREEN, &x, &y, Helv08n_GetFont());
+
+    LCD1_SetDisplayOrientation(LCD1_ORIENTATION_PORTRAIT180);
+    GDisp1_DrawFilledBox(0, 0, 80, 20, LCD1_COLOR_RED);
+    x = 0; y = 0;
+    FDisp1_WriteString("Portrait180", LCD1_COLOR_BLUE, &x, &y, Helv08n_GetFont());
+
+    LCD1_SetDisplayOrientation(LCD1_ORIENTATION_LANDSCAPE180);
+    GDisp1_DrawFilledBox(0, 0, 80, 20, LCD1_COLOR_BRIGHT_GREEN);
+    x = 0; y = 0;
+    FDisp1_WriteString("Landscape180", LCD1_COLOR_WHITE, &x, &y, Helv08n_GetFont());
+
+    LCD1_SetDisplayOrientation(LCD1_ORIENTATION_PORTRAIT);
+}
+#endif
 
   /* init */
   CreateHomeScreen();
