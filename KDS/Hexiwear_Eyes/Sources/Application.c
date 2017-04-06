@@ -24,8 +24,9 @@ void APP_Run(void) {
   GDisp1_UpdateFull();
   for(;;) {
     EYES_Run();
-    RGBB_Neg();
-    WAIT1_Waitms(10);
+    RGBR_On();
+    WAIT1_Waitms(5);
+    RGBR_Off();
   }
 }
 

@@ -21,8 +21,8 @@
 #include "uncannyEyes.h"
 
 // Enable ONE of these #includes -- HUGE graphics tables for various eyes:
-#include "defaultEye.h"        // Standard human-ish hazel eye
-//#include "noScleraEye.h"       // Large iris, no sclera
+//#include "defaultEye.h"        // Standard human-ish hazel eye
+#include "noScleraEye.h"       // Large iris, no sclera
 //#include "dragonEye.h"         // Slit pupil fiery dragon/demon eye
 //#include "goatEye.h"           // Horizontal pupil goat/Krampus eye
 // Then tweak settings below, e.g. change IRIS_MIN/MAX or disable TRACKING.
