@@ -1,7 +1,7 @@
 /* ###################################################################
 **     Filename    : Events.h
 **     Project     : Hexiwear_Eyes
-**     Processor   : MK64FN1M0VLQ12
+**     Processor   : MK64FN1M0VDC12
 **     Component   : Events
 **     Version     : Driver 01.00
 **     Compiler    : GNU C Compiler

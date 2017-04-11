@@ -1,7 +1,7 @@
 /* ###################################################################
 **     Filename    : main.c
 **     Project     : Hexiwear_Eyes
-**     Processor   : MK64FN1M0VLQ12
+**     Processor   : MK64FN1M0VDC12
 **     Version     : Driver 01.01
 **     Compiler    : GNU C Compiler
 **     Date/Time   : 2017-04-01, 17:25, # CodeGen: 0

@@ -6,11 +6,11 @@
 /*##                                   */
 /*##     Project   : Hexiwear_PEx_Dockingstation */
 /*##                                   */
-/*##     Processor : MK64FN1M0VLQ12    */
+/*##     Processor : MK64FN1M0VDC12    */
 /*##                                   */
 /*##     Compiler  : GNU C Compiler    */
 /*##                                   */
-/*##     Date/Time : 2017-02-09, 14:12, # CodeGen: 64 */
+/*##     Date/Time : 2017-04-10, 22:06, # CodeGen: 283 */
 /*##                                   */
 /*##     Abstract  :                   */
 /*##                                   */

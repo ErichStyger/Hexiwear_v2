@@ -1,7 +1,7 @@
 /* ###################################################################
 **     Filename    : Events.h
 **     Project     : Hexiwear_PEx_Dockingstation
-**     Processor   : MK64FN1M0VLQ12
+**     Processor   : MK64FN1M0VDC12
 **     Component   : Events
 **     Version     : Driver 01.00
 **     Compiler    : GNU C Compiler
@@ -85,6 +85,16 @@
 #include "TmDt1.h"
 #include "RTC1.h"
 #include "PTRC1.h"
+#include "AmblInt.h"
+#include "ExtIntLdd4.h"
+#include "GI2C0.h"
+#include "I2C2.h"
+#include "SDA1.h"
+#include "BitIoLdd21.h"
+#include "SCL1.h"
+#include "BitIoLdd22.h"
+#include "Vcc3V3B_EN.h"
+#include "BitIoLdd23.h"
 #include "XF1.h"
 #include "HF1.h"
 #include "RTT1.h"
@@ -255,6 +265,20 @@ void PTRC1_OnTraceWrap(void);
 **     Description :
 **         Called for trace ring buffer wrap around. This gives the
 **         application a chance to dump the trace buffer.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+
+void AmblInt_OnInterrupt(void);
+/*
+** ===================================================================
+**     Event       :  AmblInt_OnInterrupt (module Events)
+**
+**     Component   :  AmblInt [ExtInt]
+**     Description :
+**         This event is called when an active signal edge/level has
+**         occurred.
 **     Parameters  : None
 **     Returns     : Nothing
 ** ===================================================================

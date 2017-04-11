@@ -1,7 +1,7 @@
 /* ###################################################################
 **     Filename    : main.c
 **     Project     : Hexiwear_PEx_Dockingstation
-**     Processor   : MK64FN1M0VLQ12
+**     Processor   : MK64FN1M0VDC12
 **     Version     : Driver 01.01
 **     Compiler    : GNU C Compiler
 **     Date/Time   : 2016-11-29, 10:52, # CodeGen: 0
@@ -82,6 +82,16 @@
 #include "TmDt1.h"
 #include "RTC1.h"
 #include "PTRC1.h"
+#include "AmblInt.h"
+#include "ExtIntLdd4.h"
+#include "GI2C0.h"
+#include "I2C2.h"
+#include "SDA1.h"
+#include "BitIoLdd21.h"
+#include "SCL1.h"
+#include "BitIoLdd22.h"
+#include "Vcc3V3B_EN.h"
+#include "BitIoLdd23.h"
 #include "XF1.h"
 #include "HF1.h"
 #include "RTT1.h"

@@ -1,7 +1,7 @@
 /* ###################################################################
 **     Filename    : Events.c
 **     Project     : Hexiwear_PEx_Dockingstation
-**     Processor   : MK64FN1M0VLQ12
+**     Processor   : MK64FN1M0VDC12
 **     Component   : Events
 **     Version     : Driver 01.00
 **     Compiler    : GNU C Compiler
@@ -259,6 +259,23 @@ void PTRC1_OnTraceWrap(void)
   /* GDB: dump binary memory <file> <hexStartAddr> <hexEndAddr> */
   PTRC1_vGetGDBDumpCommand(buf, sizeof(buf), "c:\\tmp\\trc.dump");
 #endif
+}
+
+/*
+** ===================================================================
+**     Event       :  AmblInt_OnInterrupt (module Events)
+**
+**     Component   :  AmblInt [ExtInt]
+**     Description :
+**         This event is called when an active signal edge/level has
+**         occurred.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void AmblInt_OnInterrupt(void)
+{
+  /* Write your code here ... */
 }
 
 /* END Events */
