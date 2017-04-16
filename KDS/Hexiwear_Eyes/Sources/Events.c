@@ -120,6 +120,23 @@ void TI1_OnInterrupt(void)
   EYES_usCntr++;
 }
 
+/*
+** ===================================================================
+**     Event       :  AmblInt_OnInterrupt (module Events)
+**
+**     Component   :  AmblInt [ExtInt]
+**     Description :
+**         This event is called when an active signal edge/level has
+**         occurred.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void AmblInt_OnInterrupt(void)
+{
+  /* Write your code here ... */
+}
+
 /* END Events */
 
 #ifdef __cplusplus

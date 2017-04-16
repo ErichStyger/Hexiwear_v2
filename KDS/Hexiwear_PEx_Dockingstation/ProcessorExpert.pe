@@ -3,7 +3,7 @@
   <Header>
     <Name>Hexiwear_PEx_Dockingstation</Name>
     <SavedBy>Erich Styger Local</SavedBy>
-    <ModificationStamp>142</ModificationStamp>
+    <ModificationStamp>144</ModificationStamp>
     <Date>2016-11-29</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.12.2.RT7_b1550-0615</PEversion>
@@ -3696,7 +3696,7 @@
           <ItemSymbol>C_StackSize</ItemSymbol>
           <ReadOnly>false</ReadOnly>
           <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-          <Value>512</Value>
+          <Value>768</Value>
           <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
           <Base>HEX</Base>
         </ItemState>
@@ -59762,7 +59762,7 @@
         <ItemSymbol>I2C</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>I2C2</Value>
+        <Value>I2C0</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>LDD_I2C_Group</ItemSymbol>
@@ -60123,7 +60123,7 @@
   <Bean>
     <Repository>file:/${ProcessorExpertPath:user}</Repository>
     <BeanType>GenericSWI2C</BeanType>
-    <Name>I2C2</Name>
+    <Name>I2C0</Name>
     <CompNumb>136</CompNumb>
     <CompEnabled>true</CompEnabled>
     <GenCodeMode>ALWAYS_WRITE</GenCodeMode>
@@ -60138,7 +60138,7 @@
         <ItemSymbol>DeviceName</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>I2C2</Value>
+        <Value>I2C0</Value>
         <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
       </ItemState>
       <ItemState>
@@ -61558,7 +61558,7 @@
         <ItemSymbol>OnNACKName</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>I2C2_OnNACK</Value>
+        <Value>I2C0_OnNACK</Value>
         <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
       </ItemState>
       <ItemState>
@@ -61576,7 +61576,7 @@
         <ItemSymbol>OnTxCharName</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>I2C2_OnTxChar</Value>
+        <Value>I2C0_OnTxChar</Value>
         <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
       </ItemState>
       <ItemState>
@@ -61594,7 +61594,7 @@
         <ItemSymbol>OnRxCharName</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>I2C2_OnRxChar</Value>
+        <Value>I2C0_OnRxChar</Value>
         <ItemWasNeverEnabledInChgScript>true</ItemWasNeverEnabledInChgScript>
       </ItemState>
     </Events>

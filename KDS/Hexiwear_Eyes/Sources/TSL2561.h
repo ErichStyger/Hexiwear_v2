@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-#define TSL2561_GAIN_1X                 0x00  // no gain
+#define TSL2561_GAIN_0X                 0x00  // no gain
 #define TSL2561_GAIN_16X                0x10  // 16x gain
 #define TSL2561_INTEGRATION_TIME_13MS   0  // 13.7ms
 #define TSL2561_INTEGRATION_TIME_101MS  1  // 101ms

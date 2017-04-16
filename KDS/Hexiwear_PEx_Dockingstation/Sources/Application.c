@@ -127,10 +127,15 @@ static void AppTask(void *param) {
       for(;;){}
     }
 
-    res = TSL2561_SetTiming(TSL2561_GAIN_16X|TSL2561_INTEGRATION_TIME_13MS);
+    res = TSL2561_SetIntegrationTime(TSL2561_INTEGRATION_TIME_13MS);
     if (res!=ERR_OK) {
       for(;;){}
     }
+    res = TSL2561_SetGain(TSL2561_GAIN_16X);
+    if (res!=ERR_OK) {
+      for(;;){}
+    }
+
     res = TSL2561_ReadRawDataFull(&broadband);
     if (res!=ERR_OK) {
       for(;;){}

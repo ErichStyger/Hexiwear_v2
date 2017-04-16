@@ -19,26 +19,28 @@
 #include <stdlib.h> /* for rand() */
 #include "GDisp1.h"  // Display interface
 #include "uncannyEyes.h"
+#include "Application.h"
+#include "RGBR.h"
 
 // Enable ONE of these #includes -- HUGE graphics tables for various eyes:
-//#include "defaultEye.h"        // Standard human-ish hazel eye
-#include "noScleraEye.h"       // Large iris, no sclera
+#include "defaultEye.h"        // Standard human-ish hazel eye
+//#include "noScleraEye.h"       // Large iris, no sclera
 //#include "dragonEye.h"         // Slit pupil fiery dragon/demon eye
 //#include "goatEye.h"           // Horizontal pupil goat/Krampus eye
 // Then tweak settings below, e.g. change IRIS_MIN/MAX or disable TRACKING.
 
 // INPUT CONFIG (for eye motion -- enable or comment out as needed) --------
-
 //#define JOYSTICK_X_PIN A0 // Analog pin for eye horiz pos (else auto)
 //#define JOYSTICK_Y_PIN A1 // Analog pin for eye vert position (")
 //#define JOYSTICK_X_FLIP   // If set, reverse stick X axis
 //#define JOYSTICK_Y_FLIP   // If set, reverse stick Y axis
 #define TRACKING          // If enabled, eyelid tracks pupil
 
-#define EYES_USE_INTERACTIVE_IRIS    0  /* 1: scale iris depending on value (e.g. ambilight level); 0: do not scale iris */
+#define EYES_USE_INTERACTIVE_IRIS    1  /* 1: scale iris depending on value (e.g. ambilight level); 0: do not scale iris */
 #define IRIS_SMOOTH   1    // If enabled, filter input from GetIrisValue()
-#define IRIS_MIN      120 // Clip lower analogRead() range from GetIrisValue()
-#define IRIS_MAX      720 // Clip upper "
+#define IRIS_MIN      200 // Clip lower range from GetIrisValue()
+#define IRIS_MAX      700 // Clip upper "
+#define LUX_CLIP_VAL  200
 //#define WINK_L_PIN      0 // Pin for LEFT eye wink button
 //#define BLINK_PIN       1 // Pin for blink button (BOTH eyes)
 //#define WINK_R_PIN      2 // Pin for RIGHT eye wink button
@@ -48,13 +50,6 @@
 volatile uint32_t EYES_usCntr; /* updated by timer interrupt! */
 
 // DISPLAY HARDWARE CONFIG -------------------------------------------------
-
-#if EYES_USE_INTERACTIVE_IRIS
-uint16_t GetAmbilightValue(void) {
-  /* try to keep it between IRIS_MIN and IRIS_MAX */
-  return 512;  /* // e.g. dial/photocell reading */
-}
-#endif
 
 bool Blink(void) {
   return FALSE; /* state of a blink signal/pin */
@@ -92,6 +87,33 @@ static int32_t random(int32_t min, int32_t max) {
 static uint32_t micros(void) {
    return EYES_usCntr*EYES_US_CNTR_PERIOD;
 }
+
+#if EYES_USE_INTERACTIVE_IRIS
+
+static uint32_t GetAmbilightValue(void) {
+  /* try to keep it between IRIS_MIN and IRIS_MAX */
+  uint32_t val, currMicros;
+  static uint32_t lastVal = 0;
+  static uint32_t lastMicros = 0;
+
+  currMicros = micros(); /* get current time */
+  if ((currMicros-lastMicros) > 500000) { /* enough time after last reading? */
+    lastMicros = currMicros;
+    RGBR_On();
+    val = APP_GetLux();  /* // e.g. dial/photocell reading */
+    if (val==0x10000) { /* saturated */
+      val = LUX_CLIP_VAL;
+    }
+    if (val>LUX_CLIP_VAL) {
+      val = LUX_CLIP_VAL;
+    }
+    lastVal = val; /* store value */
+    RGBR_Off();
+  }
+  return lastVal;
+}
+#endif
+
 
 // Probably don't need to edit any config below this line, -----------------
 // unless building a single-eye project (pendant, etc.), in which case one
@@ -275,7 +297,6 @@ void frame( // Process motion for a single frame of left or right eye
 #endif // JOYSTICK_X_PIN etc.
 
   // Blinking
-
 #if AUTOBLINK
   // Similar to the autonomous eye movement above -- blink start times
   // and durations are random (within ranges).
@@ -427,12 +448,11 @@ void split( // Subdivides motion path into two sub-paths w/randimization
 
 // MAIN LOOP -- runs continuously after setup() ----------------------------
 void EYES_Run(void) {
-
 #if EYES_USE_INTERACTIVE_IRIS
-  uint16_t v;
+  uint32_t v;
 
   v = GetAmbilightValue();
-  v = map(v, 0, 1023, IRIS_MIN, IRIS_MAX); // Scale to iris range
+  v = map(v, 0, LUX_CLIP_VAL, IRIS_MAX, IRIS_MIN); // Scale to iris range
  #if IRIS_SMOOTH // Filter input (gradual motion)
   static uint16_t irisValue = (IRIS_MIN + IRIS_MAX) / 2;
   irisValue = ((irisValue * 15) + v) / 16;
