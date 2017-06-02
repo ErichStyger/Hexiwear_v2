@@ -10,6 +10,8 @@ Supported hardare:
 - accelerometer/magnetometer
 
 Open points:
+- left/right button group handling in UI
+- UI for toggle adv mode/link state
 - window border handling
 - cleanup GUI component
 - add widget for radio/check button (icon plus text)

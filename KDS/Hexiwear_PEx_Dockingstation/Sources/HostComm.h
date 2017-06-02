@@ -70,6 +70,31 @@ typedef enum {
   packetType_OK = 255       /**< OK packet */
 } hostInterface_packetType_t;
 
+/* different packetType_alertIn types */
+typedef enum  {
+  alertIn_type_notification      = 1,
+  alertIn_type_settings          = 2,
+  alertIn_type_timeUpdate        = 3,
+} hostInterface_alertIn_type_t;
+
+/*! Category of iOS notification */
+typedef enum {
+    ancCategoryId_other           = 0,
+    ancCategoryId_incomingCall    = 1,
+    ancCategoryId_missedCall      = 2,
+    ancCategoryId_voiceMail       = 3,
+    ancCategoryId_social          = 4,
+    ancCategoryId_schedule        = 5,
+    ancCategoryId_email           = 6,
+    ancCategoryId_news            = 7,
+    ancCategoryId_healthFitness   = 8,
+    ancCategoryId_businessFinance = 9,
+    ancCategoryId_location        = 10,
+    ancCategoryId_entertainment   = 11
+} ancCategoryId_t;
+
+
+
 /* special constants */
 #define gHostInterface_startByte1               0x55
 #define gHostInterface_startByte2               0xAA

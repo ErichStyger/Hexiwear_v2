@@ -57,11 +57,6 @@
 #include "BitIoLdd14.h"
 #include "SCEpin1.h"
 #include "BitIoLdd15.h"
-#include "SM2.h"
-#include "Clock1.h"
-#include "BitIoLdd17.h"
-#include "Output1.h"
-#include "BitIoLdd19.h"
 #include "OLEDPower.h"
 #include "BitIoLdd20.h"
 #include "UI1.h"
@@ -85,13 +80,14 @@
 #include "AmblInt.h"
 #include "ExtIntLdd4.h"
 #include "GI2C0.h"
-#include "I2C2.h"
+#include "I2C0.h"
 #include "SDA1.h"
 #include "BitIoLdd21.h"
 #include "SCL1.h"
 #include "BitIoLdd22.h"
 #include "Vcc3V3B_EN.h"
 #include "BitIoLdd23.h"
+#include "SM1.h"
 #include "XF1.h"
 #include "HF1.h"
 #include "RTT1.h"
@@ -119,6 +115,7 @@ int main(void)
 
   /* Write your code here */
   APP_Run();
+#if 0
   for(;;) {
     WAIT1_Waitms(100);
     RGBR_On();
@@ -135,6 +132,9 @@ int main(void)
     WAIT1_Waitms(100);
     RGBB_Off();
   }
+#else
+  for(;;){}
+#endif
   /* For example: for(;;) { } */
 
   /*** Don't write any code pass this line, or it will be deleted during code generation. ***/

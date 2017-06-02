@@ -274,7 +274,7 @@ uint8_t currentImageVerKW40[gOtap_ImageVersionFieldSize_c] =
 #if 0
     0x01, 0x00, 0x00,    // Build Version
 #else
-    0x01, 0x00, 0x01,    // Build Version // << EST new build version
+    0x01, 0x00, 0x02,    // Build Version // << EST new build version
 #endif
     0x41,                // Stack Version
     0x11, 0x11, 0x11,    // Hardware Id

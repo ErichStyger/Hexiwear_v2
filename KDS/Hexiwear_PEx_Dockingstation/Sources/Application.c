@@ -80,26 +80,39 @@ static void AppTask(void *param) {
  // CUBE_CreateWindow(&cubeWindow);
 #endif
 #if PL_CONFIG_HAS_ACCELEROMETER
+  CLS1_SendStr("Initializing accelerometer.\r\n", CLS1_GetStdio()->stdOut);
   FX1_Init(); /* init and enable device */
 #endif
+
+  vTaskDelay(pdMS_TO_TICKS(1000)); /* give it some time */
+  CLS1_SendStr("Sending version request.\r\n", CLS1_GetStdio()->stdOut);
   BLUETOOTH_SendVersionReq(); /* get version number */
+  vTaskDelay(pdMS_TO_TICKS(100));
 
   /* advertisement mode: flash might be erased, it gets properly set with 'toggle' first */
-  BLUETOOTH_SendToggleAdvModeReq();
+  CLS1_SendStr("Get current advertisement mode.\r\n", CLS1_GetStdio()->stdOut);
+  BLUETOOTH_SendAdvModeGetReq();
   vTaskDelay(pdMS_TO_TICKS(100)); /* give it some time, it will respond with advModeSend so I will have the current mode */
-  if (BLUETOOTH_GetAdvMode()!=bluetooth_advMode_disable) { /* check if we are in the right mode */
+  if (BLUETOOTH_GetAdvMode()!=bluetooth_advMode_enable) { /* check if we are in the right mode */
+    CLS1_SendStr("Advertisement disabled, sending request to enable it.\r\n", CLS1_GetStdio()->stdOut);
     BLUETOOTH_SendToggleAdvModeReq(); /* no? request toggle */
   }
 
   /* active buttons: flash might be erased, it gets properly set with 'toggle' first */
-  BLUETOOTH_SendToggleActiveButtonsReq();
+  CLS1_SendStr("Get current active button mode.\r\n", CLS1_GetStdio()->stdOut);
+  BLUETOOTH_SendActiveButtonsGetReq();
   vTaskDelay(pdMS_TO_TICKS(100)); /* give it some time, it will respond with buttonsGroupSendActive so I will have the current mode */
   if (BLUETOOTH_GetActiveButtons()!=buttonsGroup_right) { /* check if we are in the right mode */
+    CLS1_SendStr("Turning on touch buttons on the right side.\r\n", CLS1_GetStdio()->stdOut);
     BLUETOOTH_SendToggleActiveButtonsReq(); /* no? request toggle */
   }
 
   /* request current link state */
+  CLS1_SendStr("Getting current link state.\r\n", CLS1_GetStdio()->stdOut);
   BLUETOOTH_SendLinkStateGetReq();
+  vTaskDelay(pdMS_TO_TICKS(100));
+
+  CLS1_SendStr("Enabling TLS2561 sensor.\r\n", CLS1_GetStdio()->stdOut);
   {
     uint8_t res;
     uint8_t id;
@@ -147,10 +160,21 @@ static void AppTask(void *param) {
 
     lux = TSL2561_CalculateLux(broadband, infrared);
   }
+  CLS1_SendStr("Running application loop.\r\n", CLS1_GetStdio()->stdOut);
   for(;;) {
-    RGBG_On();
-    vTaskDelay(pdMS_TO_TICKS(20));
-    RGBG_Off();
+    if (BLUETOOTH_GetAdvMode()==bluetooth_advMode_enable) {
+      RGBB_On(); /* BLE on, advertising, show with blue LED */
+      if (BLUETOOTH_GetLinkState()==linkState_connected) {
+        vTaskDelay(pdMS_TO_TICKS(500)); /* connected, show with longer blue LED */
+      } else {
+        vTaskDelay(pdMS_TO_TICKS(10));
+      }
+      RGBB_Off();
+    } else {
+      RGBG_On();
+      vTaskDelay(pdMS_TO_TICKS(10));
+      RGBG_Off();
+    }
     vTaskDelay(pdMS_TO_TICKS(1000));
   }
 }

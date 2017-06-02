@@ -60,11 +60,6 @@
 #include "BitIoLdd14.h"
 #include "SCEpin1.h"
 #include "BitIoLdd15.h"
-#include "SM2.h"
-#include "Clock1.h"
-#include "BitIoLdd17.h"
-#include "Output1.h"
-#include "BitIoLdd19.h"
 #include "OLEDPower.h"
 #include "BitIoLdd20.h"
 #include "UI1.h"
@@ -88,13 +83,14 @@
 #include "AmblInt.h"
 #include "ExtIntLdd4.h"
 #include "GI2C0.h"
-#include "I2C2.h"
+#include "I2C0.h"
 #include "SDA1.h"
 #include "BitIoLdd21.h"
 #include "SCL1.h"
 #include "BitIoLdd22.h"
 #include "Vcc3V3B_EN.h"
 #include "BitIoLdd23.h"
+#include "SM1.h"
 #include "XF1.h"
 #include "HF1.h"
 #include "RTT1.h"
@@ -283,6 +279,25 @@ void AmblInt_OnInterrupt(void);
 **     Returns     : Nothing
 ** ===================================================================
 */
+
+/*
+** ===================================================================
+**     Event       :  SM1_OnBlockSent (module Events)
+**
+**     Component   :  SM1 [SPIMaster_LDD]
+*/
+/*!
+**     @brief
+**         This event is called after the last character from the
+**         output buffer is moved to the transmitter. This event is
+**         available only if the SendBlock method is enabled.
+**     @param
+**         UserDataPtr     - Pointer to the user or
+**                           RTOS specific data. The pointer is passed
+**                           as the parameter of Init method. 
+*/
+/* ===================================================================*/
+void SM1_OnBlockSent(LDD_TUserData *UserDataPtr);
 
 /* END Events */
 

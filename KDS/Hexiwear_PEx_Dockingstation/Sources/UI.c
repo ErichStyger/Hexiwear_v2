@@ -310,7 +310,7 @@ static void UITask(void *pvParameters) {
   LCD1_Init(); /* initialize display */
   LCD1_Clear(); /* clear display */
 
-#if 1 /* display test code */
+#if 0 /* display test code */
   {
     GDisp1_PixelDim x, y;
 

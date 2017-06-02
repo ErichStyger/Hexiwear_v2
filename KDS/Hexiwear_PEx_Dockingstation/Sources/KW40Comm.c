@@ -14,6 +14,7 @@
 #include "Bluetooth.h"
 #include "UART_PDD.h"
 #include "CLS1.h"
+#include "TmDt1.h"
 
 #define PRING_DEBUG_PACKET_MSG    (1)
 
@@ -94,10 +95,10 @@ packetType_alertOut         = 17, /**<  outcoming alerts */
 static void DebugPrintMsg(unsigned char *preStr, hostInterface_packet_t *packet) {
 #if PRING_DEBUG_PACKET_MSG
   char *str;
-  uint8_t buf[16], databuf[16];
+  uint8_t buf[16], databuf[48];
 
   databuf[0] = '\0';
-  CLS1_SendStr(preStr, CLS1_GetStdio()->stdErr);
+  CLS1_SendStr(preStr, CLS1_GetStdio()->stdOut);
   switch(packet->type) {
     case packetType_pressUp:                  str = "pressUp"; break;
     case packetType_pressDown:                str = "pressDown"; break;
@@ -105,7 +106,7 @@ static void DebugPrintMsg(unsigned char *preStr, hostInterface_packet_t *packet)
     case packetType_pressLeft:                str = "pressLeft"; break;
     case packetType_slide:                    str = "slide"; break;
     case packetType_passDisplay:              str = "passDisplay";
-                                              UTIL1_Num8uToStr(databuf, sizeof(databuf), (((int)packet->data[0])<<16)+(((int)packet->data[1])<<8)+packet->data[2]);
+                                              UTIL1_Num32uToStr(databuf, sizeof(databuf), (((int)packet->data[2])<<16)+(((int)packet->data[1])<<8)+packet->data[0]);
                                               break;
     case packetType_buildVersion:             str = "buildVersion";
                                               UTIL1_Num8uToStr(databuf, sizeof(databuf), packet->data[0]);
@@ -115,7 +116,16 @@ static void DebugPrintMsg(unsigned char *preStr, hostInterface_packet_t *packet)
                                               UTIL1_strcatNum8u(databuf, sizeof(databuf), packet->data[2]);
                                               break;
 
-    case packetType_advModeSend:              str = "advModeSend"; UTIL1_Num8uToStr(databuf, sizeof(databuf), packet->data[0]); break;
+    case packetType_advModeSend:              str = "advModeSend";
+                                              UTIL1_Num8uToStr(databuf, sizeof(databuf), packet->data[0]);
+                                              if (packet->data[0]==0) {
+                                                UTIL1_strcat(databuf, sizeof(databuf), (uint8_t*)" disabled");
+                                              } else if (packet->data[0]==1) {
+                                                UTIL1_strcat(databuf, sizeof(databuf), (uint8_t*)" advertising");
+                                              } else {
+                                                UTIL1_strcat(databuf, sizeof(databuf), (uint8_t*)" wrong data!");
+                                              }
+                                              break;
     case packetType_advModeGet:               str = "advModeGet"; break;
     case packetType_advModeToggle:            str = "advModeToggle"; break;
 
@@ -130,18 +140,62 @@ static void DebugPrintMsg(unsigned char *preStr, hostInterface_packet_t *packet)
     case packetType_heartRate:                str = "heartrate"; break;
     case packetType_steps:                    str = "steps"; break;
     case packetType_calories:                 str = "calories"; break;
-    case packetType_alertIn:                  str = "alertin"; break;
+    case packetType_alertIn:                  str = "alertin";
+                                              switch(packet->data[0]) {
+                                                case alertIn_type_notification:
+                                                  UTIL1_strcpy(databuf, sizeof(databuf), (uint8_t*)"notification ");
+                                                  break;
+                                                case alertIn_type_settings:
+                                                  UTIL1_strcpy(databuf, sizeof(databuf), (uint8_t*)"settings ");
+                                                  break;
+                                                case alertIn_type_timeUpdate:
+                                                  UTIL1_strcpy(databuf, sizeof(databuf), (uint8_t*)"timeUpdate ");
+                                                  /* packet->data[1] is size of data, must be 4! */
+                                                  if (packet->data[1]==4) {
+                                                    uint32_t secs;
+                                                    TIMEREC time;
+                                                    DATEREC date;
+
+                                                    secs = (((int)packet->data[5])<<24)+(((int)packet->data[4])<<16)+(packet->data[3]<<8)+packet->data[2];
+                                                    TmDt1_UnixSecondsToTimeDate(secs, 0, &time, &date);
+                                                    TmDt1_AddDateString(databuf, sizeof(databuf), &date, TmDt1_DEFAULT_DATE_FORMAT_STR);
+                                                    UTIL1_strcat(databuf, sizeof(databuf), (uint8_t*)", ");
+                                                    TmDt1_AddTimeString(databuf, sizeof(databuf), &time, TmDt1_DEFAULT_TIME_FORMAT_STR);
+                                                  } else {
+                                                    UTIL1_strcat(databuf, sizeof(databuf), (uint8_t*)"wrong size!");
+                                                  }
+                                                  break;
+                                              }
+                                              break;
     case packetType_alertOut:                 str = "alertout"; break;
     case packetType_appMode:                  str = "appMode"; break;
     case packetType_linkStateGet:             str = "linkStateGet";  break;
-    case packetType_linkStateSend:            str = "linkStateSend"; UTIL1_Num8uToStr(databuf, sizeof(databuf), packet->data[0]); break;
+    case packetType_linkStateSend:            str = "linkStateSend";
+                                              UTIL1_Num8uToStr(databuf, sizeof(databuf), packet->data[0]);
+                                              if (packet->data[0]==0) {
+                                                UTIL1_strcat(databuf, sizeof(databuf), (uint8_t*)" disconnected");
+                                              } else if (packet->data[0]==1) {
+                                                UTIL1_strcat(databuf, sizeof(databuf), (uint8_t*)" connected");
+                                              } else {
+                                                UTIL1_strcat(databuf, sizeof(databuf), (uint8_t*)" wrong data!");
+                                              }
+                                              break;
     case packetType_otapKW40Started:          str = "otapKW40Started"; break;
     case packetType_otapMK64Started:          str = "otap;MK64Started"; break;
     case packetType_otapCompleted:            str = "otapCompleted"; break;
     case packetType_otapFailed:               str = "otapFailed"; break;
     case packetType_buttonsGroupToggleActive: str = "buttonsGroupToggleActive"; break;
     case packetType_buttonsGroupGetActive:    str = "buttonsGroupGetActive"; break;
-    case packetType_buttonsGroupSendActive:   str = "buttonsGroupSendActive"; UTIL1_Num8uToStr(databuf, sizeof(databuf), packet->data[0]); break;
+    case packetType_buttonsGroupSendActive:   str = "buttonsGroupSendActive";
+                                              UTIL1_Num8uToStr(databuf, sizeof(databuf), packet->data[0]);
+                                              if (packet->data[0]==0) {
+                                                UTIL1_strcat(databuf, sizeof(databuf), (uint8_t*)" left");
+                                              } else if (packet->data[0]==1) {
+                                                UTIL1_strcat(databuf, sizeof(databuf), (uint8_t*)" right");
+                                              } else {
+                                                UTIL1_strcat(databuf, sizeof(databuf), (uint8_t*)" wrong?");
+                                              }
+                                              break;
     case packetType_notification:             str = "notification"; break;
     case packetType_sleepON:                  str = "sleepON"; break;
     case packetType_sleepOFF:                 str = "sleepOFF"; break;
@@ -151,12 +205,12 @@ static void DebugPrintMsg(unsigned char *preStr, hostInterface_packet_t *packet)
       str = buf;
       break;
   }
-  CLS1_SendStr(str, CLS1_GetStdio()->stdErr);
+  CLS1_SendStr(str, CLS1_GetStdio()->stdOut);
   if (databuf[0]!='\0') {
-    CLS1_SendStr(" ", CLS1_GetStdio()->stdErr);
-    CLS1_SendStr(databuf, CLS1_GetStdio()->stdErr);
+    CLS1_SendStr(" ", CLS1_GetStdio()->stdOut);
+    CLS1_SendStr(databuf, CLS1_GetStdio()->stdOut);
   }
-  CLS1_SendStr("\r\n", CLS1_GetStdio()->stdErr);
+  CLS1_SendStr("\r\n", CLS1_GetStdio()->stdOut);
 #else
   (void)packet;
 #endif
@@ -193,7 +247,7 @@ static void HandleRxPacket(hostInterface_packet_t *packet) {
     case packetType_passDisplay:
       {
         uint32_t passkey = 0;
-        memcpy(&passkey, packet->data, 3); /* copy into local variable */
+        passkey = (((int)packet->data[2])<<16)+(((int)packet->data[1])<<8)+packet->data[0];
         UI_Event(UI_EVENT_PARING_CODE, &passkey);
       }
       break;
@@ -209,6 +263,27 @@ static void HandleRxPacket(hostInterface_packet_t *packet) {
 
     case packetType_linkStateSend: /* response to packetType_linkStateGet */
       BLUETOOTH_SetLinkState(packet->data[0]);
+      break;
+
+    case packetType_alertIn:
+      switch(packet->data[0]) {
+        case alertIn_type_notification:
+          break;
+        case alertIn_type_settings:
+          break;
+        case alertIn_type_timeUpdate:
+          /* packet->data[1] is size of data, must be 4! */
+          if (packet->data[1]==4) {
+            uint32_t secs;
+            TIMEREC time;
+            DATEREC date;
+
+            secs = (((int)packet->data[5])<<24)+(((int)packet->data[4])<<16)+(packet->data[3]<<8)+packet->data[2];
+            TmDt1_UnixSecondsToTimeDate(secs, 0, &time, &date);
+            TmDt1_SetTimeDate(&time, &date);
+          }
+          break;
+      }
       break;
 
     default:
