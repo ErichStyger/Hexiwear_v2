@@ -22,6 +22,26 @@ static bluetooth_advMode_t currAdvMode = bluetooth_advMode_disable;
 static buttonsGroup_t buttonsGroupCurrentActive = buttonsGroup_right;
 static linkState_t currLinkState = linkState_disconnected;
 
+static gui_current_app_t appMode = GUI_CURRENT_APP_IDLE;
+
+gui_current_app_t BLUETOOTH_GetCurrentAppMode(void) {
+  return appMode;
+}
+
+void BLUETOOTH_SetCurrentAppMode(gui_current_app_t mode) {
+  appMode = mode;
+  HostComm_SendSetApplicationMode(mode);
+}
+const unsigned char *GetCurrentAppModeString(void) {
+  switch(appMode) {
+    case GUI_CURRENT_APP_IDLE: return "Idle";
+    case GUI_CURRENT_APP_SENSOR_TAG: return "SensorTag";
+    case GUI_CURRENT_APP_HEART_RATE: return "HeartRate";
+    case GUI_CURRENT_APP_PEDOMETER: return "Pedometer";
+    default: break;
+  }
+  return "UNKNOWN";
+}
 
 void BLUETOOTH_SendLinkStateGetReq(void) {
   hostInterface_packet_t dataPacket;
@@ -172,10 +192,16 @@ static uint8_t PrintStatus(const CLS1_StdIOType *io) {
     UTIL1_strcpy(buf, sizeof(buf), "UNKNOWN\r\n");
   }
   CLS1_SendStatusStr((unsigned char*)"  link state", (const unsigned char*)buf, io->stdOut);
+
+  CLS1_SendStatusStr((unsigned char*)"  appmode", GetCurrentAppModeString(), io->stdOut);
+  CLS1_SendStr((unsigned char*)"\r\n", io->stdOut);
+
   return ERR_OK;
 }
 
 uint8_t BLUETOOTH_ParseCommand(const uint8_t *cmd, bool *handled, CLS1_ConstStdIOType *io) {
+  const char *p;
+
   if (UTIL1_strcmp((char*)cmd, CLS1_CMD_HELP)==0 || UTIL1_strcmp((char*)cmd, "bluetooth help")==0) {
     CLS1_SendHelpStr((unsigned char*)"bluetooth", (const unsigned char*)"Group of bluetooth commands\r\n", io->stdOut);
     CLS1_SendHelpStr((unsigned char*)"  help|status", (const unsigned char*)"Print help or status information\r\n", io->stdOut);
@@ -185,6 +211,7 @@ uint8_t BLUETOOTH_ParseCommand(const uint8_t *cmd, bool *handled, CLS1_ConstStdI
     CLS1_SendHelpStr((unsigned char*)"  req buttongrp", (const unsigned char*)"Request touch button group\r\n", io->stdOut);
     CLS1_SendHelpStr((unsigned char*)"  toggle buttongrp", (const unsigned char*)"Send request toggling button group\r\n", io->stdOut);
     CLS1_SendHelpStr((unsigned char*)"  req linkstate", (const unsigned char*)"Request link state\r\n", io->stdOut);
+    CLS1_SendHelpStr((unsigned char*)"  appmode <mode>", (const unsigned char*)"Set application mode: idle, sensor, heartrate, pedometer\r\n", io->stdOut);
     *handled = TRUE;
     return ERR_OK;
   } else if ((UTIL1_strcmp((char*)cmd, CLS1_CMD_STATUS)==0) || (UTIL1_strcmp((char*)cmd, "bluetooth status")==0)) {
@@ -208,6 +235,23 @@ uint8_t BLUETOOTH_ParseCommand(const uint8_t *cmd, bool *handled, CLS1_ConstStdI
   } else if (UTIL1_strcmp((char*)cmd, "bluetooth req linkstate")==0) {
     BLUETOOTH_SendLinkStateGetReq();
     *handled = TRUE;
+  } else if (UTIL1_strncmp((char*)cmd, "bluetooth appmode ", sizeof("bluetooth appmode ")-1)==0) {
+    p = cmd + sizeof("bluetooth appmode ")-1;
+    if (UTIL1_strcmp(p, "idle")==0) {
+      BLUETOOTH_SetCurrentAppMode(GUI_CURRENT_APP_IDLE);
+      *handled = TRUE;
+    } else if (UTIL1_strcmp(p, "sensor")==0) {
+      BLUETOOTH_SetCurrentAppMode(GUI_CURRENT_APP_SENSOR_TAG);
+      *handled = TRUE;
+    } else if (UTIL1_strcmp(p, "heartrate")==0) {
+      BLUETOOTH_SetCurrentAppMode(GUI_CURRENT_APP_HEART_RATE);
+      *handled = TRUE;
+    } else if (UTIL1_strcmp(p, "pedometer")==0) {
+      BLUETOOTH_SetCurrentAppMode(GUI_CURRENT_APP_PEDOMETER);
+      *handled = TRUE;
+    } else {
+      return ERR_FAILED;
+    }
   }
   return ERR_OK; /* no error */
 }
@@ -216,4 +260,5 @@ void BLUETOOTH_Init(void) {
   BLUETOOTH_SetAdvMode(bluetooth_advMode_disable);
   BLUETOOTH_SetVersionInformation(0,0,0);
   BLUETOOTH_SetLinkState(linkState_disconnected);
+  appMode = GUI_CURRENT_APP_IDLE;
 }

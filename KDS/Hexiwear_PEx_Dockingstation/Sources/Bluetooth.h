@@ -11,6 +11,13 @@
 #include "Platform.h"
 #include "CLS1.h"
 
+typedef enum {
+  GUI_CURRENT_APP_IDLE                = 0,
+  GUI_CURRENT_APP_SENSOR_TAG          = 2, // All sensors.
+  GUI_CURRENT_APP_HEART_RATE          = 5, // heart rate
+  GUI_CURRENT_APP_PEDOMETER           = 6 // Pedometer
+} gui_current_app_t;
+
 /* ------------------------------------------ */
 /** Link state values */
 typedef enum {
@@ -48,6 +55,10 @@ void BLUETOOTH_SendActiveButtonsGetReq(void);
 /* ------------------------------------------ */
 void BLUETOOTH_SetVersionInformation(uint8_t major, uint8_t minor, uint8_t patch);
 void BLUETOOTH_SendVersionReq(void);
+
+/* ------------------------------------------ */
+gui_current_app_t BLUETOOTH_GetCurrentAppMode(void);
+void BLUETOOTH_SetCurrentAppMode(gui_current_app_t mode);
 
 /* ------------------------------------------ */
 uint8_t BLUETOOTH_ParseCommand(const uint8_t *cmd, bool *handled, CLS1_ConstStdIOType *io);

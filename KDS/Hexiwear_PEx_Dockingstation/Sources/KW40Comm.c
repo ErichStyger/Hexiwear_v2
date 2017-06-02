@@ -130,13 +130,33 @@ static void DebugPrintMsg(unsigned char *preStr, hostInterface_packet_t *packet)
     case packetType_advModeToggle:            str = "advModeToggle"; break;
 
     case packetType_batteryLevel:             str = "battyLevel"; break;
-    case packetType_accel:                    str = "accel"; break;
+    case packetType_accel:                    str = "accel";
+                                              databuf[0] = '\0';
+                                              UTIL1_strcatNum8Hex(databuf, sizeof(databuf), packet->data[0]);
+                                              UTIL1_strcatNum8Hex(databuf, sizeof(databuf), packet->data[1]);
+                                              UTIL1_chcat(databuf, sizeof(databuf), ' ');
+                                              UTIL1_strcatNum8Hex(databuf, sizeof(databuf), packet->data[2]);
+                                              UTIL1_strcatNum8Hex(databuf, sizeof(databuf), packet->data[3]);
+                                              UTIL1_chcat(databuf, sizeof(databuf), ' ');
+                                              UTIL1_strcatNum8Hex(databuf, sizeof(databuf), packet->data[4]);
+                                              UTIL1_strcatNum8Hex(databuf, sizeof(databuf), packet->data[5]);
+                                              break;
     case packetType_ambiLight:                str = "ambilight"; break;
     case packetType_pressure:                 str = "pressure"; break;
     case packetType_gyro:                     str = "gyro"; break;
     case packetType_temperature:              str = "temperature"; break;
     case packetType_humidity:                 str = "humidity"; break;
-    case packetType_magnet:                   str = "magnet"; break;
+    case packetType_magnet:                   str = "magnet";
+                                              databuf[0] = '\0';
+                                              UTIL1_strcatNum8Hex(databuf, sizeof(databuf), packet->data[0]);
+                                              UTIL1_strcatNum8Hex(databuf, sizeof(databuf), packet->data[1]);
+                                              UTIL1_chcat(databuf, sizeof(databuf), ' ');
+                                              UTIL1_strcatNum8Hex(databuf, sizeof(databuf), packet->data[2]);
+                                              UTIL1_strcatNum8Hex(databuf, sizeof(databuf), packet->data[3]);
+                                              UTIL1_chcat(databuf, sizeof(databuf), ' ');
+                                              UTIL1_strcatNum8Hex(databuf, sizeof(databuf), packet->data[4]);
+                                              UTIL1_strcatNum8Hex(databuf, sizeof(databuf), packet->data[5]);
+                                              break;
     case packetType_heartRate:                str = "heartrate"; break;
     case packetType_steps:                    str = "steps"; break;
     case packetType_calories:                 str = "calories"; break;
@@ -168,7 +188,9 @@ static void DebugPrintMsg(unsigned char *preStr, hostInterface_packet_t *packet)
                                               }
                                               break;
     case packetType_alertOut:                 str = "alertout"; break;
-    case packetType_appMode:                  str = "appMode"; break;
+    case packetType_appMode:                  str = "appMode";
+                                              UTIL1_Num8uToStr(databuf, sizeof(databuf), packet->data[0]);
+                                              break;
     case packetType_linkStateGet:             str = "linkStateGet";  break;
     case packetType_linkStateSend:            str = "linkStateSend";
                                               UTIL1_Num8uToStr(databuf, sizeof(databuf), packet->data[0]);

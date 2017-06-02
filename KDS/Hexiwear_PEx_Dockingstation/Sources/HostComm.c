@@ -54,12 +54,12 @@ void HostComm_SendAccel(int16_t x, int16_t y, int16_t z) {
   txPacket.type       = packetType_accel;
   txPacket.length     = 6;
 
-  txPacket.data[0]    = (uint8_t) ((x >> 8)&0xFF);
-  txPacket.data[1]    = (uint8_t) x;
-  txPacket.data[2]    = (uint8_t) ((y >> 8)&0xFF);
-  txPacket.data[3]    = (uint8_t) y;
-  txPacket.data[4]    = (uint8_t) ((z >> 8)&0xFF);
-  txPacket.data[5]    = (uint8_t) z;
+  txPacket.data[0]    = (uint8_t) x;
+  txPacket.data[1]    = (uint8_t) ((x >> 8)&0xFF);
+  txPacket.data[2]    = (uint8_t) y;
+  txPacket.data[3]    = (uint8_t) ((y >> 8)&0xFF);
+  txPacket.data[4]    = (uint8_t) z;
+  txPacket.data[5]    = (uint8_t) ((z >> 8)&0xFF);
   txPacket.data[6]    = gHostInterface_trailerByte;
   KW40SendPacket(&txPacket);
 }
@@ -71,12 +71,12 @@ void HostComm_SendGyro(int16_t x, int16_t y, int16_t z) {
   txPacket.start2     = gHostInterface_startByte2;
   txPacket.type       = packetType_gyro;
   txPacket.length     = 6;
-  txPacket.data[0]    = (uint8_t) ((x >> 8)&0xFF);
-  txPacket.data[1]    = (uint8_t) x;
-  txPacket.data[2]    = (uint8_t) ((y >> 8)&0xFF);
-  txPacket.data[3]    = (uint8_t) y;
-  txPacket.data[4]    = (uint8_t) ((z >> 8)&0xFF);
-  txPacket.data[5]    = (uint8_t) z;
+  txPacket.data[0]    = (uint8_t) x;
+  txPacket.data[1]    = (uint8_t) ((x >> 8)&0xFF);
+  txPacket.data[2]    = (uint8_t) y;
+  txPacket.data[3]    = (uint8_t) ((y >> 8)&0xFF);
+  txPacket.data[4]    = (uint8_t) z;
+  txPacket.data[5]    = (uint8_t) ((z >> 8)&0xFF);
   txPacket.data[6]    = gHostInterface_trailerByte;
   KW40SendPacket(&txPacket);
 }
@@ -88,12 +88,12 @@ void HostComm_SendMag(int16_t x, int16_t y, int16_t z) {
   txPacket.start2     = gHostInterface_startByte2;
   txPacket.type       = packetType_magnet;
   txPacket.length     = 6;
-  txPacket.data[0]    = (uint8_t) ((x >> 8)&0xFF);
-  txPacket.data[1]    = (uint8_t) x;
-  txPacket.data[2]    = (uint8_t) ((y >> 8)&0xFF);
-  txPacket.data[3]    = (uint8_t) y;
-  txPacket.data[4]    = (uint8_t) ((z >> 8)&0xFF);
-  txPacket.data[5]    = (uint8_t) z;
+  txPacket.data[0]    = (uint8_t) x;
+  txPacket.data[1]    = (uint8_t) ((x >> 8)&0xFF);
+  txPacket.data[2]    = (uint8_t) y;
+  txPacket.data[3]    = (uint8_t) ((y >> 8)&0xFF);
+  txPacket.data[4]    = (uint8_t) z;
+  txPacket.data[5]    = (uint8_t) ((z >> 8)&0xFF);
   txPacket.data[6]    = gHostInterface_trailerByte;
   KW40SendPacket(&txPacket);
 }

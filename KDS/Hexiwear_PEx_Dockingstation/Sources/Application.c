@@ -54,6 +54,7 @@
   #include "TSL2561.h"
   #include "Vcc3V3B_EN.h"
 #endif
+#include "Sensor.h"
 
 #if PL_CONFIG_HAS_CUBE_DEMO
   static CUBE_WindowDesc cubeWindow;
@@ -160,6 +161,8 @@ static void AppTask(void *param) {
 
     lux = TSL2561_CalculateLux(broadband, infrared);
   }
+  CLS1_SendStr("Set application mode to Idle.\r\n", CLS1_GetStdio()->stdOut);
+  BLUETOOTH_SetCurrentAppMode(GUI_CURRENT_APP_IDLE);
   CLS1_SendStr("Running application loop.\r\n", CLS1_GetStdio()->stdOut);
   for(;;) {
     if (BLUETOOTH_GetAdvMode()==bluetooth_advMode_enable) {
@@ -206,6 +209,7 @@ void APP_Run(void) {
 #if PL_CONFIG_HAS_TSL2561
   TSL2561_Init();
 #endif
+  SENSOR_Init();
   BLUETOOTH_Init();
   if (xTaskCreate(AppTask, (uint8_t *)"App", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
     for(;;){} /* error case only, stay here! */
