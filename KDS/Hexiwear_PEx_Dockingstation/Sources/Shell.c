@@ -44,6 +44,9 @@
 #if PL_CONFIG_HAS_RTC
   #include "TmDt1.h"
 #endif
+#if PL_CONFIG_HAS_TSL2561
+  #include "TSL1.h"
+#endif
 #include "RGBR.h"
 #include "RGBG.h"
 #include "RGBB.h"
@@ -104,6 +107,11 @@ static const CLS1_ParseCommandCallback CmdParserTable[] =
   RNETA_ParseCommand,
 #endif
   FRTOS1_ParseCommand,
+#if PL_CONFIG_HAS_TSL2561
+  #if TSL1_CONFIG_PARSE_COMMAND_ENABLED
+  TSL1_ParseCommand,
+  #endif
+#endif
   BLUETOOTH_ParseCommand,
   NULL /* Sentinel */
 };

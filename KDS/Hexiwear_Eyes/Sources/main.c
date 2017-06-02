@@ -67,6 +67,7 @@
 #include "BitIoLdd13.h"
 #include "Vcc3V3B_EN.h"
 #include "BitIoLdd14.h"
+#include "TSL1.h"
 #include "GDisp1.h"
 #include "OLEDPower.h"
 #include "BitIoLdd8.h"

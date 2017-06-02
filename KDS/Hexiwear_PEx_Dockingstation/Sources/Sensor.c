@@ -5,13 +5,52 @@
  *      Author: Erich Styger
  */
 
+#include "Platform.h"
 #include "Sensor.h"
 #include "FRTOS1.h"
 #include "Bluetooth.h"
 #include "FX1.h"
 #include "HostComm.h"
+#if PL_CONFIG_HAS_TSL2561
+  #include "TSL1.h"
+  #include "Vcc3V3B_EN.h"
+#endif
+#include "CLS1.h"
 
 static void SensorTask(void *param) {
+  uint8_t res;
+
+  CLS1_SendStr("Enabling TLS2561 sensor.\r\n", CLS1_GetStdio()->stdOut);
+
+  /* 3V3B_EN:
+   * HI-Z: Disabled
+   * LOW: enabled (humidity, temperature, ambiLight
+   */
+  //Vcc3V3B_EN_SetInput(); /* disable */
+  /* enable */
+  Vcc3V3B_EN_SetOutput();
+  Vcc3V3B_EN_ClrVal();
+  vTaskDelay(pdMS_TO_TICKS(50));
+  TSL1_Init();
+
+  res = TSL1_Disable();
+  if (res!=ERR_OK) {
+    for(;;){}
+  }
+  vTaskDelay(pdMS_TO_TICKS(50));
+  res = TSL1_Enable();
+  if (res!=ERR_OK) {
+    for(;;){}
+  }
+
+  res = TSL1_SetIntegrationTime(TSL2561_INTEGRATION_TIME_13MS);
+  if (res!=ERR_OK) {
+    for(;;){}
+  }
+  res = TSL1_SetGain(TSL2561_GAIN_16X);
+  if (res!=ERR_OK) {
+    for(;;){}
+  }
   for(;;) {
     if (BLUETOOTH_GetCurrentAppMode()==GUI_CURRENT_APP_SENSOR_TAG) {
       int16_t x, y, z;
@@ -56,6 +95,9 @@ static void SensorTask(void *param) {
 }
 
 void SENSOR_Init(void) {
+#if PL_CONFIG_HAS_TSL2561
+  TSL1_Init();
+#endif
   if (xTaskCreate(SensorTask, (uint8_t *)"Sensor", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
     for(;;){} /* error case only, stay here! */
   }

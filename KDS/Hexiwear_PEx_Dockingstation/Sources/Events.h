@@ -91,6 +91,7 @@
 #include "Vcc3V3B_EN.h"
 #include "BitIoLdd23.h"
 #include "SM1.h"
+#include "TSL1.h"
 #include "XF1.h"
 #include "HF1.h"
 #include "RTT1.h"

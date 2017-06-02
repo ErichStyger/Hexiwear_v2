@@ -50,10 +50,6 @@
   #include "Pairing.h"
 #endif
 #include "Bluetooth.h"
-#if PL_CONFIG_HAS_TSL2561
-  #include "TSL2561.h"
-  #include "Vcc3V3B_EN.h"
-#endif
 #include "Sensor.h"
 
 #if PL_CONFIG_HAS_CUBE_DEMO
@@ -113,54 +109,6 @@ static void AppTask(void *param) {
   BLUETOOTH_SendLinkStateGetReq();
   vTaskDelay(pdMS_TO_TICKS(100));
 
-  CLS1_SendStr("Enabling TLS2561 sensor.\r\n", CLS1_GetStdio()->stdOut);
-  {
-    uint8_t res;
-    uint8_t id;
-    uint16_t broadband, infrared;
-    uint32_t lux;
-
-    /* 3V3B_EN:
-     * HI-Z: Disabled
-     * LOW: enabled (humidity, temperature, ambiLight
-     */
-    //Vcc3V3B_EN_SetInput(); /* disable */
-    /* enable */
-    Vcc3V3B_EN_SetOutput();
-    Vcc3V3B_EN_ClrVal();
-    vTaskDelay(pdMS_TO_TICKS(50));
-    TSL2561_Init();
-
-    res = TSL2561_Disable();
-    if (res!=ERR_OK) {
-      for(;;){}
-    }
-    vTaskDelay(pdMS_TO_TICKS(50));
-    res = TSL2561_Enable();
-    if (res!=ERR_OK) {
-      for(;;){}
-    }
-
-    res = TSL2561_SetIntegrationTime(TSL2561_INTEGRATION_TIME_13MS);
-    if (res!=ERR_OK) {
-      for(;;){}
-    }
-    res = TSL2561_SetGain(TSL2561_GAIN_16X);
-    if (res!=ERR_OK) {
-      for(;;){}
-    }
-
-    res = TSL2561_ReadRawDataFull(&broadband);
-    if (res!=ERR_OK) {
-      for(;;){}
-    }
-    res = TSL2561_ReadRawDataInfrared(&infrared);
-    if (res!=ERR_OK) {
-      for(;;){}
-    }
-
-    lux = TSL2561_CalculateLux(broadband, infrared);
-  }
   CLS1_SendStr("Set application mode to Idle.\r\n", CLS1_GetStdio()->stdOut);
   BLUETOOTH_SetCurrentAppMode(GUI_CURRENT_APP_IDLE);
   CLS1_SendStr("Running application loop.\r\n", CLS1_GetStdio()->stdOut);
@@ -205,9 +153,6 @@ void APP_Run(void) {
 #endif
 #if PL_CONFIG_HAS_IDENTIFY
   ID_Init();
-#endif
-#if PL_CONFIG_HAS_TSL2561
-  TSL2561_Init();
 #endif
   SENSOR_Init();
   BLUETOOTH_Init();

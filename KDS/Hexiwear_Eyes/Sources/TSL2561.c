@@ -96,6 +96,14 @@
 #define TSL2561_REG_CHAN1_LOW        (0x0E)
 #define TSL2561_REG_CHAN1_HIGH       (0x0F)
 
+// Auto-gain thresholds
+#define TSL2561_AGC_THI_13MS      (4850)    // Max value at Ti 13ms = 5047
+#define TSL2561_AGC_TLO_13MS      (100)
+#define TSL2561_AGC_THI_101MS     (36000)   // Max value at Ti 101ms = 37177
+#define TSL2561_AGC_TLO_101MS     (200)
+#define TSL2561_AGC_THI_402MS     (63000)   // Max value at Ti 402ms = 65535
+#define TSL2561_AGC_TLO_402MS     (500)
+
 // Clipping thresholds
 #define TSL2561_CLIPPING_13MS     (4900)
 #define TSL2561_CLIPPING_101MS    (37000)
@@ -149,6 +157,22 @@ uint8_t TSL2561_ReadRawDataInfrared(uint16_t *data) {
 
   *data = 0;
   res = GI2C0_ReadWordAddress8(TSL2561_I2C_DEVICE_ADDRESS, TSL2561_COMMAND_BIT|TSL2561_REG_CHAN1_LOW, data);
+  if (res!=ERR_OK) {
+    return res;
+  }
+  return ERR_OK;
+}
+
+uint8_t TSL2561_ReadData(uint16_t *broadband, uint16_t *ir) {
+  uint8_t res;
+
+  *broadband = 0;
+  *ir = 0;
+  res = TSL2561_ReadRawDataFull(broadband);
+  if (res!=ERR_OK) {
+    return res;
+  }
+  res = TSL2561_ReadRawDataInfrared(ir);
   if (res!=ERR_OK) {
     return res;
   }
@@ -269,6 +293,84 @@ uint32_t TSL2561_CalculateLux(uint16_t broadband, uint16_t ir) {
   uint32_t lux = temp >> TSL2561_LUX_LUXSCALE;
 
   return lux;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Gets the broadband (mixed lighting) and IR only values from
+            the TSL2561, adjusting gain if auto-gain is enabled
+*/
+/**************************************************************************/
+void TSL2561_GetLuminosity (uint16_t *broadband, uint16_t *ir) {
+  bool valid = FALSE;
+
+  /* Read data until we find a valid range */
+  bool _agcCheck = FALSE;
+  do
+  {
+    uint16_t _b, _ir;
+    uint16_t _hi, _lo;
+    uint8_t _it = _tsl2561IntegrationTime;
+
+    /* Get the hi/low threshold for the current integration time */
+    switch(_it)
+    {
+      case TSL2561_INTEGRATION_TIME_13MS:
+        _hi = TSL2561_AGC_THI_13MS;
+        _lo = TSL2561_AGC_TLO_13MS;
+        break;
+      case TSL2561_INTEGRATION_TIME_101MS:
+        _hi = TSL2561_AGC_THI_101MS;
+        _lo = TSL2561_AGC_TLO_101MS;
+        break;
+      default:
+        _hi = TSL2561_AGC_THI_402MS;
+        _lo = TSL2561_AGC_TLO_402MS;
+        break;
+    }
+
+    (void)TSL2561_ReadData(&_b, &_ir);
+
+    /* Run an auto-gain check if we haven't already done so ... */
+    if (!_agcCheck)
+    {
+      if ((_b < _lo) && (_tsl2561Gain == TSL2561_GAIN_1X))
+      {
+        /* Increase the gain and try again */
+        TSL2561_SetGain(TSL2561_GAIN_16X);
+        /* Drop the previous conversion results */
+        (void)TSL2561_ReadData(&_b, &_ir);
+        /* Set a flag to indicate we've adjusted the gain */
+        _agcCheck = TRUE;
+      }
+      else if ((_b > _hi) && (_tsl2561Gain == TSL2561_GAIN_16X))
+      {
+        /* Drop gain to 1x and try again */
+        TSL2561_SetGain(TSL2561_GAIN_1X);
+        /* Drop the previous conversion results */
+        (void)TSL2561_ReadData(&_b, &_ir);
+        /* Set a flag to indicate we've adjusted the gain */
+        _agcCheck = TRUE;
+      }
+      else
+      {
+        /* Nothing to look at here, keep moving ....
+           Reading is either valid, or we're already at the chips limits */
+        *broadband = _b;
+        *ir = _ir;
+        valid = TRUE;
+      }
+    }
+    else
+    {
+      /* If we've already adjusted the gain once, just return the new results.
+         This avoids endless loops where a value is at one extreme pre-gain,
+         and the the other extreme post-gain */
+      *broadband = _b;
+      *ir = _ir;
+      valid = TRUE;
+    }
+  } while (!valid);
 }
 
 void TSL2561_Init(void) {
