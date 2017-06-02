@@ -20,8 +20,8 @@
 static void SensorTask(void *param) {
   uint8_t res;
 
+#if PL_CONFIG_HAS_TSL2561
   CLS1_SendStr("Enabling TLS2561 sensor.\r\n", CLS1_GetStdio()->stdOut);
-
   /* 3V3B_EN:
    * HI-Z: Disabled
    * LOW: enabled (humidity, temperature, ambiLight
@@ -51,6 +51,7 @@ static void SensorTask(void *param) {
   if (res!=ERR_OK) {
     for(;;){}
   }
+#endif
   for(;;) {
     if (BLUETOOTH_GetCurrentAppMode()==GUI_CURRENT_APP_SENSOR_TAG) {
       int16_t x, y, z;
@@ -86,7 +87,18 @@ static void SensorTask(void *param) {
         z = 0;
       }
       HostComm_SendMag(x, y, z);
+#if PL_CONFIG_HAS_TSL2561
+      {
+        uint16_t broad, ir;
+        uint32_t lux;
+        uint8_t ambient;
 
+        TSL1_GetLuminosity(&broad, &ir);
+        lux = TSL1_CalculateLux(broad, ir);
+        TSL1_LuxToAmbientPercentage(lux, &ambient);
+        HostComm_SendAmbientLight(ambient);
+      }
+#endif
       vTaskDelay(pdMS_TO_TICKS(500));
     } else {
       vTaskDelay(pdMS_TO_TICKS(2000));

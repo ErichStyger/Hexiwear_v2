@@ -21,6 +21,7 @@
 #include "uncannyEyes.h"
 #include "Application.h"
 #include "RGBR.h"
+#include "TSL1.h"
 
 // Enable ONE of these #includes -- HUGE graphics tables for various eyes:
 #include "defaultEye.h"        // Standard human-ish hazel eye
@@ -95,13 +96,15 @@ static uint32_t GetAmbilightValue(void) {
   uint32_t val, currMicros;
   static uint32_t lastVal = 0;
   static uint32_t lastMicros = 0;
+  uint16_t broad, ir;
 
   currMicros = micros(); /* get current time */
   if ((currMicros-lastMicros) > 500000) { /* enough time after last reading? */
     lastMicros = currMicros;
     RGBR_On();
-    val = APP_GetLux();  /* // e.g. dial/photocell reading */
-    if (val==0x10000) { /* saturated */
+    TSL1_GetLuminosity(&broad, &ir);
+    val = TSL1_CalculateLux(broad, ir);
+    if (val==TSL2561_LUX_SATURATED_VALUE) { /* saturated */
       val = LUX_CLIP_VAL;
     }
     if (val>LUX_CLIP_VAL) {

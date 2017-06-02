@@ -8,8 +8,6 @@
 #ifndef SOURCES_APPLICATION_H_
 #define SOURCES_APPLICATION_H_
 
-unsigned long APP_GetLux(void);
-
 void APP_Run(void);
 
 

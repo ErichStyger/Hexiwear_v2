@@ -141,7 +141,10 @@ static void DebugPrintMsg(unsigned char *preStr, hostInterface_packet_t *packet)
                                               UTIL1_strcatNum8Hex(databuf, sizeof(databuf), packet->data[4]);
                                               UTIL1_strcatNum8Hex(databuf, sizeof(databuf), packet->data[5]);
                                               break;
-    case packetType_ambiLight:                str = "ambilight"; break;
+    case packetType_ambiLight:                str = "ambilight";
+                                              UTIL1_Num8uToStr(databuf, sizeof(databuf), packet->data[0]);
+                                              UTIL1_chcat(databuf, sizeof(databuf), '%');
+                                              break;
     case packetType_pressure:                 str = "pressure"; break;
     case packetType_gyro:                     str = "gyro"; break;
     case packetType_temperature:              str = "temperature"; break;

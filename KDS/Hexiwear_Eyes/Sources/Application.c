@@ -15,24 +15,7 @@
 #include "OLEDPower.h"
 #include "uncannyEyes.h"
 #include "Vcc3V3B_EN.h"
-#include "TSL2561.h"
-
-uint32_t APP_GetLux(void) {
-  uint8_t res;
-  uint16_t broadband, infrared;
-  uint32_t lux;
-
-  res = TSL2561_ReadRawDataFull(&broadband);
-  if (res!=ERR_OK) {
-    for(;;){}
-  }
-  res = TSL2561_ReadRawDataInfrared(&infrared);
-  if (res!=ERR_OK) {
-    for(;;){}
-  }
-  lux = TSL2561_CalculateLux(broadband, infrared);
-  return lux;
-}
+#include "TSL1.h"
 
 void APP_Run(void) {
   //OLEDPower_ClrVal(); /* turn on power for OLED (low active) */
@@ -43,7 +26,6 @@ void APP_Run(void) {
   GDisp1_UpdateFull();
   {
     uint8_t res;
-    uint8_t id;
     uint16_t broadband, infrared;
     uint32_t lux;
 
@@ -56,23 +38,23 @@ void APP_Run(void) {
     Vcc3V3B_EN_SetOutput();
     Vcc3V3B_EN_ClrVal();
     WAIT1_Waitms(50);
-    TSL2561_Init();
+    TSL1_Init();
 
-    res = TSL2561_Disable();
+    res = TSL1_Disable();
     if (res!=ERR_OK) {
       for(;;){}
     }
     WAIT1_Waitms(50);
-    res = TSL2561_Enable();
+    res = TSL1_Enable();
     if (res!=ERR_OK) {
       for(;;){}
     }
 
-    res = TSL2561_SetIntegrationTime(TSL2561_INTEGRATION_TIME_13MS);
+    res = TSL1_SetIntegrationTime(TSL2561_INTEGRATION_TIME_13MS);
     if (res!=ERR_OK) {
       for(;;){}
     }
-    res = TSL2561_SetGain(TSL2561_GAIN_16X);
+    res = TSL1_SetGain(TSL2561_GAIN_16X);
     if (res!=ERR_OK) {
       for(;;){}
     }
