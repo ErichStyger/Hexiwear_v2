@@ -8,6 +8,7 @@ Supported hardare:
 - touch buttons
 - RTC
 - accelerometer/magnetometer
+- ambient light
 
 Open points:
 - left/right button group handling in UI
@@ -29,3 +30,4 @@ Open points:
 - Accelerometer INT1, INT2 and RST
 - low power mode
 - mag returns all zero?
+- show pairing code on connect
