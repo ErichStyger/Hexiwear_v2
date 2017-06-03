@@ -1,10 +1,28 @@
 # Python script to set the time on the Hexiwear
+# Usage:
+# python RaspiTime.py 00:29:40:08:00:01
+
 import pexpect
 import time
+import sys # for command line argument list, see http://www.pythonforbeginners.com/system/python-sys-argv
 from time import gmtime, strftime
 
+#default address
 DEVICE = "00:29:40:08:00:01"   # device #24
 #DEVICE = "00:32:40:08:00:12"   # device #??
+
+#print "This is the name of the script: ", sys.argv[0]
+#print "Number of arguments: ", len(sys.argv)
+#print "The arguments are: " , str(sys.argv)
+
+if len(sys.argv) == 2:
+  print("using argument device address:"),
+  print str(sys.argv[1])
+  DEVICE = str(sys.argv[1])
+#else:
+#  print("using default address"),
+#  print(DEVICE)
+  
 
 print("Hexiwear address:"),
 print(DEVICE)
