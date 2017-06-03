@@ -44,27 +44,49 @@ child = pexpect.spawn("gatttool -I")
 print("Connecting to"),
 print(DEVICE),
 child.sendline("connect {0}".format(DEVICE))
-child.expect("Connection successful", timeout=5)
-print("Connected!")
 
-# format of data:
-# 02    : alert in setting type
-# <size>: number of bytes
-# <id>  : setting id, 01 (stdin), 02 (stdout), 03 (stderr)
-# <data>: setting data
-# command = "char-write-req 61 02050268656C0A00000000000000000000000000"
-# produce something like: "char-write-req 61 020702656C6C6F0A000000000000000000000000"
-size = len(text)+2  # number of bytes, including id plus 0xa
-command = "02" + "%0.2X"%size + "%0.2X"%id
-for x in range(0,len(text)): # add characters in hex
-  command = command + "%0.2X" % ord(text[x])
-command = command + "%0.2X"%10  # line feed
-for x in range(len(command),40):
-  command = command + "0"  # fill up with zeros 
-command = "char-write-req 61 " + command
+NOF_REMAINING_RETRY = 3
 
-print(command)
-child.sendline(command)
-child.expect("Characteristic value was written successfully", timeout=5)
+while True:
+  try:
+    child.expect("Connection successful", timeout=5)
+  except pexpect.TIMEOUT:
+    NOF_REMAINING_RETRY = NOF_REMAINING_RETRY-1
+    if (NOF_REMAINING_RETRY>0):
+      print "timeout, retry..."
+      continue
+    else:
+      print "timeout, giving up."
+      break
+  else:
+    print "return"
+    break
 
-print("done!")
+if NOF_REMAINING_RETRY>0:
+  print("Connected!")
+  
+  # format of data:
+  # 02    : alert in setting type
+  # <size>: number of bytes
+  # <id>  : setting id, 01 (stdin), 02 (stdout), 03 (stderr)
+  # <data>: setting data
+  # command = "char-write-req 61 02050268656C0A00000000000000000000000000"
+  # produce something like: "char-write-req 61 020702656C6C6F0A000000000000000000000000"
+  size = len(text)+2  # number of bytes, including id plus 0xa
+  command = "02" + "%0.2X"%size + "%0.2X"%id
+  for x in range(0,len(text)): # add characters in hex
+    command = command + "%0.2X" % ord(text[x])
+  command = command + "%0.2X"%10  # line feed
+  for x in range(len(command),40):
+    command = command + "0"  # fill up with zeros 
+  command = "char-write-req 61 " + command
+  
+  print(command)
+  child.sendline(command)
+  child.expect("Characteristic value was written successfully", timeout=5)
+  
+  print("done!")
+  sys.exit(0)
+else:
+  print("FAILED!")
+  sys.exit(-1)
