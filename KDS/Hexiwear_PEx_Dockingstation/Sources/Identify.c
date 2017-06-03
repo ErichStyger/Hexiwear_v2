@@ -65,10 +65,8 @@ ID_Devices ID_WhichDevice(void) {
 static uint8_t PrintStatus(const CLS1_StdIOType *io) {
   uint8_t buf[32];
   const ID_Device *device;
-  const unsigned char *name = NULL;
 
   CLS1_SendStatusStr((unsigned char*)"id", (unsigned char*)"\r\n", io->stdOut);
-
   device = GetDeviceDesc(ID_WhichDevice());
   if (device!=NULL) {
     UTIL1_strcpy(buf, sizeof(buf), device->name);

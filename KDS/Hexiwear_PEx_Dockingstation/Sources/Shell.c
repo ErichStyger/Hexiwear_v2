@@ -50,6 +50,7 @@
 #if PL_CONFIG_HAS_IDENTIFY
   #include "Identify.h"
 #endif
+#include "RStdIO.h"
 #include "RGBR.h"
 #include "RGBG.h"
 #include "RGBB.h"
@@ -118,27 +119,23 @@ static const CLS1_ParseCommandCallback CmdParserTable[] =
   TSL1_ParseCommand,
   #endif
 #endif
+  RSTDIO_ParseCommand,
   BLUETOOTH_ParseCommand,
   NULL /* Sentinel */
 };
 
 static void ShellTask(void *pvParameters) {
-#if PL_CONFIG_HAS_RADIO && RNET_CONFIG_REMOTE_STDIO
   CLS1_ConstStdIOType *ioRemote = RSTDIO_GetStdio();
-#endif
+
   (void)pvParameters; /* not used */
   CLS1_DefaultShellBuffer[0] = '\0';
-#if PL_CONFIG_HAS_RADIO && RNET_CONFIG_REMOTE_STDIO
   RSTDIO_DefaultShellBuffer[0] = '\0';
-#endif
   CLS1_SendStr("Started Shell Task.\r\n", CLS1_GetStdio()->stdOut);
   for(;;) {
     (void)CLS1_ReadAndParseWithCommandTable(CLS1_DefaultShellBuffer, sizeof(CLS1_DefaultShellBuffer), CLS1_GetStdio(), CmdParserTable);
-#if PL_CONFIG_HAS_RADIO && RNET_CONFIG_REMOTE_STDIO
     RSTDIO_Print(CLS1_GetStdio()); /* dispatch incoming messages */
     (void)CLS1_ReadAndParseWithCommandTable(RSTDIO_DefaultShellBuffer, sizeof(RSTDIO_DefaultShellBuffer), ioRemote, CmdParserTable);
-#endif
-    FRTOS1_vTaskDelay(10/portTICK_PERIOD_MS);
+    vTaskDelay(10/portTICK_PERIOD_MS);
   } /* for */
 }
 
@@ -146,6 +143,7 @@ void SHELL_Init(void) {
 #if PL_CONFIG_HAS_SHELL_RTT
   CLS1_SetStdio(RTT1_GetStdio());
 #endif
+  RSTDIO_Init();
   if (xTaskCreate(ShellTask, "Shell", configMINIMAL_STACK_SIZE+100, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
     for(;;){} /* error */
   }
