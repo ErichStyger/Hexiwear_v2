@@ -16,8 +16,8 @@ DEVICE = "00:29:40:08:00:01"   # device #24
 #print "The arguments are: " , str(sys.argv)
 
 if len(sys.argv) == 2:
-  print("using argument device address:"),
-  print str(sys.argv[1])
+#  print("using argument device address:"),
+#  print str(sys.argv[1])
   DEVICE = str(sys.argv[1])
 #else:
 #  print("using default address"),

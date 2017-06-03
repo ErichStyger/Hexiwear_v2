@@ -96,6 +96,7 @@ static void DebugPrintMsg(unsigned char *preStr, hostInterface_packet_t *packet)
 #if PRING_DEBUG_PACKET_MSG
   char *str;
   uint8_t buf[16], databuf[48];
+  int i;
 
   databuf[0] = '\0';
   CLS1_SendStr(preStr, CLS1_GetStdio()->stdOut);
@@ -169,7 +170,15 @@ static void DebugPrintMsg(unsigned char *preStr, hostInterface_packet_t *packet)
                                                   UTIL1_strcpy(databuf, sizeof(databuf), (uint8_t*)"notification ");
                                                   break;
                                                 case alertIn_type_settings:
+                                                  /* 03 (setting) + size + id + data */
                                                   UTIL1_strcpy(databuf, sizeof(databuf), (uint8_t*)"settings ");
+                                                  UTIL1_strcatNum8Hex(databuf, sizeof(databuf), packet->data[1]); /* size */
+                                                  UTIL1_chcat(databuf, sizeof(databuf), ' ');
+                                                  UTIL1_strcatNum8Hex(databuf, sizeof(databuf), packet->data[2]); /* id */
+                                                  for(i=1; i<packet->data[1]; i++) { /* print all other data bytes */
+                                                    UTIL1_chcat(databuf, sizeof(databuf), ' ');
+                                                    UTIL1_strcatNum8Hex(databuf, sizeof(databuf), packet->data[2+i]); /* data */
+                                                  }
                                                   break;
                                                 case alertIn_type_timeUpdate:
                                                   UTIL1_strcpy(databuf, sizeof(databuf), (uint8_t*)"timeUpdate ");
