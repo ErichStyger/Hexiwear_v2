@@ -15,6 +15,7 @@
 #include "UART_PDD.h"
 #include "CLS1.h"
 #include "TmDt1.h"
+#include "RStdIO.h"
 
 #define PRING_DEBUG_PACKET_MSG    (1)
 
@@ -170,7 +171,11 @@ static void DebugPrintMsg(unsigned char *preStr, hostInterface_packet_t *packet)
                                                   UTIL1_strcpy(databuf, sizeof(databuf), (uint8_t*)"notification ");
                                                   break;
                                                 case alertIn_type_settings:
-                                                  /* 03 (setting) + size + id + data */
+                                                  /* data[0] 03 (alertIn_type_settings)
+                                                   * data[1] size
+                                                   * data[2] id
+                                                   * data[3+] data
+                                                   * */
                                                   UTIL1_strcpy(databuf, sizeof(databuf), (uint8_t*)"settings ");
                                                   UTIL1_strcatNum8Hex(databuf, sizeof(databuf), packet->data[1]); /* size */
                                                   UTIL1_chcat(databuf, sizeof(databuf), ' ');
@@ -304,6 +309,27 @@ static void HandleRxPacket(hostInterface_packet_t *packet) {
         case alertIn_type_notification:
           break;
         case alertIn_type_settings:
+          {
+          /* data[0] 03 (alertIn_type_settings)
+           * data[1] size
+           * data[2] id
+           * data[3+] data
+           * */
+            uint8_t size;
+            uint8_t id;
+
+            size = packet->data[1];
+            if (size>=1) { /* safety check */
+              id = packet->data[2];
+              if (id==alertIn_type_setting_stdin) {
+                (void)RSTDIO_AddToQueue(RSTDIO_QUEUE_RX_IN, &packet->data[3], size-1);
+              } else if (id==alertIn_type_setting_stdout) {
+                (void)RSTDIO_AddToQueue(RSTDIO_QUEUE_RX_OUT, &packet->data[3], size-1);
+              } else if (id==alertIn_type_setting_stderr) {
+                (void)RSTDIO_AddToQueue(RSTDIO_QUEUE_RX_ERR, &packet->data[3], size-1);
+              }
+            }
+          }
           break;
         case alertIn_type_timeUpdate:
           /* packet->data[1] is size of data, must be 4! */

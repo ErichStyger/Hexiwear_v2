@@ -77,6 +77,12 @@ typedef enum  {
   alertIn_type_timeUpdate        = 3,
 } hostInterface_alertIn_type_t;
 
+typedef enum  {
+  alertIn_type_setting_stdin     = 1,
+  alertIn_type_setting_stdout    = 2,
+  alertIn_type_setting_stderr    = 3,
+} hostInterface_alertIn_setting_type_t;
+
 /*! Category of iOS notification */
 typedef enum {
     ancCategoryId_other           = 0,
@@ -92,8 +98,6 @@ typedef enum {
     ancCategoryId_location        = 10,
     ancCategoryId_entertainment   = 11
 } ancCategoryId_t;
-
-
 
 /* special constants */
 #define gHostInterface_startByte1               0x55
