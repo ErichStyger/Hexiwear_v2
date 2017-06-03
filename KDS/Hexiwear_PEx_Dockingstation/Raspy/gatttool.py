@@ -3,7 +3,6 @@ import pexpect
 import time
 
 DEVICE = "00:29:40:08:00:01"   # device #24
-#DEVICE = "00:32:40:08:00:12"   # device #??
 
 print("Hexiwear address:"),
 print(DEVICE)
@@ -33,14 +32,13 @@ child.sendline("char-read-hnd 0x30")
 child.expect("Characteristic value/descriptor: ", timeout=10)
 print(child.before)
 child.expect("\r\n", timeout=10)
-print(child.before)
 print("Accel:  "),
 print(child.before),
 print(float(hexStrToInt(child.before[0:5]))/100),
 print(float(hexStrToInt(child.before[6:11]))/100),
 print(float(hexStrToInt(child.before[12:17]))/100)
 
-# Accelerometer
+# Gyro
 child.sendline("char-read-hnd 0x34")
 child.expect("Characteristic value/descriptor: ", timeout=10)
 child.expect("\r\n", timeout=10)
