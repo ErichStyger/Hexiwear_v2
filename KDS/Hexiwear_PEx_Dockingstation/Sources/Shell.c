@@ -47,6 +47,9 @@
 #if PL_CONFIG_HAS_TSL2561
   #include "TSL1.h"
 #endif
+#if PL_CONFIG_HAS_IDENTIFY
+  #include "Identify.h"
+#endif
 #include "RGBR.h"
 #include "RGBG.h"
 #include "RGBB.h"
@@ -55,6 +58,9 @@ static const CLS1_ParseCommandCallback CmdParserTable[] =
 {
   CLS1_ParseCommand, /* Processor Expert Shell component, is first in list */
   KIN1_ParseCommand,
+#if PL_CONFIG_HAS_IDENTIFY
+  ID_ParseCommand,
+#endif
 #if PL_CONFIG_HAS_HOME_LEDS
   #if HLED1_PARSE_COMMAND_ENABLED
   HLED1_ParseCommand,

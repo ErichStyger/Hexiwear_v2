@@ -12,8 +12,9 @@
 
 #define PL_CONFIG_HAS_RADIO       (0 && defined(PEcfg_PAIND))  /* if we have a nRF24L01+ on the docking station */
 #define PL_CONFIG_HAS_HOME_LEDS   (0 && defined(PEcfg_PAIND))  /* if we have the 'home' extension board attached to the docking station with 6 LEDs */
-#define PL_CONFIG_HAS_SHELL_UART  (1 && defined(PEcfg_PAIND))  /* if it has uart for shell, e.g. over tinyK20 */
-#define PL_CONFIG_HAS_SHELL_RTT   (1) /* using shell over SEGGER RTT */
+#define PL_CONFIG_HAS_SHELL       (1)
+#define PL_CONFIG_HAS_SHELL_UART  (1 && PL_CONFIG_HAS_SHELL && defined(PEcfg_PAIND))  /* if it has uart for shell, e.g. over tinyK20 */
+#define PL_CONFIG_HAS_SHELL_RTT   (1 && PL_CONFIG_HAS_SHELL) /* using shell over SEGGER RTT */
 
 #define PL_CONFIG_HAS_KW40_COMM   (1)  /* Communication with KW40, including touch buttons */
 #define PL_CONFIG_HAS_OLED        (1)  /* support for OLED display */

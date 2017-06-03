@@ -1,29 +1,39 @@
-/*
- * Identify.h
+/**
+ * \file
+ * \brief Module to identify different devices based on their unique ID.
+ * \author Erich Styger, erich.styger@hslu.ch
  *
- *  Created on: 26.11.2015
- *      Author: tastyger
+ * With this module individual devices are identified based on their unique ID.
  */
 
-#ifndef SOURCES_INTRO_COMMON_MASTER_IDENTIFY_H_
-#define SOURCES_INTRO_COMMON_MASTER_IDENTIFY_H_
+#ifndef __IDENTIFY_H_
+#define __IDENTIFY_H_
 
 #include "Platform.h"
 
 #if PL_CONFIG_HAS_IDENTIFY
+  #if PL_CONFIG_HAS_SHELL
+    #include "CLS1.h"
+    /*!
+     * \brief Parses a command
+     * \param cmd Command string to be parsed
+     * \param handled Sets this variable to TRUE if command was handled
+     * \param io I/O stream to be used for input/output
+     * \return Error code, ERR_OK if everything was fine
+     */
+    uint8_t ID_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io);
+  #endif /* PL_CONFIG_HAS_SHELL */
 
-typedef enum { /* do *not* change order of enumeration, they are used internally for a table index */
-  ID_HEXI_01,  /* damaged OLED? */
-  /* special values at the end: */
-  ID_HEXI_NOF_IDS, /* sentinel to count number of entries */
-  ID_HEXI_UNKNOWN, /* unknown hexi, unknown ID */
-  ID_HEXI_NONE /* initialization value, used internally */
-} ID_Hexis;
+  typedef enum {
+    ID_DEVICE_HEXI_01,
+    ID_DEVICE_HEXI_24,
+    ID_DEVICE_UNKNOWN, /* unknown robot, unknown ID */
+    ID_DEVICE_NONE /* initialization value, used internally */
+  } ID_Devices;
 
-ID_Hexis ID_WhichHexi(void);
-void ID_Deinit(void);
-void ID_Init(void);
-
+  ID_Devices ID_WhichDevice(void);
+  void ID_Deinit(void);
+  void ID_Init(void);
 #endif /* PL_CONFIG_HAS_IDENTIFY */
 
-#endif /* SOURCES_INTRO_COMMON_MASTER_IDENTIFY_H_ */
+#endif /* __IDENTIFY_H_ */
