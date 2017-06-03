@@ -1,7 +1,7 @@
 # Python script to send settings to the Hexiwear
 # Usage:
 # python HexiSendSettings.py <device> <in|out|err> text
-# python HexiSendSettings.py 00:29:40:08:00:01 out hello
+# python HexiSendSettings.py 00:29:40:08:00:01 in "buzzer help"
 
 import pexpect
 import time

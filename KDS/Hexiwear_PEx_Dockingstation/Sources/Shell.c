@@ -125,7 +125,11 @@ static const CLS1_ParseCommandCallback CmdParserTable[] =
 };
 
 static void ShellTask(void *pvParameters) {
-  CLS1_ConstStdIOType *ioRemote = RSTDIO_GetStdio();
+  CLS1_StdIOType ioRemote;
+
+  ioRemote = *RSTDIO_GetStdio(); /* struct copy */
+  ioRemote.stdErr = CLS1_GetStdio()->stdErr; /* modfy default handlers */
+  ioRemote.stdOut = CLS1_GetStdio()->stdOut;
 
   (void)pvParameters; /* not used */
   CLS1_DefaultShellBuffer[0] = '\0';
@@ -134,7 +138,7 @@ static void ShellTask(void *pvParameters) {
   for(;;) {
     (void)CLS1_ReadAndParseWithCommandTable(CLS1_DefaultShellBuffer, sizeof(CLS1_DefaultShellBuffer), CLS1_GetStdio(), CmdParserTable);
     RSTDIO_Print(CLS1_GetStdio()); /* dispatch incoming messages */
-    (void)CLS1_ReadAndParseWithCommandTable(RSTDIO_DefaultShellBuffer, sizeof(RSTDIO_DefaultShellBuffer), ioRemote, CmdParserTable);
+    (void)CLS1_ReadAndParseWithCommandTable(RSTDIO_DefaultShellBuffer, sizeof(RSTDIO_DefaultShellBuffer), &ioRemote, CmdParserTable);
     vTaskDelay(10/portTICK_PERIOD_MS);
   } /* for */
 }
