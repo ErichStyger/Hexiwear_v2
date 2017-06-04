@@ -26,8 +26,12 @@
 
   typedef enum {
     ID_DEVICE_HEXI_01,
+    ID_DEVICE_HEXI_20,
+    ID_DEVICE_HEXI_21,
+    ID_DEVICE_HEXI_22,
     ID_DEVICE_HEXI_23,
     ID_DEVICE_HEXI_24,
+    ID_DEVICE_HEXI_25,
     ID_DEVICE_UNKNOWN, /* unknown device */
     ID_DEVICE_NONE /* initialization value, used internally */
   } ID_Devices;

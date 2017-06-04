@@ -1,10 +1,11 @@
-# Python script to upate the RTC clock of all devices
+# Python script to get data from multiple devices
 # Usage:
-# python RtcUpdateAll.py
+# python GetDataAll.py
 
 import subprocess
 
-devices = [ 
+# list of devices
+devices = [
    # "00:32:40:08:00:12"
   "00:4A:40:0A:00:41", # device 20 ok
   "00:34:40:0A:00:4E", # device 21 display problem
@@ -15,7 +16,7 @@ devices = [
    ]
 
 for x in range(0,len(devices)):
-  cmd = "python RtcUpdate.py " + devices[x]
+  cmd = "python GetData.py " + devices[x]
   subprocess.call(cmd, shell=True)
 
-print("finished updating all devices!")
+print("finished all devices!")
