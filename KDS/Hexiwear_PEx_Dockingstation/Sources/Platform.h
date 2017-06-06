@@ -33,5 +33,6 @@
 #define PL_CONFIG_HAS_RTC             (1)
 #define PL_CONFIG_HAS_IDENTIFY        (1)
 #define PL_CONFIG_HAS_TSL2561         (1) /* ambient light sensor */
+#define PL_CONFIG_HAS_HTU21D          (1) /* temperature/humidity */
 
 #endif /* SOURCES_PLATFORM_H_ */

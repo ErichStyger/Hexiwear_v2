@@ -16,12 +16,15 @@
   #include "Vcc3V3B_EN.h"
 #endif
 #include "CLS1.h"
+#if PL_CONFIG_HAS_HTU21D
+  #include "HTU21d.h"
+#endif
 
 static void SensorTask(void *param) {
   uint8_t res;
 
 #if PL_CONFIG_HAS_TSL2561
-  CLS1_SendStr("Enabling TLS2561 sensor.\r\n", CLS1_GetStdio()->stdOut);
+  CLS1_SendStr("Enabling TLS2561 (ambient light) sensor.\r\n", CLS1_GetStdio()->stdOut);
   /* 3V3B_EN:
    * HI-Z: Disabled
    * LOW: enabled (humidity, temperature, ambiLight
@@ -51,6 +54,39 @@ static void SensorTask(void *param) {
   if (res!=ERR_OK) {
     for(;;){}
   }
+#endif
+#if PL_CONFIG_HAS_HTU21D
+  enum htu21_status status;
+  enum htu21_battery_status battStatus;
+  enum htu21_heater_status  heater;
+
+  CLS1_SendStr("Enabling HTU21D (temperature/humidity) sensor.\r\n", CLS1_GetStdio()->stdOut);
+  status = htu21_reset();
+  if (status!=htu21_status_ok) {
+    CLS1_SendStr("Failed resetting HTU21D.\r\n", CLS1_GetStdio()->stdErr);
+  }
+  status = htu21_get_battery_status(&battStatus);
+  if (status!=htu21_status_ok) {
+    CLS1_SendStr("Failed reading HTU21D battery status.\r\n", CLS1_GetStdio()->stdErr);
+  } else {
+    if (battStatus==htu21_battery_ok) {
+      CLS1_SendStr("Battery: OK.\r\n", CLS1_GetStdio()->stdOut);
+    } else {
+      CLS1_SendStr("Battery: LOW.\r\n", CLS1_GetStdio()->stdOut);
+    }
+  }
+
+  status = htu21_get_heater_status(&heater);
+  if (status!=htu21_status_ok) {
+    CLS1_SendStr("Failed reading HTU21D heater status.\r\n", CLS1_GetStdio()->stdErr);
+  } else {
+    if (heater==htu21_heater_off) {
+      CLS1_SendStr("Heater: OFF.\r\n", CLS1_GetStdio()->stdOut);
+    } else {
+      CLS1_SendStr("Heater: On.\r\n", CLS1_GetStdio()->stdOut);
+    }
+  }
+
 #endif
   for(;;) {
     if (BLUETOOTH_GetCurrentAppMode()==GUI_CURRENT_APP_SENSOR_TAG) {
@@ -109,6 +145,9 @@ static void SensorTask(void *param) {
 void SENSOR_Init(void) {
 #if PL_CONFIG_HAS_TSL2561
   TSL1_Init();
+#endif
+#if PL_CONFIG_HAS_HTU21D
+  htu21_init();
 #endif
   if (xTaskCreate(SensorTask, (uint8_t *)"Sensor", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
     for(;;){} /* error case only, stay here! */
