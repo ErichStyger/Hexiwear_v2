@@ -142,9 +142,9 @@ static void delay_ms(uint32_t ms) {
 #define HTU21_USER_REG_ONCHIP_HEATER_ENABLE         0x04
 #define HTU21_USER_REG_OTP_RELOAD_DISABLE         0x02
 
-uint32_t htu21_temperature_conversion_time = HTU21_TEMPERATURE_CONVERSION_TIME_T_14b_RH_12b;
-uint32_t htu21_humidity_conversion_time = HTU21_HUMIDITY_CONVERSION_TIME_T_14b_RH_12b;
-enum htu21_i2c_master_mode i2c_master_mode;
+static uint32_t htu21_temperature_conversion_time = HTU21_TEMPERATURE_CONVERSION_TIME_T_14b_RH_12b;
+static uint32_t htu21_humidity_conversion_time = HTU21_HUMIDITY_CONVERSION_TIME_T_14b_RH_12b;
+static enum htu21_i2c_master_mode i2c_master_mode;
 
 // Static functions
 static enum htu21_status htu21_write_command(uint8_t);
@@ -158,12 +158,8 @@ static enum htu21_status htu21_crc_check( uint16_t, uint8_t);
 /**
  * \brief Configures the SERCOM I2C master to be used with the htu21 device.
  */
-void htu21_init(void)
-{
+void htu21_init(void) {
   i2c_master_mode = htu21_i2c_no_hold;
-
- // /* Initialize and enable device with config. */
- // i2c_master_init();
 }
 
 /**
@@ -279,30 +275,34 @@ enum htu21_status htu21_write_command( uint8_t cmd)
  *       - htu21_status_i2c_transfer_error : Problem with i2c transfer
  *       - htu21_status_no_i2c_acknowledge : I2C did not acknowledge
  */
-#if 0
 enum htu21_status htu21_write_command_no_stop( uint8_t cmd)
 {
-  enum status_code i2c_status;
+  //enum status_code i2c_status;
   uint8_t data[1];
+  uint8_t res;
 
   data[0] = cmd;
-
+#if 0
   struct i2c_master_packet transfer = {
     .address     = HTU21_ADDR,
     .data_length = 1,
     .data        = data,
   };
-
+#endif
   /* Do the transfer */
+  res = GI2C0_WriteByte(HTU21_ADDR, cmd);
+  if (res!=ERR_OK) {
+    return htu21_status_i2c_transfer_error;
+  }
+#if 0
   i2c_status = i2c_master_write_packet_wait_no_stop(&transfer);
   if( i2c_status == STATUS_ERR_OVERFLOW )
     return htu21_status_no_i2c_acknowledge;
   if( i2c_status != STATUS_OK)
     return htu21_status_i2c_transfer_error;
-
+#endif
   return htu21_status_ok;
 }
-#endif
 
 /**
  * \brief Check CRC
@@ -451,55 +451,58 @@ enum htu21_status htu21_write_user_register(uint8_t value)
  *       - htu21_status_no_i2c_acknowledge : I2C did not acknowledge
  *       - htu21_status_crc_error : CRC check error
  */
-#if 0
-enum htu21_status htu21_temperature_conversion_and_read_adc( uint16_t *adc)
-{
+enum htu21_status htu21_temperature_conversion_and_read_adc( uint16_t *adc) {
   enum htu21_status status = htu21_status_ok;
-  enum status_code i2c_status;
+//  enum status_code i2c_status;
   uint16_t _adc;
   uint8_t buffer[3];
   uint8_t crc;
+  uint8_t res;
 
   buffer[0] = 0;
   buffer[1] = 0;
   buffer[2] = 0;
 
   /* Read data */
-    struct i2c_master_packet read_transfer = {
+#if 0
+  struct i2c_master_packet read_transfer = {
     .address     = HTU21_ADDR,
     .data_length = 3,
     .data        = buffer,
   };
-
+#endif
   if( i2c_master_mode == htu21_i2c_hold) {
     status = htu21_write_command_no_stop(HTU21_READ_TEMPERATURE_W_HOLD_COMMAND);
-  }
-  else {
+  } else {
     status = htu21_write_command(HTU21_READ_TEMPERATURE_WO_HOLD_COMMAND);
     delay_ms(htu21_temperature_conversion_time/1000);
   }
-  if( status != htu21_status_ok)
+  if( status != htu21_status_ok) {
     return status;
-
-    i2c_status = i2c_master_read_packet_wait(&read_transfer);
+  }
+#if 0
+  i2c_status = i2c_master_read_packet_wait(&read_transfer);
   if( i2c_status == STATUS_ERR_OVERFLOW )
     return htu21_status_no_i2c_acknowledge;
   if( i2c_status != STATUS_OK)
     return htu21_status_i2c_transfer_error;
-
+#else
+  res = GI2C0_ReadAddress(HTU21_ADDR, NULL, 0, &buffer[0], 3);
+  if (res!=ERR_OK) {
+    return htu21_status_i2c_transfer_error;
+  }
+#endif
   _adc = (buffer[0] << 8) | buffer[1];
   crc = buffer[2];
 
-  // compute CRC
+  /* compute CRC */
   status = htu21_crc_check(_adc,crc);
-  if( status != htu21_status_ok)
+  if( status != htu21_status_ok) {
     return status;
-
+  }
   *adc = _adc;
-
   return status;
 }
-#endif
 /**
  * \brief Reads the relative humidity ADC value
  *
@@ -511,55 +514,57 @@ enum htu21_status htu21_temperature_conversion_and_read_adc( uint16_t *adc)
  *       - htu21_status_no_i2c_acknowledge : I2C did not acknowledge
  *       - htu21_status_crc_error : CRC check error
  */
-#if 0
-enum htu21_status htu21_humidity_conversion_and_read_adc( uint16_t *adc)
-{
+enum htu21_status htu21_humidity_conversion_and_read_adc( uint16_t *adc) {
   enum htu21_status status = htu21_status_ok;
-  enum status_code i2c_status;
   uint16_t _adc;
   uint8_t buffer[3];
-  uint8_t crc;
+  uint8_t crc, res;
 
   buffer[0] = 0;
   buffer[1] = 0;
   buffer[2] = 0;
 
   /* Read data */
+#if 0
     struct i2c_master_packet read_transfer = {
     .address     = HTU21_ADDR,
     .data_length = 3,
     .data        = buffer,
   };
-
+#endif
   if( i2c_master_mode == htu21_i2c_hold) {
     status = htu21_write_command_no_stop(HTU21_READ_HUMIDITY_W_HOLD_COMMAND);
-  }
-  else {
+  } else {
     status = htu21_write_command(HTU21_READ_HUMIDITY_WO_HOLD_COMMAND);
     delay_ms(htu21_humidity_conversion_time/1000);
   }
-  if( status != htu21_status_ok)
+  if( status != htu21_status_ok) {
     return status;
-
-    i2c_status = i2c_master_read_packet_wait(&read_transfer);
-  if( i2c_status == STATUS_ERR_OVERFLOW )
-    return htu21_status_no_i2c_acknowledge;
-  if( i2c_status != STATUS_OK)
+  }
+  res = GI2C0_ReadAddress(HTU21_ADDR, NULL, 0, &buffer[0], 3);
+  if (res!=ERR_OK) {
     return htu21_status_i2c_transfer_error;
-
+  }
+#if 0
+  i2c_status = i2c_master_read_packet_wait(&read_transfer);
+  if( i2c_status == STATUS_ERR_OVERFLOW ) {
+    return htu21_status_no_i2c_acknowledge;
+  }
+  if( i2c_status != STATUS_OK) {
+    return htu21_status_i2c_transfer_error;
+  }
+#endif
   _adc = (buffer[0] << 8) | buffer[1];
   crc = buffer[2];
-
-  // compute CRC
+  /* compute CRC */
   status = htu21_crc_check(_adc,crc);
-  if( status != htu21_status_ok)
+  if( status != htu21_status_ok) {
     return status;
-
+  }
   *adc = _adc;
-
   return status;
 }
-#endif
+
 /**
  * \brief Reads the htu21 serial number.
  *
@@ -571,80 +576,50 @@ enum htu21_status htu21_humidity_conversion_and_read_adc( uint16_t *adc)
  *       - htu21_status_no_i2c_acknowledge : I2C did not acknowledge
  *       - htu21_status_crc_error : CRC check error
  */
-#if 0
-enum htu21_status htu21_read_serial_number(uint64_t * serial_number)
-{
+enum htu21_status htu21_read_serial_number(uint64_t *serial_number) {
   enum htu21_status status;
- // enum status_code i2c_status;
   uint8_t cmd_data[2];
   uint8_t rcv_data[14];
-  uint8_t i;
+  uint8_t i, res;
 
-#if 0
-  struct i2c_master_packet transfer = {
-    .address     = HTU21_ADDR,
-    .data_length = 2,
-    .data        = cmd_data,
-  };
-  struct i2c_master_packet read_transfer = {
-    .address     = HTU21_ADDR,
-    .data_length = 8,
-    .data        = rcv_data,
-  };
-#endif
   // Read the first 8 bytes
   cmd_data[0] = (HTU21_READ_SERIAL_FIRST_8BYTES_COMMAND>>8)&0xFF;
   cmd_data[1] = HTU21_READ_SERIAL_FIRST_8BYTES_COMMAND&0xFF;
 
   /* Do the transfer */
-#if 0
-  i2c_master_write_packet_wait_no_stop(&transfer);
-    i2c_status = i2c_master_read_packet_wait(&read_transfer);
-  if( i2c_status == STATUS_ERR_OVERFLOW )
-    return htu21_status_no_i2c_acknowledge;
-  if( i2c_status != STATUS_OK)
+  /* read first 8 bytes */
+  res = GI2C0_ReadAddress(HTU21_ADDR, &cmd_data[0], 2, &rcv_data[0], 8);
+  if (res!=ERR_OK) {
     return htu21_status_i2c_transfer_error;
-#else
-  GI2C0_SelectSlave(HTU21_ADDR);
-  GI2C0_WriteBlock(&cmd_data[0], 2, GI2C0_DO_NOT_SEND_STOP);
-#endif
+  }
   // Read the last 6 bytes
   cmd_data[0] = (HTU21_READ_SERIAL_LAST_6BYTES_COMMAND>>8)&0xFF;
   cmd_data[1] = HTU21_READ_SERIAL_LAST_6BYTES_COMMAND&0xFF;
 
-  read_transfer.data = &rcv_data[8];
-  read_transfer.data_length = 6;
-
   /* Do the transfer */
-#if 0
-  i2c_master_write_packet_wait_no_stop(&transfer);
-  i2c_status = i2c_master_read_packet_wait(&read_transfer);
-  if( i2c_status == STATUS_ERR_OVERFLOW )
-    return htu21_status_no_i2c_acknowledge;
-  if( i2c_status != STATUS_OK)
+  res = GI2C0_ReadAddress(HTU21_ADDR, &cmd_data[0], 2, &rcv_data[8], 6);
+  if (res!=ERR_OK) {
     return htu21_status_i2c_transfer_error;
-#else
-  GI2C0_ReadBlock(&rcv_data, 8, GI2C0_SEND_STOP);
-  GI2C0_UnselectSlave();
-#endif
+  }
+  /* check CRC */
   for( i=0 ; i<8 ; i+=2 ) {
     status = htu21_crc_check(rcv_data[i],rcv_data[i+1]);
-    if( status != htu21_status_ok )
+    if( status != htu21_status_ok ) {
       return status;
+    }
   }
   for( i=8 ; i<14 ; i+=3 ) {
     status = htu21_crc_check( ((rcv_data[i]<<8)|(rcv_data[i+1])),rcv_data[i+2] );
-    if( status != htu21_status_ok )
+    if( status != htu21_status_ok ) {
       return status;
+    }
   }
-
   *serial_number =  ((uint64_t)rcv_data[0]<<56) | ((uint64_t)rcv_data[2]<<48) | ((uint64_t)rcv_data[4]<<40) | ((uint64_t)rcv_data[6]<<32)
           | ((uint64_t)rcv_data[8]<<24) | ((uint64_t)rcv_data[9]<<16) | ((uint64_t)rcv_data[11]<<8) | ((uint64_t)rcv_data[12]<<0);
-
   return htu21_status_ok;
 
 }
-#endif
+
 /**
  * \brief Set temperature & humidity ADC resolution.
  *
@@ -656,8 +631,7 @@ enum htu21_status htu21_read_serial_number(uint64_t * serial_number)
  *       - htu21_status_no_i2c_acknowledge : I2C did not acknowledge
  *       - htu21_status_crc_error : CRC check error
  */
-enum htu21_status htu21_set_resolution(enum htu21_resolution res)
-{
+enum htu21_status htu21_set_resolution(enum htu21_resolution res) {
   enum htu21_status status;
   uint8_t reg_value, tmp=0;
   uint32_t temperature_conversion_time = HTU21_TEMPERATURE_CONVERSION_TIME_T_14b_RH_12b;
@@ -667,36 +641,30 @@ enum htu21_status htu21_set_resolution(enum htu21_resolution res)
     tmp = HTU21_USER_REG_RESOLUTION_T_14b_RH_12b;
     temperature_conversion_time = HTU21_TEMPERATURE_CONVERSION_TIME_T_14b_RH_12b;
     humidity_conversion_time = HTU21_HUMIDITY_CONVERSION_TIME_T_14b_RH_12b;
-  }
-  else if( res == htu21_resolution_t_13b_rh_10b) {
+  } else if( res == htu21_resolution_t_13b_rh_10b) {
     tmp = HTU21_USER_REG_RESOLUTION_T_13b_RH_10b;
     temperature_conversion_time = HTU21_TEMPERATURE_CONVERSION_TIME_T_13b_RH_10b;
     humidity_conversion_time = HTU21_HUMIDITY_CONVERSION_TIME_T_13b_RH_10b;
-  }
-  else if( res == htu21_resolution_t_12b_rh_8b) {
+  } else if( res == htu21_resolution_t_12b_rh_8b) {
     tmp = HTU21_USER_REG_RESOLUTION_T_12b_RH_8b;
     temperature_conversion_time = HTU21_TEMPERATURE_CONVERSION_TIME_T_12b_RH_8b;
     humidity_conversion_time = HTU21_HUMIDITY_CONVERSION_TIME_T_12b_RH_8b;
-  }
-  else if( res == htu21_resolution_t_11b_rh_11b) {
+  } else if( res == htu21_resolution_t_11b_rh_11b) {
     tmp = HTU21_USER_REG_RESOLUTION_T_11b_RH_11b;
     temperature_conversion_time = HTU21_TEMPERATURE_CONVERSION_TIME_T_11b_RH_11b;
     humidity_conversion_time = HTU21_HUMIDITY_CONVERSION_TIME_T_11b_RH_11b;
   }
 
   status = htu21_read_user_register(&reg_value);
-  if( status != htu21_status_ok )
+  if( status != htu21_status_ok ) {
     return status;
-
+  }
   // Clear the resolution bits
   reg_value &= ~HTU21_USER_REG_RESOLUTION_MASK;
   reg_value |= tmp & HTU21_USER_REG_RESOLUTION_MASK;
-
   htu21_temperature_conversion_time = temperature_conversion_time;
   htu21_humidity_conversion_time = humidity_conversion_time;
-
   status = htu21_write_user_register(reg_value);
-
   return status;
 }
 
@@ -712,20 +680,19 @@ enum htu21_status htu21_set_resolution(enum htu21_resolution res)
  *       - htu21_status_i2c_transfer_error : Problem with i2c transfer
  *       - htu21_status_no_i2c_acknowledge : I2C did not acknowledge
  */
-enum htu21_status htu21_get_battery_status(enum htu21_battery_status *bat)
-{
+enum htu21_status htu21_get_battery_status(enum htu21_battery_status *bat) {
   enum htu21_status status;
   uint8_t reg_value;
 
   status = htu21_read_user_register(&reg_value);
-  if( status != htu21_status_ok)
+  if( status != htu21_status_ok) {
     return status;
-
-  if( reg_value & HTU21_USER_REG_END_OF_BATTERY_VDD_BELOW_2_25V )
+  }
+  if( reg_value & HTU21_USER_REG_END_OF_BATTERY_VDD_BELOW_2_25V ) {
     *bat = htu21_battery_low;
-  else
+  } else {
     *bat = htu21_battery_ok;
-
+  }
   return status;
 }
 
@@ -737,8 +704,7 @@ enum htu21_status htu21_get_battery_status(enum htu21_battery_status *bat)
  *       - htu21_status_i2c_transfer_error : Problem with i2c transfer
  *       - htu21_status_no_i2c_acknowledge : I2C did not acknowledge
  */
-enum htu21_status htu21_enable_heater(void)
-{
+enum htu21_status htu21_enable_heater(void) {
   enum htu21_status status;
   uint8_t reg_value;
 
@@ -748,9 +714,7 @@ enum htu21_status htu21_enable_heater(void)
   }
   // Clear the resolution bits
   reg_value |= HTU21_USER_REG_ONCHIP_HEATER_ENABLE;
-
   status = htu21_write_user_register(reg_value);
-
   return status;
 }
 
@@ -762,20 +726,17 @@ enum htu21_status htu21_enable_heater(void)
  *       - htu21_status_i2c_transfer_error : Problem with i2c transfer
  *       - htu21_status_no_i2c_acknowledge : I2C did not acknowledge
  */
-enum htu21_status htu21_disable_heater(void)
-{
+enum htu21_status htu21_disable_heater(void) {
   enum htu21_status status;
   uint8_t reg_value;
 
   status = htu21_read_user_register(&reg_value);
-  if( status != htu21_status_ok )
+  if( status != htu21_status_ok ) {
     return status;
-
+  }
   // Clear the resolution bits
   reg_value &= ~HTU21_USER_REG_ONCHIP_HEATER_ENABLE;
-
   status = htu21_write_user_register(reg_value);
-
   return status;
 }
 
@@ -821,25 +782,23 @@ enum htu21_status htu21_get_heater_status(enum htu21_heater_status *heater)
  *       - htu21_status_no_i2c_acknowledge : I2C did not acknowledge
  *       - htu21_status_crc_error : CRC check error
  */
-enum htu21_status htu21_read_temperature_and_relative_humidity( float *temperature, float *humidity)
-{
+enum htu21_status htu21_read_temperature_and_relative_humidity( float *temperature, float *humidity) {
   enum htu21_status status;
   uint16_t adc;
 
   status = htu21_temperature_conversion_and_read_adc( &adc);
-  if( status != htu21_status_ok)
+  if( status != htu21_status_ok) {
     return status;
-
+  }
   // Perform conversion function
   *temperature = (float)adc * TEMPERATURE_COEFF_MUL / (1UL<<16) + TEMPERATURE_COEFF_ADD;
 
   status = htu21_humidity_conversion_and_read_adc( &adc);
-  if( status != htu21_status_ok)
+  if( status != htu21_status_ok) {
     return status;
-
+  }
   // Perform conversion function
   *humidity = (float)adc * HUMIDITY_COEFF_MUL / (1UL<<16) + HUMIDITY_COEFF_ADD;
-
   return status;
 }
 
@@ -882,9 +841,18 @@ static uint8_t PrintStatus(const CLS1_StdIOType *io) {
   enum htu21_status status;
   enum htu21_battery_status battStatus;
   enum htu21_heater_status  heater;
+  uint64_t serial_number;
+  uint16_t humidity, temperature;
+  float humidF, tempF, dewF;
 
   CLS1_SendStatusStr((unsigned char*)"htu21d", (unsigned char*)"\r\n", io->stdOut);
-  CLS1_SendStatusStr((unsigned char*)"  device", (uint8_t*)"UNKNOWN\r\n", io->stdOut);
+
+  if(i2c_master_mode==htu21_i2c_hold) {
+    UTIL1_strcpy(buf, sizeof(buf), (uint8_t*)"i2c hold\r\n");
+  } else {
+    UTIL1_strcpy(buf, sizeof(buf), (uint8_t*)"no i2c hold\r\n");
+  }
+  CLS1_SendStatusStr((unsigned char*)"  i2c mode", buf, io->stdOut);
 
   status = htu21_get_battery_status(&battStatus);
   if (status!=htu21_status_ok) {
@@ -905,6 +873,55 @@ static uint8_t PrintStatus(const CLS1_StdIOType *io) {
     UTIL1_strcpy(buf, sizeof(buf), (uint8_t*)"ON\r\n");
   }
   CLS1_SendStatusStr((unsigned char*)"  heater", buf, io->stdOut);
+
+  status = htu21_read_serial_number(&serial_number);
+  if (status!=htu21_status_ok) {
+    UTIL1_strcpy(buf, sizeof(buf), (uint8_t*)"ERROR\r\n");
+  } else {
+    UTIL1_strcpy(buf, sizeof(buf), (uint8_t*)"0x");
+    UTIL1_strcatNum32Hex(buf, sizeof(buf), serial_number>>32);
+    UTIL1_strcatNum32Hex(buf, sizeof(buf), serial_number);
+    UTIL1_strcat(buf, sizeof(buf), (uint8_t*)"\r\n");
+  }
+  CLS1_SendStatusStr((unsigned char*)"  serial", buf, io->stdOut);
+
+  status = htu21_humidity_conversion_and_read_adc(&humidity);
+  if (status!=htu21_status_ok) {
+    UTIL1_strcpy(buf, sizeof(buf), (uint8_t*)"ERROR\r\n");
+  } else {
+    UTIL1_strcpy(buf, sizeof(buf), (uint8_t*)"0x");
+    UTIL1_strcatNum16Hex(buf, sizeof(buf), humidity);
+    UTIL1_strcat(buf, sizeof(buf), (uint8_t*)"\r\n");
+  }
+  CLS1_SendStatusStr((unsigned char*)"  humidity", buf, io->stdOut);
+
+  status = htu21_temperature_conversion_and_read_adc(&temperature);
+  if (status!=htu21_status_ok) {
+    UTIL1_strcpy(buf, sizeof(buf), (uint8_t*)"ERROR\r\n");
+  } else {
+    UTIL1_strcpy(buf, sizeof(buf), (uint8_t*)"0x");
+    UTIL1_strcatNum16Hex(buf, sizeof(buf), temperature);
+    UTIL1_strcat(buf, sizeof(buf), (uint8_t*)"\r\n");
+  }
+  CLS1_SendStatusStr((unsigned char*)"  temperature", buf, io->stdOut);
+
+  status = htu21_read_temperature_and_relative_humidity(&tempF, &humidF);
+  if (status!=htu21_status_ok) {
+    UTIL1_strcpy(buf, sizeof(buf), (uint8_t*)"ERROR\r\n");
+  } else {
+    buf[0] = '\0';
+    UTIL1_strcatNumFloat(buf, sizeof(buf), tempF, 2);
+    UTIL1_strcat(buf, sizeof(buf), (uint8_t*)"°C, ");
+    UTIL1_strcatNumFloat(buf, sizeof(buf), humidF, 2);
+    UTIL1_strcat(buf, sizeof(buf), (uint8_t*)"%RH\r\n");
+  }
+  CLS1_SendStatusStr((unsigned char*)"  data", buf, io->stdOut);
+
+  dewF = htu21_compute_dew_point(tempF, humidF);
+  buf[0] = '\0';
+  UTIL1_strcatNumFloat(buf, sizeof(buf), dewF, 3);
+  UTIL1_strcat(buf, sizeof(buf), (uint8_t*)"°C\r\n");
+  CLS1_SendStatusStr((unsigned char*)"  dew point", buf, io->stdOut);
   return ERR_OK;
 }
 

@@ -34,8 +34,6 @@
 #ifndef HTU21_H_INCLUDED
 #define HTU21_H_INCLUDED
 
-//#include <stdint.h>
-//#include <stdbool.h>
 #include "Platform.h"
 
 #if PL_CONFIG_HAS_SHELL
