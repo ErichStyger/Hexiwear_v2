@@ -34,9 +34,22 @@
 #ifndef HTU21_H_INCLUDED
 #define HTU21_H_INCLUDED
 
-#include <stdint.h>
-#include <stdbool.h>
-#include <math.h>
+//#include <stdint.h>
+//#include <stdbool.h>
+#include "Platform.h"
+
+#if PL_CONFIG_HAS_SHELL
+  #include "CLS1.h"
+  /*!
+   * \brief Parses a command
+   * \param cmd Command string to be parsed
+   * \param handled Sets this variable to TRUE if command was handled
+   * \param io I/O stream to be used for input/output
+   * \return Error code, ERR_OK if everything was fine
+   */
+  uint8_t HTU21_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io);
+#endif /* PL_CONFIG_HAS_SHELL */
+
 
 // Enums
 enum htu21_i2c_master_mode {

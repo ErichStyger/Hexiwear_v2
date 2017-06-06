@@ -20,9 +20,6 @@ typedef struct {
   KIN1_UID uuid;
 } ID_Device;
 
-/*
- * 21?
- */
 static const ID_Device idTable[] =
 {
   {.id=ID_DEVICE_HEXI_01,  .name=(const unsigned char*)"Hexi_01 ??:??:??:??:??:??", .uuid={{0x00,0x2F,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x4E,0x45,0x30,0x51,0x40,0x01,0x00,0x10}}}, /* broken display */
@@ -83,7 +80,6 @@ static uint8_t PrintStatus(const CLS1_StdIOType *io) {
   } else {
     CLS1_SendStatusStr((unsigned char*)"  device", (uint8_t*)"UNKNOWN\r\n", io->stdOut);
   }
-
   return ERR_OK;
 }
 

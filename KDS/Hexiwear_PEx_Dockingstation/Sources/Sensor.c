@@ -65,28 +65,6 @@ static void SensorTask(void *param) {
   if (status!=htu21_status_ok) {
     CLS1_SendStr("Failed resetting HTU21D.\r\n", CLS1_GetStdio()->stdErr);
   }
-  status = htu21_get_battery_status(&battStatus);
-  if (status!=htu21_status_ok) {
-    CLS1_SendStr("Failed reading HTU21D battery status.\r\n", CLS1_GetStdio()->stdErr);
-  } else {
-    if (battStatus==htu21_battery_ok) {
-      CLS1_SendStr("Battery: OK.\r\n", CLS1_GetStdio()->stdOut);
-    } else {
-      CLS1_SendStr("Battery: LOW.\r\n", CLS1_GetStdio()->stdOut);
-    }
-  }
-
-  status = htu21_get_heater_status(&heater);
-  if (status!=htu21_status_ok) {
-    CLS1_SendStr("Failed reading HTU21D heater status.\r\n", CLS1_GetStdio()->stdErr);
-  } else {
-    if (heater==htu21_heater_off) {
-      CLS1_SendStr("Heater: OFF.\r\n", CLS1_GetStdio()->stdOut);
-    } else {
-      CLS1_SendStr("Heater: On.\r\n", CLS1_GetStdio()->stdOut);
-    }
-  }
-
 #endif
   for(;;) {
     if (BLUETOOTH_GetCurrentAppMode()==GUI_CURRENT_APP_SENSOR_TAG) {

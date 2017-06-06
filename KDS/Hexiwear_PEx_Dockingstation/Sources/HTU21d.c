@@ -35,6 +35,7 @@
  */
 
 #include "htu21d.h"
+#include "UTIL1.h"
 
  /**
   * The header "i2c.h" has to be implemented for your own platform to
@@ -67,13 +68,14 @@
   */
 #include "GI2C0.h"
 #include "WAIT1.h"
+#include <math.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 static void delay_ms(uint32_t ms) {
-  WAIT1_Waitms(ms);
+  WAIT1_WaitOSms(ms);
 }
 
 // HTU21 device address
@@ -168,7 +170,7 @@ void htu21_init(void)
  * \brief Check whether HTU21 device is connected
  *
  * \return bool : status of HTU21
- *       - true : Device is present
+ *       - TRUE : Device is present
  *       - false : Device is not acknowledging I2C address
   */
 bool htu21_is_connected(void)
@@ -186,7 +188,7 @@ bool htu21_is_connected(void)
   if( i2c_status != STATUS_OK)
     return false;
 #endif
-  return true;
+  return TRUE;
 }
 
 /**
@@ -741,9 +743,9 @@ enum htu21_status htu21_enable_heater(void)
   uint8_t reg_value;
 
   status = htu21_read_user_register(&reg_value);
-  if( status != htu21_status_ok )
+  if( status != htu21_status_ok ) {
     return status;
-
+  }
   // Clear the resolution bits
   reg_value |= HTU21_USER_REG_ONCHIP_HEATER_ENABLE;
 
@@ -873,6 +875,67 @@ float htu21_compute_dew_point(float temperature,float relative_humidity)
   dew_point =  - HTU21_CONSTANT_B / (log10( relative_humidity * partial_pressure / 100) - HTU21_CONSTANT_A) - HTU21_CONSTANT_C;
 
   return (float)dew_point;
+}
+
+static uint8_t PrintStatus(const CLS1_StdIOType *io) {
+  uint8_t buf[32];
+  enum htu21_status status;
+  enum htu21_battery_status battStatus;
+  enum htu21_heater_status  heater;
+
+  CLS1_SendStatusStr((unsigned char*)"htu21d", (unsigned char*)"\r\n", io->stdOut);
+  CLS1_SendStatusStr((unsigned char*)"  device", (uint8_t*)"UNKNOWN\r\n", io->stdOut);
+
+  status = htu21_get_battery_status(&battStatus);
+  if (status!=htu21_status_ok) {
+    UTIL1_strcpy(buf, sizeof(buf), (uint8_t*)"ERROR\r\n");
+  } else if (battStatus==htu21_battery_ok) {
+    UTIL1_strcpy(buf, sizeof(buf), (uint8_t*)"OK\r\n");
+  } else {
+    UTIL1_strcpy(buf, sizeof(buf), (uint8_t*)"LOW\r\n");
+  }
+  CLS1_SendStatusStr((unsigned char*)"  battery", buf, io->stdOut);
+
+  status = htu21_get_heater_status(&heater);
+  if (status!=htu21_status_ok) {
+    UTIL1_strcpy(buf, sizeof(buf), (uint8_t*)"ERROR\r\n");
+  } else if (heater==htu21_heater_off) {
+    UTIL1_strcpy(buf, sizeof(buf), (uint8_t*)"OFF\r\n");
+  } else {
+    UTIL1_strcpy(buf, sizeof(buf), (uint8_t*)"ON\r\n");
+  }
+  CLS1_SendStatusStr((unsigned char*)"  heater", buf, io->stdOut);
+  return ERR_OK;
+}
+
+uint8_t HTU21_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io) {
+  uint8_t res;
+
+  if (UTIL1_strcmp((char*)cmd, CLS1_CMD_HELP)==0 || UTIL1_strcmp((char*)cmd, "htu21d help")==0) {
+    CLS1_SendHelpStr((unsigned char*)"htu21d", (const unsigned char*)"Group of htu21d commands\r\n", io->stdOut);
+    CLS1_SendHelpStr((unsigned char*)"  help|status", (const unsigned char*)"Print help or status information\r\n", io->stdOut);
+    CLS1_SendHelpStr((unsigned char*)"  heater (on|off)", (const unsigned char*)"Turns heater on or off\r\n", io->stdOut);
+    *handled = TRUE;
+    return ERR_OK;
+  } else if ((UTIL1_strcmp((char*)cmd, CLS1_CMD_STATUS)==0) || (UTIL1_strcmp((char*)cmd, "htu21d status")==0)) {
+    *handled = TRUE;
+    return PrintStatus(io);
+  } else if (UTIL1_strcmp((char*)cmd, "htu21d heater on")==0) {
+    *handled = TRUE;
+    res = htu21_enable_heater();
+    if (htu21_status_ok) {
+      CLS1_SendStr((unsigned char*)"Failed turning heater on", io->stdErr);
+      return ERR_FAILED;
+    }
+  } else if (UTIL1_strcmp((char*)cmd, "htu21d heater off")==0) {
+    *handled = TRUE;
+    res = htu21_disable_heater();
+    if (htu21_status_ok) {
+      CLS1_SendStr((unsigned char*)"Failed turning heater off", io->stdErr);
+      return ERR_FAILED;
+    }
+   }
+  return ERR_OK;
 }
 
 #ifdef __cplusplus

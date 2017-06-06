@@ -50,6 +50,9 @@
 #if PL_CONFIG_HAS_IDENTIFY
   #include "Identify.h"
 #endif
+#if PL_CONFIG_HAS_HTU21D
+  #include "HTU21d.h"
+#endif
 #include "RStdIO.h"
 #include "RGBR.h"
 #include "RGBG.h"
@@ -118,6 +121,9 @@ static const CLS1_ParseCommandCallback CmdParserTable[] =
   #if TSL1_CONFIG_PARSE_COMMAND_ENABLED
   TSL1_ParseCommand,
   #endif
+#endif
+#if PL_CONFIG_HAS_HTU21D
+  HTU21_ParseCommand,
 #endif
   RSTDIO_ParseCommand,
   BLUETOOTH_ParseCommand,
