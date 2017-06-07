@@ -117,7 +117,8 @@ void HostComm_SendTemperature(uint16_t celsius) {
   txPacket.start2     = gHostInterface_startByte2;
   txPacket.type       = packetType_temperature;
   txPacket.length     = 2;
-  memcpy(&txPacket.data[0],(uint8_t*)&celsius,txPacket.length);
+  txPacket.data[0]    = (uint8_t) celsius;
+  txPacket.data[1]    = (uint8_t) ((celsius >> 8)&0xFF);
   txPacket.data[2]    = gHostInterface_trailerByte;
   KW40SendPacket(&txPacket);
 }
@@ -129,7 +130,8 @@ void HostComm_SendHumidity(uint16_t percentage) {
   txPacket.start2     = gHostInterface_startByte2;
   txPacket.type       = packetType_humidity;
   txPacket.length     = 2;
-  memcpy(&txPacket.data[0],(uint8_t*)&percentage,txPacket.length);
+  txPacket.data[0]    = (uint8_t) percentage;
+  txPacket.data[1]    = (uint8_t) ((percentage >> 8)&0xFF);
   txPacket.data[2]    = gHostInterface_trailerByte;
   KW40SendPacket(&txPacket);
 }

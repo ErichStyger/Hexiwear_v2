@@ -668,6 +668,12 @@ enum htu21_status htu21_set_resolution(enum htu21_resolution res) {
   return status;
 }
 
+static void strcatResolution(uint8_t *buf, size_t bufSize, enum htu21_resolution resolution) {
+  switch(resolution) {
+    case htu21_resolution_t_14b_rh_12b:
+  }
+}
+
 /**
  * \brief Provide battery status
  *

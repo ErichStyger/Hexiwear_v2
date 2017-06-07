@@ -65,6 +65,10 @@ static void SensorTask(void *param) {
   if (status!=htu21_status_ok) {
     CLS1_SendStr("Failed resetting HTU21D.\r\n", CLS1_GetStdio()->stdErr);
   }
+  status = htu21_set_resolution(htu21_resolution_t_11b_rh_11b);
+  if (status!=htu21_status_ok) {
+    CLS1_SendStr("Failed resetting resolution.\r\n", CLS1_GetStdio()->stdErr);
+  }
 #endif
   for(;;) {
     if (BLUETOOTH_GetCurrentAppMode()==GUI_CURRENT_APP_SENSOR_TAG) {
@@ -113,7 +117,19 @@ static void SensorTask(void *param) {
         HostComm_SendAmbientLight(ambient);
       }
 #endif
-      vTaskDelay(pdMS_TO_TICKS(500));
+#if PL_CONFIG_HAS_HTU21D
+      {
+        enum htu21_status status;
+        float humidF, tempF;
+
+        status = htu21_read_temperature_and_relative_humidity(&tempF, &humidF);
+        if (status==htu21_status_ok) {
+          HostComm_SendHumidity(humidF*100); /* send 81.25% as 8125 */
+          HostComm_SendTemperature(tempF*100); /* send 24.27°C as 2427 */
+        }
+      }
+#endif
+      vTaskDelay(pdMS_TO_TICKS(1000));
     } else {
       vTaskDelay(pdMS_TO_TICKS(2000));
     }

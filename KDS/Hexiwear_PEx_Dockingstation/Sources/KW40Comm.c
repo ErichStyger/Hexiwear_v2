@@ -149,8 +149,16 @@ static void DebugPrintMsg(unsigned char *preStr, hostInterface_packet_t *packet)
                                               break;
     case packetType_pressure:                 str = "pressure"; break;
     case packetType_gyro:                     str = "gyro"; break;
-    case packetType_temperature:              str = "temperature"; break;
-    case packetType_humidity:                 str = "humidity"; break;
+    case packetType_temperature:              str = "temperature";
+                                              databuf[0] = '\0';
+                                              UTIL1_strcatNum32sDotValue100(databuf, sizeof(databuf), (packet->data[0]+(packet->data[1]<<8)));
+                                              UTIL1_strcat(databuf, sizeof(databuf), "°C");
+                                              break;
+    case packetType_humidity:                 str = "humidity";
+                                              databuf[0] = '\0';
+                                              UTIL1_strcatNum32sDotValue100(databuf, sizeof(databuf), (packet->data[0]+(packet->data[1]<<8)));
+                                              UTIL1_chcat(databuf, sizeof(databuf), '%');
+                                              break;
     case packetType_magnet:                   str = "magnet";
                                               databuf[0] = '\0';
                                               UTIL1_strcatNum8Hex(databuf, sizeof(databuf), packet->data[0]);
