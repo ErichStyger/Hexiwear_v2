@@ -671,6 +671,15 @@ enum htu21_status htu21_set_resolution(enum htu21_resolution res) {
 static void strcatResolution(uint8_t *buf, size_t bufSize, enum htu21_resolution resolution) {
   switch(resolution) {
     case htu21_resolution_t_14b_rh_12b:
+      UTIL1_strcat(buf, bufSize, (uint8_t*)"temp: 14bit, humidity: 12bit"); break;
+    case htu21_resolution_t_12b_rh_8b:
+      UTIL1_strcat(buf, bufSize, (uint8_t*)"temp: 12bit, humidity: 8bit"); break;
+    case htu21_resolution_t_13b_rh_10b:
+      UTIL1_strcat(buf, bufSize, (uint8_t*)"temp: 13bit, humidity: 10bit"); break;
+    case htu21_resolution_t_11b_rh_11b:
+      UTIL1_strcat(buf, bufSize, (uint8_t*)"temp: 11bit, humidity: 11bit"); break;
+    default:
+      UTIL1_strcat(buf, bufSize, (uint8_t*)"UNKNOWN?"); break;
   }
 }
 
@@ -797,6 +806,16 @@ enum htu21_status htu21_read_temperature_and_relative_humidity( float *temperatu
     return status;
   }
   // Perform conversion function
+  {
+    float temp;
+
+    temp = adc;
+    temp *= 175.72;
+    temp /= 65536;
+    temp -= 46.85;
+    *temperature = temp;
+  }
+
   *temperature = (float)adc * TEMPERATURE_COEFF_MUL / (1UL<<16) + TEMPERATURE_COEFF_ADD;
 
   status = htu21_humidity_conversion_and_read_adc( &adc);
