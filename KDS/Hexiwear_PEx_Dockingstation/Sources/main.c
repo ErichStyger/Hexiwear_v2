@@ -69,13 +69,10 @@
 #include "Helv08n.h"
 #include "TRG1.h"
 #include "Helv12n.h"
-#include "I2C1.h"
-#include "GI2C1.h"
-#include "FX1.h"
-#include "I2CSPY1.h"
 #include "TMOUT1.h"
 #include "TmDt1.h"
 #include "RTC1.h"
+#include "SYS1.h"
 #include "PTRC1.h"
 #include "AmblInt.h"
 #include "ExtIntLdd4.h"
@@ -89,6 +86,8 @@
 #include "BitIoLdd23.h"
 #include "SM1.h"
 #include "TSL1.h"
+#include "LDO_EN.h"
+#include "BitIoLdd24.h"
 #include "XF1.h"
 #include "HF1.h"
 #include "RTT1.h"
@@ -115,6 +114,7 @@ int main(void)
   /*** End of Processor Expert internal initialization.                    ***/
 
   /* Write your code here */
+  WAIT1_Waitms(500);
   APP_Run();
 #if 0
   for(;;) {

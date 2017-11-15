@@ -10,6 +10,9 @@ Supported hardare:
 - accelerometer/magnetometer
 - ambient light
 
+- 3V3B_EN, PTB12: HI-Z disable, LOW enable: Hum&Temp, AmbLight
+- LDO_EN, : Hi-Z disable, LOW enable: Heart rate pWR
+
 Open points:
 - left/right button group handling in UI
 - UI for toggle adv mode/link state

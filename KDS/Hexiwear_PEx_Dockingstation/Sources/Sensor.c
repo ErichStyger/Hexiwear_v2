@@ -9,17 +9,29 @@
 #include "Sensor.h"
 #include "FRTOS1.h"
 #include "Bluetooth.h"
-#include "FX1.h"
+#if PL_CONFIG_HAS_ACCELEROMETER
+  #include "FX1.h"
+#endif
 #include "HostComm.h"
 #if PL_CONFIG_HAS_TSL2561
   #include "TSL1.h"
   #include "Vcc3V3B_EN.h"
 #endif
 #include "CLS1.h"
+#if PL_CONFIG_HAS_HTU21D
+  #include "HTU21d.h"
+#endif
+#include "LDO_EN.h" /* power for heart rate monitor */
 
 static void SensorTask(void *param) {
   uint8_t res;
 
+#if 1
+  /* enable power for heart rate monitor */
+  LDO_EN_SetOutput();
+  LDO_EN_ClrVal();
+  vTaskDelay(pdMS_TO_TICKS(50));
+#endif
 #if PL_CONFIG_HAS_TSL2561
   CLS1_SendStr("Enabling TLS2561 sensor.\r\n", CLS1_GetStdio()->stdOut);
   /* 3V3B_EN:
@@ -57,6 +69,7 @@ static void SensorTask(void *param) {
       int16_t x, y, z;
 
       /* accelerometer */
+#if PL_CONFIG_HAS_ACCELEROMETER
       x = FX1_GetXmg();
       vTaskDelay(pdMS_TO_TICKS(10));
       y = FX1_GetYmg();
@@ -87,6 +100,7 @@ static void SensorTask(void *param) {
         z = 0;
       }
       HostComm_SendMag(x, y, z);
+#endif
 #if PL_CONFIG_HAS_TSL2561
       {
         uint16_t broad, ir;

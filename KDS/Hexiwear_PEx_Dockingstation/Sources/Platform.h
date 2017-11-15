@@ -28,8 +28,8 @@
 #define PL_CONFIG_HAS_WATCH       (1 && PL_CONFIG_HAS_OLED)
 
 #define PL_CONFIG_HAS_BUZZER          (1)
-#define PL_CONFIG_HAS_ACCELEROMETER   (1)
-#define PL_CONFIG_HAS_I2C_SPY         (1)
+#define PL_CONFIG_HAS_ACCELEROMETER   (0)
+#define PL_CONFIG_HAS_I2C_SPY         (0)
 #define PL_CONFIG_HAS_RTC             (1)
 #define PL_CONFIG_HAS_IDENTIFY        (1)
 #define PL_CONFIG_HAS_TSL2561         (1) /* ambient light sensor */

@@ -22,8 +22,8 @@ void APP_Run(void) {
   EYES_Init();
   LCD1_Init();
   LCD1_Clear();
-  GDisp1_DrawFilledBox(0, 0, GDisp1_GetWidth()-1, GDisp1_GetHeight()-1, LCD1_COLOR_RED);
-  GDisp1_UpdateFull();
+  //GDisp1_DrawFilledBox(0, 0, GDisp1_GetWidth()-1, GDisp1_GetHeight()-1, LCD1_COLOR_RED);
+  //GDisp1_UpdateFull();
   {
     uint8_t res;
     uint16_t broadband, infrared;
@@ -35,9 +35,11 @@ void APP_Run(void) {
      */
     //Vcc3V3B_EN_SetInput(); /* disable */
     /* enable */
-    Vcc3V3B_EN_SetOutput();
     Vcc3V3B_EN_ClrVal();
+    Vcc3V3B_EN_SetOutput();
     WAIT1_Waitms(50);
+
+#if 1
     TSL1_Init();
 
     res = TSL1_Disable();
@@ -58,6 +60,19 @@ void APP_Run(void) {
     if (res!=ERR_OK) {
       for(;;){}
     }
+#else
+    TSL2561_Init();
+
+    res = TSL2561_Enable();
+    if (res!=ERR_OK) {
+      for(;;){}
+    }
+     res = TSL2561_Disable();
+     if (res!=ERR_OK) {
+       for(;;){}
+     }
+
+#endif
   }
   for(;;) {
     EYES_Run();
