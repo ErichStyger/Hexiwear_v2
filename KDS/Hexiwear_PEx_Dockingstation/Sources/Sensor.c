@@ -16,15 +16,12 @@
   #include "Vcc3V3B_EN.h"
 #endif
 #include "CLS1.h"
-#if PL_CONFIG_HAS_HTU21D
-  #include "HTU21d.h"
-#endif
 
 static void SensorTask(void *param) {
   uint8_t res;
 
 #if PL_CONFIG_HAS_TSL2561
-  CLS1_SendStr("Enabling TLS2561 (ambient light) sensor.\r\n", CLS1_GetStdio()->stdOut);
+  CLS1_SendStr("Enabling TLS2561 sensor.\r\n", CLS1_GetStdio()->stdOut);
   /* 3V3B_EN:
    * HI-Z: Disabled
    * LOW: enabled (humidity, temperature, ambiLight
@@ -53,21 +50,6 @@ static void SensorTask(void *param) {
   res = TSL1_SetGain(TSL2561_GAIN_16X);
   if (res!=ERR_OK) {
     for(;;){}
-  }
-#endif
-#if PL_CONFIG_HAS_HTU21D
-  enum htu21_status status;
-  enum htu21_battery_status battStatus;
-  enum htu21_heater_status  heater;
-
-  CLS1_SendStr("Enabling HTU21D (temperature/humidity) sensor.\r\n", CLS1_GetStdio()->stdOut);
-  status = htu21_reset();
-  if (status!=htu21_status_ok) {
-    CLS1_SendStr("Failed resetting HTU21D.\r\n", CLS1_GetStdio()->stdErr);
-  }
-  status = htu21_set_resolution(htu21_resolution_t_11b_rh_11b);
-  if (status!=htu21_status_ok) {
-    CLS1_SendStr("Failed resetting resolution.\r\n", CLS1_GetStdio()->stdErr);
   }
 #endif
   for(;;) {
@@ -117,19 +99,7 @@ static void SensorTask(void *param) {
         HostComm_SendAmbientLight(ambient);
       }
 #endif
-#if PL_CONFIG_HAS_HTU21D
-      {
-        enum htu21_status status;
-        float humidF, tempF;
-
-        status = htu21_read_temperature_and_relative_humidity(&tempF, &humidF);
-        if (status==htu21_status_ok) {
-          HostComm_SendHumidity(humidF*100); /* send 81.25% as 8125 */
-          HostComm_SendTemperature(tempF*100); /* send 24.27°C as 2427 */
-        }
-      }
-#endif
-      vTaskDelay(pdMS_TO_TICKS(1000));
+      vTaskDelay(pdMS_TO_TICKS(500));
     } else {
       vTaskDelay(pdMS_TO_TICKS(2000));
     }
@@ -139,9 +109,6 @@ static void SensorTask(void *param) {
 void SENSOR_Init(void) {
 #if PL_CONFIG_HAS_TSL2561
   TSL1_Init();
-#endif
-#if PL_CONFIG_HAS_HTU21D
-  htu21_init();
 #endif
   if (xTaskCreate(SensorTask, (uint8_t *)"Sensor", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL) != pdPASS) {
     for(;;){} /* error case only, stay here! */
