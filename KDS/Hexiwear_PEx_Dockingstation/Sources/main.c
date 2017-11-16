@@ -69,6 +69,16 @@
 #include "Helv08n.h"
 #include "TRG1.h"
 #include "Helv12n.h"
+#include "I2C1.h"
+#include "GI2C1.h"
+#include "FX1.h"
+#include "Accel_RST.h"
+#include "BitIoLdd16.h"
+#include "Accel_INT1.h"
+#include "ExtIntLdd2.h"
+#include "Accel_INT2.h"
+#include "ExtIntLdd3.h"
+#include "I2CSPY1.h"
 #include "TMOUT1.h"
 #include "TmDt1.h"
 #include "RTC1.h"
@@ -78,10 +88,6 @@
 #include "ExtIntLdd4.h"
 #include "GI2C0.h"
 #include "I2C0.h"
-#include "SDA1.h"
-#include "BitIoLdd21.h"
-#include "SCL1.h"
-#include "BitIoLdd22.h"
 #include "Vcc3V3B_EN.h"
 #include "BitIoLdd23.h"
 #include "SM1.h"
@@ -114,7 +120,10 @@ int main(void)
   /*** End of Processor Expert internal initialization.                    ***/
 
   /* Write your code here */
-  WAIT1_Waitms(500);
+#if 1
+  void hack(void);
+  hack();
+#endif
   APP_Run();
 #if 0
   for(;;) {

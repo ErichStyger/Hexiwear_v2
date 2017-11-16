@@ -72,6 +72,16 @@
 #include "Helv08n.h"
 #include "TRG1.h"
 #include "Helv12n.h"
+#include "I2C1.h"
+#include "GI2C1.h"
+#include "FX1.h"
+#include "Accel_RST.h"
+#include "BitIoLdd16.h"
+#include "Accel_INT1.h"
+#include "ExtIntLdd2.h"
+#include "Accel_INT2.h"
+#include "ExtIntLdd3.h"
+#include "I2CSPY1.h"
 #include "TMOUT1.h"
 #include "TmDt1.h"
 #include "RTC1.h"
@@ -81,10 +91,6 @@
 #include "ExtIntLdd4.h"
 #include "GI2C0.h"
 #include "I2C0.h"
-#include "SDA1.h"
-#include "BitIoLdd21.h"
-#include "SCL1.h"
-#include "BitIoLdd22.h"
 #include "Vcc3V3B_EN.h"
 #include "BitIoLdd23.h"
 #include "SM1.h"
@@ -298,6 +304,34 @@ void AmblInt_OnInterrupt(void);
 */
 /* ===================================================================*/
 void SM1_OnBlockSent(LDD_TUserData *UserDataPtr);
+
+void Accel_INT2_OnInterrupt(void);
+/*
+** ===================================================================
+**     Event       :  Accel_INT2_OnInterrupt (module Events)
+**
+**     Component   :  Accel_INT2 [ExtInt]
+**     Description :
+**         This event is called when an active signal edge/level has
+**         occurred.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+
+void Accel_INT1_OnInterrupt(void);
+/*
+** ===================================================================
+**     Event       :  Accel_INT1_OnInterrupt (module Events)
+**
+**     Component   :  Accel_INT1 [ExtInt]
+**     Description :
+**         This event is called when an active signal edge/level has
+**         occurred.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
 
 /* END Events */
 

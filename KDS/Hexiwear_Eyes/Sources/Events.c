@@ -137,6 +137,82 @@ void AmblInt_OnInterrupt(void)
   /* Write your code here ... */
 }
 
+/*
+** ===================================================================
+**     Event       :  II2C1_OnReceiveData (module Events)
+**
+**     Component   :  II2C1 [InternalI2C]
+**     Description :
+**         This event is invoked when I2C finishes the reception of the
+**         data successfully. This event is not available for the SLAVE
+**         mode and if both RecvChar and RecvBlock are disabled. This
+**         event is enabled only if interrupts/events are enabled.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void II2C1_OnReceiveData(void)
+{
+  /* Write your code here ... */
+}
+
+/*
+** ===================================================================
+**     Event       :  II2C1_OnTransmitData (module Events)
+**
+**     Component   :  II2C1 [InternalI2C]
+**     Description :
+**         This event is invoked when I2C finishes the transmission of
+**         the data successfully. This event is not available for the
+**         SLAVE mode and if both SendChar and SendBlock are disabled.
+**         This event is enabled only if interrupts/events are enabled.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void II2C1_OnTransmitData(void)
+{
+  /* Write your code here ... */
+}
+
+/*
+** ===================================================================
+**     Event       :  II2C0_OnReceiveData (module Events)
+**
+**     Component   :  II2C0 [InternalI2C]
+**     Description :
+**         This event is invoked when I2C finishes the reception of the
+**         data successfully. This event is not available for the SLAVE
+**         mode and if both RecvChar and RecvBlock are disabled. This
+**         event is enabled only if interrupts/events are enabled.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void II2C0_OnReceiveData(void)
+{
+  /* Write your code here ... */
+}
+
+/*
+** ===================================================================
+**     Event       :  II2C0_OnTransmitData (module Events)
+**
+**     Component   :  II2C0 [InternalI2C]
+**     Description :
+**         This event is invoked when I2C finishes the transmission of
+**         the data successfully. This event is not available for the
+**         SLAVE mode and if both SendChar and SendBlock are disabled.
+**         This event is enabled only if interrupts/events are enabled.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void II2C0_OnTransmitData(void)
+{
+  /* Write your code here ... */
+}
+
 /* END Events */
 
 #ifdef __cplusplus

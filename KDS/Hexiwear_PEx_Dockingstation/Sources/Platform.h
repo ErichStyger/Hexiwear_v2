@@ -28,11 +28,12 @@
 #define PL_CONFIG_HAS_WATCH       (1 && PL_CONFIG_HAS_OLED)
 
 #define PL_CONFIG_HAS_BUZZER          (1)
-#define PL_CONFIG_HAS_ACCELEROMETER   (0)
+#define PL_CONFIG_HAS_ACCELEROMETER   (1)
 #define PL_CONFIG_HAS_I2C_SPY         (0)
 #define PL_CONFIG_HAS_RTC             (1)
 #define PL_CONFIG_HAS_IDENTIFY        (1)
 #define PL_CONFIG_HAS_TSL2561         (1) /* ambient light sensor */
-#define PL_CONFIG_HAS_HTU21D          (1) /* temperature/humidity */
+#define PL_CONFIG_HAS_HTU21D          (0) /* temperature/humidity */
+#define PL_CONFIG_LOG_TO_RTT          (1) /* log data to RTT */
 
 #endif /* SOURCES_PLATFORM_H_ */

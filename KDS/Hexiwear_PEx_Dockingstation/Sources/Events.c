@@ -301,6 +301,40 @@ void SM1_OnBlockSent(LDD_TUserData *UserDataPtr)
   LCD1_OnDataReceived();
 }
 
+/*
+** ===================================================================
+**     Event       :  Accel_INT2_OnInterrupt (module Events)
+**
+**     Component   :  Accel_INT2 [ExtInt]
+**     Description :
+**         This event is called when an active signal edge/level has
+**         occurred.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void Accel_INT2_OnInterrupt(void)
+{
+  /* Write your code here ... */
+}
+
+/*
+** ===================================================================
+**     Event       :  Accel_INT1_OnInterrupt (module Events)
+**
+**     Component   :  Accel_INT1 [ExtInt]
+**     Description :
+**         This event is called when an active signal edge/level has
+**         occurred.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void Accel_INT1_OnInterrupt(void)
+{
+  /* Write your code here ... */
+}
+
 /* END Events */
 
 #ifdef __cplusplus

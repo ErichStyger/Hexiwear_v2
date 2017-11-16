@@ -35,6 +35,7 @@ void APP_Run(void) {
      */
     //Vcc3V3B_EN_SetInput(); /* disable */
     /* enable */
+    Vcc3V3B_EN_SetVal();
     Vcc3V3B_EN_ClrVal();
     Vcc3V3B_EN_SetOutput();
     WAIT1_Waitms(50);
