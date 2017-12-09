@@ -17,7 +17,7 @@ void UIMC_SetBackgroundColor(UIMC_MultipleChoiceWidget *widget, UI1_PixelColor c
   int i;
 
   widget->bgColor = color;
-  for(i=0;i<UIMC_NOF_QUESTIONS;i++) {
+  for(i=0;i<UIMC_MAX_NOF_ANSWERS;i++) {
     UIIcon_SetBackgroundColor(&widget->questions[i].icon, color);
     UIText_SetBackgroundColor(&widget->questions[i].text, color);
   }
@@ -27,7 +27,7 @@ void UIMC_SetForegroundColor(UIMC_MultipleChoiceWidget *widget, UI1_PixelColor c
   int i;
 
   widget->fgColor = color;
-  for(i=0;i<UIMC_NOF_QUESTIONS;i++) {
+  for(i=0;i<UIMC_MAX_NOF_ANSWERS;i++) {
     UIIcon_SetForegroundColor(&widget->questions[i].icon, color);
     UIText_SetForegroundColor(&widget->questions[i].text, color);
   }
@@ -37,13 +37,13 @@ void UIMC_SetInsideColor(UIMC_MultipleChoiceWidget *widget, UI1_PixelColor color
   int i;
 
   widget->insideColor = color;
-  for(i=0;i<UIMC_NOF_QUESTIONS;i++) {
+  for(i=0;i<UIMC_MAX_NOF_ANSWERS;i++) {
     UIIcon_SetInsideColor(&widget->questions[i].icon, color);
   }
 }
 
 void UIMC_SetChoiceText(UIMC_MultipleChoiceWidget *widget, int choice, uint8_t *text) {
-  if (choice>=UIMC_NOF_QUESTIONS) {
+  if (choice>=UIMC_MAX_NOF_ANSWERS) {
     return; /* selection out of bounds! */
   }
   UIText_SetText(&widget->questions[choice].text, text);
@@ -53,7 +53,7 @@ void UIMC_SetChoiceText(UIMC_MultipleChoiceWidget *widget, int choice, uint8_t *
 void UIMC_Select(UIMC_MultipleChoiceWidget *widget, int choice) {
   int i;
 
-  if (choice>=UIMC_NOF_QUESTIONS) {
+  if (choice>=UIMC_MAX_NOF_ANSWERS) {
     return; /* selection out of bounds! */
   }
   if (choice== widget->choice) {
@@ -79,7 +79,7 @@ void UIMC_Paint(UIMC_MultipleChoiceWidget *widget) {
 uint8_t UIMC_OnClick(UIMC_MultipleChoiceWidget *widget, UIText_TextWidget *textw) {
   int i;
 
-  for(i=0;i<UIMC_NOF_QUESTIONS;i++) {
+  for(i=0;i<UIMC_MAX_NOF_ANSWERS;i++) {
     if (UI1_EqualElement(&textw->element, &widget->questions[i].text.element)) {
       break; /* found it */
     }
@@ -127,7 +127,7 @@ void UIMC_SelectionHandler(UI1_Element *element, UI1_MsgKind kind, void *pData) 
   } /* switch */
 }
 
-uint8_t UIMC_Create(UI1_Element *parent, UIMC_MultipleChoiceWidget *widget, UI1_PixelDim x, UI1_PixelDim y, UI1_PixelDim width, UI1_PixelDim height) {
+uint8_t UIMC_Create(UI1_Element *parent, UIMC_MultipleChoiceWidget *widget, UI1_PixelDim x, UI1_PixelDim y, UI1_PixelDim width, UI1_PixelDim height, uint8_t nofAnswers) {
   FDisp1_Font *font;
   int i;
   UI1_PixelDim xpos, ypos;
@@ -135,19 +135,20 @@ uint8_t UIMC_Create(UI1_Element *parent, UIMC_MultipleChoiceWidget *widget, UI1_
   if (widget == NULL) {
     return ERR_FAILED;
   }
+  widget->nofAnswers = nofAnswers;
   font = Helv08n_GetFont(); /* font defined in user properties */
   if (width==0) {                      /* auto size */
     width = FDisp1_GetStringWidth((unsigned char*)UIMC_CONFIG_MULTIPLECHOICE_DEFAULT_TEXT, font, NULL);
     width += 10+1; /* size for icon */
   }
   if (height==0) {                     /* auto size */
-    height = UIMC_NOF_QUESTIONS*FDisp1_GetStringHeight((unsigned char*)UIMC_CONFIG_MULTIPLECHOICE_DEFAULT_TEXT, font, NULL);
+    height = widget->nofAnswers*FDisp1_GetStringHeight((unsigned char*)UIMC_CONFIG_MULTIPLECHOICE_DEFAULT_TEXT, font, NULL);
   }
   UI1_ElementInitCommon(&widget->element, UI1_WIDGET_MULTIPLE_CHOICE, x, y, width, height, UIMC_MessageHandler);
   widget->choice = 0; /* initialize selected item */
   xpos = 0;
   ypos = 0;
-  for(i=0;i<UIMC_NOF_QUESTIONS;i++) {
+  for(i=0;i<widget->nofAnswers;i++) {
     /* icon items */
     UIIcon_Create(&widget->element, &widget->questions[i].icon, xpos, ypos, 10, 10);
     UIIcon_SetBackgroundColor(&widget->questions[i].icon, UIMC_CONFIG_MULTIPLECHOICE_DEFAULT_BACKGROUND_COLOR);
@@ -182,6 +183,7 @@ uint8_t UIMC_Create(UI1_Element *parent, UIMC_MultipleChoiceWidget *widget, UI1_
 }
 
 void UIMC_Init(void) {
+  /* nothing needed */
 }
 
 

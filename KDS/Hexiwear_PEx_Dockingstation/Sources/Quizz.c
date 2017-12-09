@@ -99,6 +99,7 @@ static void guiCallback(UI1_Element *element, UI1_MsgKind kind, void *pData) {
 static const UIMC_MultipleChoicQuestion questions[] = {
   {
     .question = "Disable Inter-\nrupts on ARM\nCortex-M4F:",
+    .nofAnswers = 5,
     .answer[0] = "cpsie i",
     .answer[1] = "cpsid i",
     .answer[2] = "cpsie primask",
@@ -107,21 +108,32 @@ static const UIMC_MultipleChoicQuestion questions[] = {
   },
   {
     .question = "How are you\ndoing?",
+    .nofAnswers = 5,
     .answer[0] = "Excellent!",
     .answer[1] = "Doing fine",
     .answer[2] = "Could be better",
     .answer[3] = "Oh, well ...",
     .answer[4] = "@!#!?!!",
   },
+  {
+    .question = "Lecture speed:",
+    .nofAnswers = 3,
+    .answer[0] = "Faster",
+    .answer[1] = "Ok!",
+    .answer[2] = "Slower",
+    .answer[3] = "",
+    .answer[4] = "",
+  },
 };
 
 static void QUIZZ_CreateGUI(QUIZZ_GUIDesc *gui) {
   UI1_PixelDim x, y, h;
+  int questionIdx = 2;
 
   /* window */
   (void)UIWindow_Create(NULL, &gui->window,
       0, 0, GDisp1_GetWidth(), GDisp1_GetHeight());
-  UIWindow_SetBackgroundColor(&gui->window, UI1_COLOR_BRIGHT_GREEN);
+  UIWindow_SetBackgroundColor(&gui->window, UI1_COLOR_BRIGHT_GREY);
   UIWindow_SetBorder(&gui->window);
   UIWindow_SetUserMsgHandler(&gui->window, guiCallback);
 
@@ -130,9 +142,9 @@ static void QUIZZ_CreateGUI(QUIZZ_GUIDesc *gui) {
       0, 0, /* for window border */
       0, 0 /* auto-size */
      );
-  UIHeader_SetBackgroundColor(&gui->header, UI1_COLOR_BRIGHT_BLUE);
+  UIHeader_SetBackgroundColor(&gui->header, UI1_COLOR_BRIGHT_GREY);
   UIHeader_SetForegroundColor(&gui->header, UI1_COLOR_BLACK);
-  UIHeader_SetText(&gui->header, (uint8_t*)questions[0].question);
+  UIHeader_SetText(&gui->header, (uint8_t*)questions[questionIdx].question);
   UIHeader_Resize(&gui->header); /* adjust size */
   UIIcon_SetUserMsgHandler(&gui->header.iconWidget, guiCallback);
   UI1_EnableElementSelection(&gui->header.iconWidget.element);
@@ -140,10 +152,10 @@ static void QUIZZ_CreateGUI(QUIZZ_GUIDesc *gui) {
   h = UI1_GetElementHeight(&gui->header.element);
 #if 1
   /* multiple choice questions */
-  UIMC_Create(&gui->window.element, &gui->quizz, 0, h, 0, 0);
+  UIMC_Create(&gui->window.element, &gui->quizz, 0, h, 0, 0, questions[questionIdx].nofAnswers);
   UIMC_SetBackgroundColor(&gui->quizz, gui->window.bgColor);
-  for(int i=0;i<UIMC_NOF_QUESTIONS;i++) {
-    UIMC_SetChoiceText(&gui->quizz, i, (uint8_t*)questions[0].answer[i]);
+  for(int i=0;i<questions[questionIdx].nofAnswers;i++) {
+    UIMC_SetChoiceText(&gui->quizz, i, (uint8_t*)questions[questionIdx].answer[i]);
   }
 
   h += UI1_GetElementHeight(&gui->quizz.element);

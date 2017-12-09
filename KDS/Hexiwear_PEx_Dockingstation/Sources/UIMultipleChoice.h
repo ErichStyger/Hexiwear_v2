@@ -16,7 +16,7 @@
 
 /* config */
 #ifndef UIMC_CONFIG_MULTIPLECHOICE_DEFAULT_BACKGROUND_COLOR
-  #define UIMC_CONFIG_MULTIPLECHOICE_DEFAULT_BACKGROUND_COLOR  UI1_COLOR_BLUE
+  #define UIMC_CONFIG_MULTIPLECHOICE_DEFAULT_BACKGROUND_COLOR  UI1_COLOR_BRIGHT_GREY
     /*!< Default background color */
 #endif
 
@@ -40,11 +40,12 @@
     /*!< 1: have extra user message handler; 0: no extra message handler*/
 #endif
 
-#define UIMC_NOF_QUESTIONS 5
+#define UIMC_MAX_NOF_ANSWERS 5  /* maximum possible number of answers for question */
 
 typedef struct {
-  const unsigned char *question;
-  const unsigned char *answer[UIMC_NOF_QUESTIONS];
+  const unsigned char *question; /* The question itself */
+  const uint8_t nofAnswers; /* how many answer possibilities */
+  const unsigned char *answer[UIMC_MAX_NOF_ANSWERS];
 } UIMC_MultipleChoicQuestion;
 
 typedef struct {
@@ -54,8 +55,9 @@ typedef struct {
 
 typedef struct {
   UI1_Element element;                 /* the base element, always first in structure */
-  UIMC_Question questions[UIMC_NOF_QUESTIONS];
-  int choice; /* 0...UIMC_NOF_QUESTIONS */
+  int nofAnswers;                    /* nof answers in answer list */
+  UIMC_Question questions[UIMC_MAX_NOF_ANSWERS];
+  int choice; /* 0...nofAnswer-1 */
   UI1_PixelColor fgColor;              /* foreground color */
   UI1_PixelColor bgColor;              /* foreground color */
   UI1_PixelColor insideColor;          /* inside color */
@@ -70,7 +72,7 @@ void UIMC_SetInsideColor(UIMC_MultipleChoiceWidget *widget, UI1_PixelColor color
 
 void UIMC_SetChoiceText(UIMC_MultipleChoiceWidget *widget, int choice, uint8_t *text);
 
-uint8_t UIMC_Create(UI1_Element *parent, UIMC_MultipleChoiceWidget *widget, UI1_PixelDim x, UI1_PixelDim y, UI1_PixelDim width, UI1_PixelDim height);
+uint8_t UIMC_Create(UI1_Element *parent, UIMC_MultipleChoiceWidget *widget, UI1_PixelDim x, UI1_PixelDim y, UI1_PixelDim width, UI1_PixelDim height, uint8_t nofAnswers);
 
 void UIMC_Init(void);
 

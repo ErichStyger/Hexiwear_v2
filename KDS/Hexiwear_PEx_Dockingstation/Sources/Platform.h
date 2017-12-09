@@ -32,7 +32,7 @@
 #define PL_CONFIG_HAS_I2C_SPY         (0)
 #define PL_CONFIG_HAS_RTC             (1)
 #define PL_CONFIG_HAS_IDENTIFY        (1)
-#define PL_CONFIG_HAS_TSL2561         (1) /* ambient light sensor */
+#define PL_CONFIG_HAS_TSL2561         (0) /* ambient light sensor */
 #define PL_CONFIG_HAS_HTU21D          (0) /* temperature/humidity */
 #define PL_CONFIG_LOG_TO_RTT          (1) /* log data to RTT */
 
